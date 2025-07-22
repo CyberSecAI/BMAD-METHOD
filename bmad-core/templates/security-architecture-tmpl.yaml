@@ -1,0 +1,268 @@
+template:
+  id: security-architecture-v2
+  name: Security Architecture Document
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/security_architecture.md
+    title: "{{project_name}} Security Architecture"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: security-overview
+    title: Security Architecture Overview
+    instruction: |
+      Provide a high-level overview of the security architecture including:
+      - Security objectives and principles
+      - Security architecture framework used (SABSA, TOGAF, etc.)
+      - Key security domains and components
+      - Integration with overall system architecture
+      - Compliance and regulatory considerations
+    type: text
+    owner: security
+    editors: [architect, pm]
+
+  - id: security-principles
+    title: Security Design Principles
+    instruction: |
+      Define the fundamental security principles guiding the architecture:
+      - Defense in depth strategy
+      - Principle of least privilege
+      - Fail-safe defaults
+      - Complete mediation
+      - Open design transparency
+      - Separation of duties
+      - Security by design approach
+      - Zero trust architecture principles
+      
+      For each principle, explain how it applies to this specific system.
+    type: text
+    elicit: true
+    owner: security
+    editors: [architect]
+
+  - id: threat-landscape
+    title: Threat Landscape and Context
+    instruction: |
+      Analyze the specific threat landscape for this system:
+      - Industry-specific threats and attack patterns
+      - Regulatory and compliance threat vectors
+      - Internal vs external threat actors
+      - Attack surface analysis
+      - Current threat intelligence relevant to the system
+      - Threat evolution and emerging risks
+    type: text
+    elicit: true
+    owner: security
+
+  - id: security-domains
+    title: Security Architecture Domains
+    instruction: |
+      Define security architecture across key domains following industry frameworks.
+    type: text
+    owner: security
+    elicit: true
+    sections:
+      - id: identity-access-management
+        title: Identity and Access Management (IAM)
+        instruction: |
+          Define IAM architecture including:
+          - Identity provider integration and federation
+          - Authentication mechanisms and protocols
+          - Authorization models and policies
+          - Privileged access management
+          - Identity lifecycle management
+          - Single sign-on (SSO) architecture
+        type: text
+      - id: data-security-architecture
+        title: Data Security Architecture
+        instruction: |
+          Define data protection architecture including:
+          - Data classification and labeling
+          - Encryption at rest architecture
+          - Encryption in transit architecture
+          - Key management infrastructure
+          - Data loss prevention (DLP) architecture
+          - Data masking and anonymization
+        type: text
+      - id: network-security-architecture
+        title: Network Security Architecture
+        instruction: |
+          Define network security controls including:
+          - Network segmentation and micro-segmentation
+          - Firewall architecture and placement
+          - Intrusion detection and prevention systems
+          - Network access control (NAC)
+          - VPN and remote access architecture
+          - Web application firewall (WAF) placement
+        type: text
+      - id: application-security-architecture
+        title: Application Security Architecture
+        instruction: |
+          Define application security controls including:
+          - Secure development lifecycle integration
+          - Application security testing integration
+          - Runtime application self-protection (RASP)
+          - API security architecture
+          - Container and microservices security
+          - Third-party component security management
+        type: text
+      - id: infrastructure-security-architecture
+        title: Infrastructure Security Architecture
+        instruction: |
+          Define infrastructure security including:
+          - Server and endpoint hardening standards
+          - Virtualization and cloud security architecture
+          - Container orchestration security
+          - Infrastructure as code security
+          - Configuration management security
+          - Patch management architecture
+        type: text
+
+  - id: security-services
+    title: Security Services Architecture
+    instruction: |
+      Define centralized security services and their architecture:
+      - Security information and event management (SIEM)
+      - Security orchestration, automation, and response (SOAR)
+      - Threat intelligence platform integration
+      - Vulnerability management services
+      - Security testing services
+      - Incident response platform architecture
+    type: text
+    elicit: true
+    owner: security
+    editors: [architect]
+
+  - id: trust-boundaries
+    title: Trust Boundaries and Zones
+    instruction: |
+      Define security zones and trust boundaries:
+      - Network trust zones and segmentation
+      - Application trust boundaries
+      - Data trust classifications
+      - User trust levels and contexts
+      - External partner and vendor trust relationships
+      - Zero trust zone implementation
+      
+      Create a visual representation showing trust boundaries and security controls between zones.
+    type: text
+    elicit: true
+    owner: security
+
+  - id: security-controls-mapping
+    title: Security Controls Architecture
+    instruction: |
+      Map security controls to architecture components:
+      - Preventive controls placement and implementation
+      - Detective controls integration
+      - Corrective controls architecture
+      - Compensating controls for gaps
+      - Control redundancy and failover
+      - Control monitoring and health checking
+    type: table
+    columns:
+      - Architecture Component
+      - Security Controls
+      - Control Type
+      - Implementation Details
+      - Monitoring Approach
+    elicit: true
+    owner: security
+    editors: [architect]
+
+  - id: integration-architecture
+    title: Security Integration Architecture
+    instruction: |
+      Define how security integrates with existing systems:
+      - Enterprise security architecture integration
+      - Third-party security service integration
+      - Cloud security service integration
+      - DevSecOps tool chain integration
+      - Business application integration
+      - Legacy system security integration
+    type: text
+    elicit: true
+    owner: security
+    editors: [architect]
+
+  - id: compliance-architecture
+    title: Compliance Architecture
+    instruction: |
+      Define architecture components supporting compliance:
+      - Regulatory compliance controls architecture
+      - Audit logging and trail architecture
+      - Data governance and privacy architecture
+      - Compliance monitoring and reporting systems
+      - Evidence collection and management
+      - Compliance automation architecture
+    type: text
+    owner: security
+    editors: [pm]
+
+  - id: security-operations
+    title: Security Operations Architecture
+    instruction: |
+      Define security operations center (SOC) architecture:
+      - Security monitoring architecture
+      - Incident detection and response workflows
+      - Threat hunting platform architecture
+      - Security analytics and intelligence
+      - Alert correlation and prioritization
+      - Security orchestration and automation
+    type: text
+    elicit: true
+    owner: security
+
+  - id: disaster-recovery
+    title: Security Disaster Recovery Architecture
+    instruction: |
+      Define security considerations for disaster recovery:
+      - Security control continuity planning
+      - Backup and recovery security architecture
+      - Alternate site security requirements
+      - Recovery time objectives for security systems
+      - Security testing of disaster recovery procedures
+      - Incident response during disaster scenarios
+    type: text
+    owner: security
+    editors: [architect]
+
+  - id: implementation-roadmap
+    title: Security Architecture Implementation Roadmap
+    instruction: |
+      Create a phased implementation plan for the security architecture:
+      - Implementation phases and priorities
+      - Dependencies and critical path analysis
+      - Resource requirements and timeline
+      - Risk mitigation during implementation
+      - Success criteria and validation methods
+      - Go-live criteria and acceptance testing
+    type: table
+    columns:
+      - Implementation Phase
+      - Security Components
+      - Timeline
+      - Dependencies
+      - Resources Required
+      - Success Criteria
+    elicit: true
+    owner: security
+    editors: [pm, architect]
+
+  - id: architecture-governance
+    title: Security Architecture Governance
+    instruction: |
+      Define governance processes for security architecture:
+      - Architecture review and approval processes
+      - Security architecture change management
+      - Architecture compliance monitoring
+      - Regular architecture assessment procedures
+      - Architecture documentation maintenance
+      - Stakeholder communication and updates
+    type: bullet-list
+    owner: security
+    editors: [architect, pm]

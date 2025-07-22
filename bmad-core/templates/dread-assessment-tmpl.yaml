@@ -1,0 +1,218 @@
+template:
+  id: dread-assessment-v2
+  name: DREAD Risk Assessment
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/dread_assessment.md
+    title: "{{project_name}} DREAD Risk Assessment"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: assessment-overview
+    title: DREAD Assessment Overview
+    instruction: |
+      Provide an introduction to the DREAD risk assessment including:
+      - Purpose and scope of the assessment
+      - DREAD methodology explanation
+      - Scoring criteria and scale used
+      - Assessment timeframe and context
+      - Key stakeholders involved in assessment
+    type: text
+    owner: security
+    editors: [architect, pm]
+
+  - id: dread-methodology
+    title: DREAD Methodology and Scoring Criteria
+    instruction: |
+      Define the DREAD assessment methodology and scoring criteria used:
+      
+      **DREAD Components:**
+      - **Damage (D)**: How bad would an attack be?
+      - **Reproducibility (R)**: How easy is it to reproduce the attack?
+      - **Exploitability (E)**: How much work is it to launch the attack?
+      - **Affected Users (A)**: How many people would be impacted?
+      - **Discoverability (D)**: How easy is it to discover the threat?
+      
+      **Scoring Scale (1-10):**
+      - 1-3: Low risk/impact
+      - 4-6: Medium risk/impact  
+      - 7-8: High risk/impact
+      - 9-10: Critical risk/impact
+      
+      Provide specific criteria for each score level for each DREAD component.
+    type: text
+    elicit: true
+    owner: security
+
+  - id: threat-inventory
+    title: Threat Inventory for Assessment
+    instruction: |
+      List all threats that will be assessed using the DREAD methodology.
+      Reference threats identified in the threat model document where applicable.
+      
+      For each threat, provide:
+      - Threat ID (if from threat model)
+      - Threat name and brief description
+      - Attack scenario summary
+      - Affected system components
+      - Current mitigation status
+    type: table
+    columns:
+      - Threat ID
+      - Threat Name
+      - Description
+      - Attack Scenario
+      - Affected Components
+      - Current Mitigations
+    elicit: true
+    owner: security
+    editors: [architect]
+
+  - id: dread-scoring
+    title: DREAD Scoring Analysis
+    instruction: |
+      Apply DREAD scoring to each identified threat. For each threat, provide:
+      - Detailed rationale for each DREAD component score
+      - Overall DREAD risk score (average or weighted average)
+      - Risk level classification (Low/Medium/High/Critical)
+      - Confidence level in the assessment
+      
+      Use the following format for each threat assessment:
+      
+      **Threat: [Threat Name]**
+      - **Damage (D)**: [Score] - [Rationale]
+      - **Reproducibility (R)**: [Score] - [Rationale]  
+      - **Exploitability (E)**: [Score] - [Rationale]
+      - **Affected Users (A)**: [Score] - [Rationale]
+      - **Discoverability (D)**: [Score] - [Rationale]
+      - **Overall DREAD Score**: [Score]
+      - **Risk Level**: [Low/Medium/High/Critical]
+      - **Assessment Confidence**: [Low/Medium/High]
+    type: text
+    elicit: true
+    owner: security
+
+  - id: dread-scoring-matrix
+    title: DREAD Scoring Matrix
+    instruction: |
+      Create a comprehensive scoring matrix showing all threats and their DREAD scores.
+      This provides a quick reference and comparison view of all assessed threats.
+    type: table
+    columns:
+      - Threat Name
+      - Damage
+      - Reproducibility  
+      - Exploitability
+      - Affected Users
+      - Discoverability
+      - DREAD Score
+      - Risk Level
+      - Priority
+    elicit: true
+    owner: security
+
+  - id: risk-prioritization
+    title: Risk Prioritization and Ranking
+    instruction: |
+      Prioritize threats based on DREAD scores and additional business context:
+      - Rank threats from highest to lowest risk
+      - Consider business impact and regulatory implications
+      - Factor in current mitigation effectiveness
+      - Account for implementation cost and effort
+      - Provide recommended treatment approach for each risk level
+      
+      **Risk Treatment Approaches:**
+      - **Critical (9-10)**: Immediate remediation required
+      - **High (7-8)**: Remediate within current sprint/iteration
+      - **Medium (4-6)**: Address in next planning cycle
+      - **Low (1-3)**: Monitor and review periodically
+    type: text
+    elicit: true
+    owner: security
+    editors: [pm]
+
+  - id: critical-risks
+    title: Critical Risk Analysis
+    instruction: |
+      Provide detailed analysis of threats scoring 9-10 on DREAD scale:
+      - Detailed impact assessment
+      - Attack likelihood and feasibility
+      - Current defensive measures and gaps
+      - Immediate remediation requirements
+      - Business justification for urgent action
+      - Recommended timeline for remediation
+    type: text
+    elicit: true
+    owner: security
+    editors: [pm, architect]
+
+  - id: risk-trends
+    title: Risk Trend Analysis
+    instruction: |
+      Analyze risk trends and patterns identified in the assessment:
+      - Common high-risk threat patterns
+      - System components with highest risk concentration
+      - Risk distribution across DREAD categories
+      - Comparison with industry benchmarks if available
+      - Emerging threats and evolving risk landscape
+    type: text
+    owner: security
+
+  - id: mitigation-recommendations
+    title: Risk-Based Mitigation Recommendations
+    instruction: |
+      Provide specific mitigation recommendations based on DREAD scores:
+      - Priority-ordered mitigation actions
+      - Resource allocation recommendations
+      - Quick wins and low-hanging fruit
+      - Long-term risk reduction strategies
+      - Integration with existing security roadmap
+    type: numbered-list
+    prefix: "MR"
+    elicit: true
+    owner: security
+    editors: [architect, dev]
+
+  - id: residual-risk-assessment
+    title: Residual Risk Assessment
+    instruction: |
+      Assess residual risks after planned mitigations are implemented:
+      - Re-scoring of threats post-mitigation
+      - Identification of remaining risk exposure
+      - Acceptance criteria for residual risks
+      - Ongoing monitoring and reassessment requirements
+      - Risk appetite alignment with business objectives
+    type: text
+    elicit: true
+    owner: security
+    editors: [pm]
+
+  - id: assessment-limitations
+    title: Assessment Limitations and Assumptions
+    instruction: |
+      Document limitations and assumptions of the DREAD assessment:
+      - Scope limitations and excluded threats
+      - Key assumptions made during scoring
+      - Uncertainty factors and confidence levels
+      - External dependencies and variables
+      - Recommended reassessment triggers and frequency
+    type: bullet-list
+    owner: security
+
+  - id: next-steps
+    title: Next Steps and Action Plan
+    instruction: |
+      Define concrete next steps based on the DREAD assessment:
+      - Immediate action items and ownership
+      - Medium-term risk reduction initiatives
+      - Integration with threat model and mitigation documents
+      - Stakeholder communication and approval processes
+      - Success metrics and progress tracking methods
+    type: bullet-list
+    elicit: true
+    owner: security
+    editors: [pm]

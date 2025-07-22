@@ -1,0 +1,166 @@
+template:
+  id: threat-model-v2
+  name: STRIDE Threat Model Analysis
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/threat_model.md
+    title: "{{project_name}} Threat Model"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: executive-summary
+    title: Executive Summary
+    instruction: |
+      Create a concise executive summary covering:
+      - Project/system being analyzed
+      - Key security concerns identified
+      - High-priority threats and their impact
+      - Overall security posture assessment
+      Keep this under 200 words for stakeholder consumption.
+    type: text
+    owner: security
+    editors: [architect, pm]
+
+  - id: system-overview
+    title: System Overview
+    instruction: |
+      Provide a high-level description of the system architecture relevant to threat modeling:
+      - System boundaries and trust boundaries
+      - Key components and data flows
+      - User roles and access patterns
+      - External dependencies and integrations
+      Reference existing architecture documentation where available.
+    type: text
+    elicit: true
+    owner: security
+    editors: [architect]
+
+  - id: assets-identification
+    title: Asset Identification
+    instruction: |
+      Identify and categorize critical assets that need protection:
+      - Data assets (databases, files, configuration)
+      - System assets (servers, applications, services)  
+      - People assets (users, administrators, developers)
+      - Reputation and business assets
+      Rate each asset's criticality (High/Medium/Low) and business impact if compromised.
+    type: table
+    columns:
+      - Asset Name
+      - Asset Type
+      - Criticality
+      - Business Impact
+      - Current Protection Level
+    elicit: true
+    owner: security
+    editors: [architect, pm]
+
+  - id: threat-modeling-stride
+    title: STRIDE Threat Analysis
+    instruction: |
+      Apply the STRIDE methodology to identify threats across each category:
+      
+      **Spoofing (S)**: Identity verification failures
+      **Tampering (T)**: Unauthorized data/system modifications
+      **Repudiation (R)**: Denial of actions performed
+      **Information Disclosure (I)**: Unauthorized information access
+      **Denial of Service (D)**: System availability attacks  
+      **Elevation of Privilege (E)**: Unauthorized permission escalation
+      
+      For each threat identified, provide:
+      - Threat description and attack scenario
+      - Affected assets and components
+      - Attack vectors and prerequisites
+      - Potential impact and likelihood
+    type: text
+    elicit: true
+    owner: security
+    sections:
+      - id: spoofing-threats
+        title: Spoofing Threats
+        instruction: |
+          Identify potential spoofing attacks where attackers impersonate legitimate users, systems, or services.
+          Consider authentication bypasses, session hijacking, and identity confusion attacks.
+        type: bullet-list
+      - id: tampering-threats  
+        title: Tampering Threats
+        instruction: |
+          Identify threats where attackers could modify data, configuration, or system behavior.
+          Consider data integrity attacks, configuration manipulation, and unauthorized changes.
+        type: bullet-list
+      - id: repudiation-threats
+        title: Repudiation Threats
+        instruction: |
+          Identify scenarios where users could deny performing actions or where audit trails could be compromised.
+          Consider logging gaps, audit bypass, and accountability failures.
+        type: bullet-list
+      - id: information-disclosure-threats
+        title: Information Disclosure Threats
+        instruction: |
+          Identify potential data leakage and unauthorized access scenarios.
+          Consider data exposure, privacy violations, and confidentiality breaches.
+        type: bullet-list
+      - id: denial-of-service-threats
+        title: Denial of Service Threats
+        instruction: |
+          Identify attacks that could disrupt system availability or performance.
+          Consider resource exhaustion, service disruption, and availability attacks.
+        type: bullet-list
+      - id: elevation-of-privilege-threats
+        title: Elevation of Privilege Threats
+        instruction: |
+          Identify scenarios where attackers could gain unauthorized elevated access.
+          Consider privilege escalation, authorization bypass, and access control failures.
+        type: bullet-list
+
+  - id: threat-prioritization
+    title: Threat Prioritization Matrix
+    instruction: |
+      Prioritize identified threats using a risk-based approach considering likelihood and impact.
+      Rate each threat on a scale of 1-5 for both likelihood and impact, then calculate risk score.
+      Focus on threats with the highest risk scores for immediate attention.
+    type: table
+    columns:
+      - Threat ID
+      - Threat Description
+      - STRIDE Category
+      - Likelihood (1-5)
+      - Impact (1-5)  
+      - Risk Score
+      - Priority Level
+    elicit: true
+    owner: security
+    editors: [architect, pm]
+
+  - id: security-requirements
+    title: Security Requirements
+    instruction: |
+      Based on the threat analysis, define specific security requirements that must be implemented:
+      - Authentication and authorization requirements
+      - Data protection and encryption requirements
+      - Logging and monitoring requirements
+      - Network security requirements
+      - Incident response requirements
+      Map each requirement to the threats it addresses.
+    type: numbered-list
+    prefix: "SR"
+    elicit: true
+    owner: security
+    editors: [architect, dev]
+
+  - id: next-steps
+    title: Next Steps and Recommendations
+    instruction: |
+      Outline the recommended next steps for addressing identified threats:
+      - Immediate actions required
+      - Medium-term security enhancements
+      - Long-term security strategy
+      - Dependencies on other security documents (mitigations, test cases)
+      - Timeline and resource requirements
+    type: bullet-list
+    owner: security
+    editors: [pm, architect]

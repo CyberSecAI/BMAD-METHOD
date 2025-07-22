@@ -1,0 +1,180 @@
+template:
+  id: attack-tree-v2
+  name: Attack Tree Analysis
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/attack_tree.md
+    title: "{{project_name}} Attack Tree Analysis"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: overview
+    title: Attack Tree Overview
+    instruction: |
+      Provide an introduction to the attack tree analysis including:
+      - Primary attack goal being analyzed
+      - Scope and boundaries of the analysis
+      - Methodology and approach used
+      - Key assumptions made during analysis
+    type: text
+    owner: security
+    editors: [architect]
+
+  - id: primary-attack-goal
+    title: Primary Attack Goal
+    instruction: |
+      Define the main attack objective that this tree analyzes. Examples:
+      - "Gain unauthorized access to customer payment data"
+      - "Disrupt service availability for more than 24 hours" 
+      - "Gain administrative access to production systems"
+      - "Exfiltrate sensitive business intelligence"
+      
+      Clearly state why this goal was chosen and its potential business impact.
+    type: text
+    elicit: true
+    owner: security
+    editors: [pm, architect]
+
+  - id: attack-tree-structure
+    title: Attack Tree Structure
+    instruction: |
+      Create a hierarchical attack tree showing how the primary goal can be achieved.
+      Use indentation to show the tree structure with AND/OR relationships:
+      
+      **Tree Legend:**
+      - Primary Goal (root)
+        - OR: Alternative paths to achieve parent goal
+          - AND: All sub-goals must be achieved
+            - Leaf: Specific attack action/technique
+      
+      For each node, indicate:
+      - Attack technique or sub-goal
+      - Difficulty level (Trivial/Easy/Moderate/Hard/Very Hard)
+      - Required skills/resources
+      - Detection likelihood (High/Medium/Low)
+      
+      Example structure:
+      ```
+      Primary Goal: Compromise Customer Database
+      ├── OR: External Attack Path
+      │   ├── AND: SQL Injection Attack
+      │   │   ├── Identify SQL injection point (Easy)
+      │   │   └── Exploit injection to access DB (Moderate)
+      │   └── AND: Phishing Attack on Admin
+      │       ├── Craft convincing phishing email (Easy)
+      │       ├── Admin clicks malicious link (Moderate)
+      │       └── Steal admin credentials (Easy)
+      └── OR: Internal Attack Path
+          └── AND: Insider Threat
+              ├── Gain employee access (Very Hard)
+              └── Abuse legitimate access (Easy)
+      ```
+    type: text
+    elicit: true
+    owner: security
+
+  - id: attack-path-analysis
+    title: Attack Path Analysis
+    instruction: |
+      Analyze the most critical attack paths from the tree:
+      - Identify the 3-5 most likely attack paths
+      - Evaluate each path's feasibility and attractiveness to attackers
+      - Consider required attacker capabilities and resources
+      - Assess current defensive measures against each path
+      
+      For each critical path, provide:
+      - Path description and step-by-step breakdown
+      - Overall difficulty assessment
+      - Time to execute estimate
+      - Skills/tools required
+      - Likelihood of detection at each step
+      - Current security controls that would impede this path
+    type: text
+    elicit: true
+    owner: security
+    sections:
+      - id: critical-path-1
+        title: Critical Attack Path #1
+        instruction: Detail the highest priority attack path
+        type: text
+      - id: critical-path-2  
+        title: Critical Attack Path #2
+        instruction: Detail the second highest priority attack path
+        type: text
+      - id: critical-path-3
+        title: Critical Attack Path #3
+        instruction: Detail the third highest priority attack path
+        type: text
+
+  - id: quantitative-analysis
+    title: Quantitative Risk Analysis
+    instruction: |
+      Provide quantitative estimates for key attack scenarios where possible:
+      - Assign probability estimates to leaf nodes (attack techniques)
+      - Calculate overall attack success probability for each path
+      - Estimate cost to execute attacks (time, resources, skills)
+      - Assess potential financial impact if attacks succeed
+      - Calculate risk exposure (probability × impact)
+      
+      Use ranges and confidence levels for estimates (e.g., "30-50% probability, medium confidence").
+    type: table
+    columns:
+      - Attack Path
+      - Success Probability
+      - Cost to Execute
+      - Time to Execute
+      - Detection Probability
+      - Financial Impact
+      - Risk Score
+    elicit: true
+    owner: security
+    editors: [pm]
+
+  - id: defensive-analysis
+    title: Defensive Countermeasures Analysis
+    instruction: |
+      Analyze existing and potential defensive measures against each attack path:
+      - Current security controls and their effectiveness
+      - Gaps in current defenses
+      - Recommended additional countermeasures
+      - Cost-benefit analysis of proposed defenses
+      - Defense-in-depth strategy recommendations
+      
+      Map defensive measures to specific attack tree nodes they would block or detect.
+    type: text
+    elicit: true
+    owner: security
+    editors: [architect, dev]
+
+  - id: attack-tree-visualization
+    title: Attack Tree Visualization
+    instruction: |
+      Create a visual representation of the attack tree using Mermaid diagram syntax.
+      This provides a clear graphical view of attack paths and relationships.
+      
+      Use Mermaid flowchart syntax to represent the tree structure:
+      - Rectangles for attack goals/sub-goals
+      - Diamonds for decision points (AND/OR gates)
+      - Different colors for difficulty levels
+      - Arrows showing attack flow
+    type: mermaid
+    elicit: true
+    owner: security
+
+  - id: lessons-learned
+    title: Lessons Learned and Recommendations
+    instruction: |
+      Summarize key insights from the attack tree analysis:
+      - Most vulnerable attack vectors identified
+      - Surprising or unexpected attack paths discovered
+      - Security assumptions that were challenged
+      - Priority recommendations for improving security posture
+      - Integration points with threat model and mitigation documents
+      - Recommendations for ongoing attack tree maintenance
+    type: bullet-list
+    owner: security
+    editors: [architect, pm]

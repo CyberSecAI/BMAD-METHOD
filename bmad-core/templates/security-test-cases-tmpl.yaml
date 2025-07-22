@@ -1,0 +1,303 @@
+template:
+  id: security-test-cases-v2
+  name: Security Test Cases and Validation
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/test_cases.md
+    title: "{{project_name}} Security Test Cases"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: testing-overview
+    title: Security Testing Overview
+    instruction: |
+      Provide an overview of the security testing strategy including:
+      - Security testing objectives and goals
+      - Testing scope and boundaries
+      - Testing methodologies and frameworks used
+      - Integration with development lifecycle
+      - Success criteria and acceptance thresholds
+    type: text
+    owner: security
+    editors: [qa, dev]
+
+  - id: testing-methodology
+    title: Security Testing Methodology
+    instruction: |
+      Define the security testing approach and methodologies:
+      - Static Application Security Testing (SAST)
+      - Dynamic Application Security Testing (DAST)
+      - Interactive Application Security Testing (IAST)
+      - Manual penetration testing approaches
+      - Threat-based testing scenarios
+      - Compliance and regulatory testing requirements
+      
+      For each methodology, specify:
+      - When and how it will be applied
+      - Tools and techniques to be used
+      - Expected outcomes and deliverables
+      - Integration points in development process
+    type: text
+    elicit: true
+    owner: security
+    editors: [qa, dev]
+
+  - id: threat-based-test-cases
+    title: Threat-Based Test Cases
+    instruction: |
+      Create test cases directly mapped to identified threats from the threat model.
+      Each test case should validate that mitigations effectively address specific threats.
+      
+      Reference threats by ID from the threat model document where applicable.
+    type: text
+    elicit: true
+    owner: security
+    editors: [qa]
+    sections:
+      - id: authentication-tests
+        title: Authentication Security Tests
+        instruction: |
+          Define test cases for authentication mechanisms:
+          - Password policy enforcement testing
+          - Multi-factor authentication bypass attempts
+          - Session management and timeout testing
+          - Account lockout and brute force protection
+          - SSO integration security testing
+        type: table
+        columns:
+          - Test Case ID
+          - Test Description
+          - Test Steps
+          - Expected Result
+          - Associated Threat
+          - Priority
+      - id: authorization-tests
+        title: Authorization Security Tests
+        instruction: |
+          Define test cases for authorization and access controls:
+          - Privilege escalation attempts
+          - Horizontal and vertical access control bypass
+          - Role-based access control validation
+          - API authorization testing
+          - Resource-level access validation
+        type: table
+        columns:
+          - Test Case ID
+          - Test Description
+          - Test Steps
+          - Expected Result
+          - Associated Threat
+          - Priority
+      - id: input-validation-tests
+        title: Input Validation Security Tests
+        instruction: |
+          Define test cases for input validation and injection attacks:
+          - SQL injection testing (various techniques)
+          - Cross-site scripting (XSS) testing
+          - Command injection testing
+          - LDAP injection testing
+          - XML/XXE injection testing
+        type: table
+        columns:
+          - Test Case ID
+          - Test Description
+          - Test Steps
+          - Expected Result
+          - Associated Threat
+          - Priority
+      - id: session-management-tests
+        title: Session Management Security Tests
+        instruction: |
+          Define test cases for session security:
+          - Session hijacking attempts
+          - Session fixation testing
+          - Cross-site request forgery (CSRF) testing
+          - Session timeout validation
+          - Secure cookie configuration testing
+        type: table
+        columns:
+          - Test Case ID
+          - Test Description
+          - Test Steps
+          - Expected Result
+          - Associated Threat
+          - Priority
+      - id: encryption-tests
+        title: Encryption Security Tests
+        instruction: |
+          Define test cases for encryption and cryptographic controls:
+          - Data encryption at rest validation
+          - Data encryption in transit validation
+          - Key management security testing
+          - Cryptographic algorithm validation
+          - Certificate validation testing
+        type: table
+        columns:
+          - Test Case ID
+          - Test Description
+          - Test Steps
+          - Expected Result
+          - Associated Threat
+          - Priority
+
+  - id: vulnerability-test-cases
+    title: Common Vulnerability Test Cases
+    instruction: |
+      Define test cases for OWASP Top 10 and other common vulnerabilities:
+      - Broken access control testing
+      - Cryptographic failures testing
+      - Injection vulnerability testing
+      - Insecure design validation
+      - Security misconfiguration testing
+      - Vulnerable and outdated components
+      - Identification and authentication failures
+      - Software and data integrity failures
+      - Security logging and monitoring failures
+      - Server-side request forgery (SSRF)
+    type: text
+    elicit: true
+    owner: security
+    editors: [qa, dev]
+
+  - id: api-security-tests
+    title: API Security Test Cases
+    instruction: |
+      Define specific test cases for API security if applicable:
+      - API authentication and authorization
+      - Rate limiting and throttling
+      - Input validation for API parameters
+      - API versioning security considerations
+      - GraphQL security testing (if applicable)
+      - REST API security best practices
+    type: table
+    columns:
+      - Test Case ID
+      - API Endpoint
+      - Test Description
+      - Test Steps
+      - Expected Result
+      - Associated Threat
+    elicit: true
+    owner: security
+    editors: [dev, qa]
+
+  - id: infrastructure-tests
+    title: Infrastructure Security Test Cases
+    instruction: |
+      Define test cases for infrastructure and deployment security:
+      - Container security testing
+      - Cloud configuration security
+      - Network security testing
+      - Server hardening validation
+      - Database security configuration
+      - Monitoring and logging validation
+    type: text
+    elicit: true
+    owner: security
+    editors: [architect, qa]
+
+  - id: compliance-test-cases
+    title: Compliance Test Cases
+    instruction: |
+      Define test cases for regulatory and compliance requirements:
+      - Data protection regulation compliance (GDPR, CCPA)
+      - Industry-specific compliance (HIPAA, PCI-DSS, SOX)
+      - Internal security policy compliance
+      - Audit trail and logging compliance
+      - Data retention and deletion compliance
+    type: table
+    columns:
+      - Compliance Requirement
+      - Test Case ID
+      - Test Description
+      - Test Steps
+      - Expected Result
+      - Validation Criteria
+    owner: security
+    editors: [pm, qa]
+
+  - id: automated-testing
+    title: Automated Security Testing
+    instruction: |
+      Define automated security testing approach and implementation:
+      - Continuous integration security testing
+      - Automated vulnerability scanning schedules
+      - Security regression testing
+      - Performance impact of security controls
+      - Automated compliance validation
+      
+      Include:
+      - Tools and frameworks to be used
+      - Integration with CI/CD pipelines
+      - Automated test execution schedules
+      - Failure handling and notification procedures
+      - Test result analysis and reporting
+    type: text
+    elicit: true
+    owner: security
+    editors: [dev, qa]
+
+  - id: manual-testing
+    title: Manual Security Testing
+    instruction: |
+      Define manual security testing procedures and scenarios:
+      - Penetration testing scenarios
+      - Social engineering testing (if applicable)
+      - Physical security testing (if applicable)
+      - Business logic security testing
+      - Complex attack scenario simulation
+      
+      Include:
+      - Testing procedures and methodologies
+      - Required skills and certifications
+      - Testing environment requirements
+      - Documentation and reporting standards
+      - Remediation validation procedures
+    type: text
+    elicit: true
+    owner: security
+    editors: [qa]
+
+  - id: test-data-management
+    title: Test Data and Environment Management
+    instruction: |
+      Define secure test data and environment management:
+      - Test data anonymization and masking procedures
+      - Secure test environment provisioning
+      - Test data lifecycle management
+      - Environment isolation and segmentation
+      - Test data cleanup and destruction procedures
+    type: bullet-list
+    owner: security
+    editors: [dev, qa]
+
+  - id: reporting-metrics
+    title: Security Testing Reporting and Metrics
+    instruction: |
+      Define security testing reporting standards and key metrics:
+      - Test execution reporting templates
+      - Security defect classification and severity
+      - Key performance indicators (KPIs) for security testing
+      - Trend analysis and dashboard requirements
+      - Executive summary reporting formats
+    type: text
+    elicit: true
+    owner: security
+    editors: [qa, pm]
+
+  - id: remediation-validation
+    title: Remediation Validation Testing
+    instruction: |
+      Define procedures for validating security fixes and mitigations:
+      - Regression testing after security fixes
+      - Mitigation effectiveness validation
+      - Fix verification procedures
+      - Re-testing schedules and criteria
+      - Sign-off procedures for security fixes
+    type: bullet-list
+    owner: security
+    editors: [dev, qa]

@@ -1,0 +1,251 @@
+template:
+  id: mitigations-v2
+  name: Security Mitigations and Controls
+  version: 2.0
+  output:
+    format: markdown
+    filename: docs/mitigations.md
+    title: "{{project_name}} Security Mitigations"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+
+sections:
+  - id: mitigation-overview
+    title: Mitigation Strategy Overview
+    instruction: |
+      Provide an executive overview of the security mitigation strategy:
+      - Primary security objectives and goals
+      - Risk-based prioritization approach
+      - Defense-in-depth strategy summary
+      - Integration with existing security frameworks
+      - Resource requirements and timeline overview
+    type: text
+    owner: security
+    editors: [architect, pm]
+
+  - id: threat-mitigation-mapping
+    title: Threat-to-Mitigation Mapping
+    instruction: |
+      Map identified threats from the threat model to specific mitigations.
+      This ensures comprehensive coverage and traceability from threats to controls.
+      Reference specific threats by ID from the threat model document.
+      
+      For each mapping, indicate:
+      - Threat ID and brief description
+      - Primary mitigation strategy
+      - Supporting/secondary controls
+      - Residual risk level after mitigation
+    type: table
+    columns:
+      - Threat ID
+      - Threat Summary
+      - Primary Mitigation
+      - Secondary Controls
+      - Mitigation Status
+      - Residual Risk
+    elicit: true
+    owner: security
+    editors: [architect]
+
+  - id: preventive-controls
+    title: Preventive Controls
+    instruction: |
+      Detail security controls designed to prevent threats from materializing.
+      These controls should stop attacks before they can cause damage.
+      
+      For each preventive control, specify:
+      - Control name and description
+      - Threats addressed
+      - Implementation approach
+      - Configuration requirements
+      - Effectiveness rating
+      - Maintenance requirements
+    type: text
+    elicit: true
+    owner: security
+    editors: [architect, dev]
+    sections:
+      - id: authentication-controls
+        title: Authentication Controls
+        instruction: |
+          Define authentication mechanisms and policies:
+          - Multi-factor authentication requirements
+          - Password policies and complexity requirements
+          - Account lockout and brute-force protection
+          - Single sign-on (SSO) implementation
+          - API authentication mechanisms
+        type: bullet-list
+      - id: authorization-controls
+        title: Authorization Controls  
+        instruction: |
+          Define access control and authorization mechanisms:
+          - Role-based access control (RBAC) design
+          - Principle of least privilege implementation
+          - Privilege escalation controls
+          - Resource-level access controls
+          - API authorization mechanisms
+        type: bullet-list
+      - id: input-validation-controls
+        title: Input Validation Controls
+        instruction: |
+          Define input validation and sanitization requirements:
+          - Server-side validation requirements
+          - Input sanitization and encoding
+          - File upload security controls
+          - SQL injection prevention measures
+          - Cross-site scripting (XSS) prevention
+        type: bullet-list
+      - id: encryption-controls
+        title: Encryption Controls
+        instruction: |
+          Define encryption requirements and implementation:
+          - Data encryption at rest requirements
+          - Data encryption in transit requirements
+          - Key management and rotation policies
+          - Cryptographic algorithm standards
+          - Certificate management procedures
+        type: bullet-list
+
+  - id: detective-controls
+    title: Detective Controls
+    instruction: |
+      Detail security controls designed to detect threats and security incidents.
+      These controls provide visibility into potential attacks and security events.
+    type: text
+    elicit: true
+    owner: security
+    editors: [dev, qa]
+    sections:
+      - id: logging-monitoring
+        title: Logging and Monitoring
+        instruction: |
+          Define comprehensive logging and monitoring requirements:
+          - Security event logging requirements
+          - Log retention and archival policies
+          - Real-time monitoring and alerting
+          - Security information and event management (SIEM)
+          - Application security monitoring
+        type: bullet-list
+      - id: intrusion-detection
+        title: Intrusion Detection
+        instruction: |
+          Define intrusion detection and prevention systems:
+          - Network intrusion detection systems (NIDS)
+          - Host-based intrusion detection systems (HIDS)
+          - Application intrusion detection
+          - Behavioral analysis and anomaly detection
+          - Threat intelligence integration
+        type: bullet-list
+      - id: vulnerability-scanning
+        title: Vulnerability Management
+        instruction: |
+          Define vulnerability assessment and management processes:
+          - Automated vulnerability scanning schedules
+          - Penetration testing requirements
+          - Code security analysis (SAST/DAST)
+          - Third-party security assessments
+          - Vulnerability remediation timelines
+        type: bullet-list
+
+  - id: corrective-controls
+    title: Corrective Controls
+    instruction: |
+      Detail security controls designed to respond to and recover from security incidents.
+      These controls minimize damage and restore normal operations.
+    type: text
+    elicit: true
+    owner: security
+    editors: [pm, dev]
+    sections:
+      - id: incident-response
+        title: Incident Response
+        instruction: |
+          Define incident response procedures and capabilities:
+          - Incident classification and escalation procedures
+          - Response team roles and responsibilities
+          - Communication and notification procedures
+          - Evidence preservation and forensics
+          - Post-incident analysis and lessons learned
+        type: bullet-list
+      - id: backup-recovery
+        title: Backup and Recovery
+        instruction: |
+          Define backup and disaster recovery procedures:
+          - Data backup schedules and retention
+          - System backup and restoration procedures
+          - Disaster recovery testing procedures
+          - Business continuity planning
+          - Recovery time and point objectives
+        type: bullet-list
+
+  - id: administrative-controls
+    title: Administrative Controls
+    instruction: |
+      Detail administrative and procedural security controls:
+      - Security policies and standards
+      - Security awareness training programs
+      - Security review and audit procedures
+      - Vendor and third-party security requirements
+      - Change management security procedures
+    type: bullet-list
+    elicit: true
+    owner: security
+    editors: [pm]
+
+  - id: implementation-plan
+    title: Implementation Plan
+    instruction: |
+      Create a prioritized implementation plan for all security mitigations:
+      - Implementation phases and milestones
+      - Resource requirements and dependencies
+      - Timeline and critical path analysis
+      - Risk-based prioritization justification
+      - Success criteria and validation methods
+      
+      Organize by priority: Critical (0-30 days), High (1-3 months), Medium (3-6 months), Low (6+ months)
+    type: table
+    columns:
+      - Mitigation
+      - Priority Level
+      - Implementation Phase
+      - Timeline
+      - Resources Required
+      - Dependencies
+      - Success Criteria
+    elicit: true
+    owner: security
+    editors: [pm, architect]
+
+  - id: cost-benefit-analysis
+    title: Cost-Benefit Analysis
+    instruction: |
+      Provide cost-benefit analysis for major security investments:
+      - Implementation costs (initial and ongoing)
+      - Risk reduction quantification
+      - Return on security investment (ROSI)
+      - Alternative solutions considered
+      - Recommendations for budget allocation
+    type: text
+    elicit: true
+    owner: security
+    editors: [pm]
+
+  - id: compliance-mapping
+    title: Compliance and Standards Mapping
+    instruction: |
+      Map security mitigations to relevant compliance requirements and standards:
+      - Regulatory requirements (GDPR, HIPAA, SOX, PCI-DSS)
+      - Industry standards (ISO 27001, NIST Framework, SOC 2)
+      - Internal security policies and standards
+      - Audit and compliance validation procedures
+    type: table
+    columns:
+      - Regulation/Standard
+      - Requirement ID
+      - Requirement Description
+      - Implementing Mitigation(s)
+      - Compliance Status
+    owner: security
+    editors: [pm]

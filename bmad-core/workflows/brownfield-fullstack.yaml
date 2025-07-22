@@ -83,6 +83,21 @@ workflow:
       condition: architecture_changes_needed
       notes: "Creates architecture ONLY for significant architectural changes. SAVE OUTPUT: Copy final architecture.md to your project's docs/ folder."
 
+    - agent: security
+      creates: security-impact-assessment.md
+      requires: 
+        - prd.md
+      optional_requires:
+        - architecture.md
+      uses: review-epic
+      notes: "Performs security impact assessment for brownfield changes. Reviews existing security posture and identifies security implications of proposed changes. Creates security requirements for implementation. SAVE OUTPUT: Copy to docs/ folder."
+
+    - agent: architect
+      updates: architecture.md (if needed)
+      requires: security-impact-assessment.md
+      condition: security_recommendations_require_architecture_changes
+      notes: "Updates architecture based on security impact assessment recommendations. Re-export updated architecture to docs/ folder if changes made."
+
     - agent: po
       validates: all_artifacts
       uses: po-master-checklist

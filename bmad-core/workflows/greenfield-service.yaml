@@ -39,6 +39,20 @@ workflow:
       condition: architecture_suggests_prd_changes
       notes: "If architect suggests story changes, update PRD and re-export the complete unredacted prd.md to docs/ folder."
 
+    - agent: security
+      creates: security-architecture.md
+      requires: 
+        - prd.md
+        - architecture.md
+      uses: assess-plan
+      notes: "Performs comprehensive security assessment focusing on API security, data protection, and service-level security controls. SAVE OUTPUT: Copy security-architecture.md to docs/ folder."
+
+    - agent: architect
+      updates: architecture.md (if needed)
+      requires: security-architecture.md
+      condition: security_recommendations_require_architecture_changes
+      notes: "Updates architecture based on security recommendations. Re-export updated architecture to docs/ folder if changes made."
+
     - agent: po
       validates: all_artifacts
       uses: po-master-checklist

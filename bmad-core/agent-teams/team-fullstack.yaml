@@ -8,6 +8,7 @@ agents:
   - pm
   - ux-expert
   - architect
+  - security
   - po
 workflows:
   - brownfield-fullstack.yaml

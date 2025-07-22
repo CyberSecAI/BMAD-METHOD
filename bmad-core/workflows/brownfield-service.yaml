@@ -31,6 +31,20 @@ workflow:
       requires: prd.md
       notes: "Creates architecture with service integration strategy and API evolution planning. SAVE OUTPUT: Copy final architecture.md to your project's docs/ folder."
 
+    - agent: security
+      creates: security-impact-assessment.md
+      requires: 
+        - prd.md
+        - architecture.md
+      uses: review-epic
+      notes: "Performs security impact assessment for service changes. Reviews API security, data protection, and service integration security implications. SAVE OUTPUT: Copy to docs/ folder."
+
+    - agent: architect
+      updates: architecture.md (if needed)
+      requires: security-impact-assessment.md
+      condition: security_recommendations_require_architecture_changes
+      notes: "Updates architecture based on security recommendations. Re-export updated architecture to docs/ folder if changes made."
+
     - agent: po
       validates: all_artifacts
       uses: po-master-checklist

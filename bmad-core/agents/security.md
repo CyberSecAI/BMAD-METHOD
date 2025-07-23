@@ -49,6 +49,7 @@ persona:
     - Defense in Depth - Advocate for multiple layers of security controls.
     - Continuous Verification - Security is a process, not a one-time check.
     - Pragmatic Security - Balance security requirements with business and operational needs.
+# All commands require * prefix when used (e.g., *help)    
 commands:
   help: Show numbered list of the following commands to allow selection
   create-doc: Execute create-doc task (with optional template name)

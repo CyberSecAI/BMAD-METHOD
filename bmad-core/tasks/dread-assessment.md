@@ -1,32 +1,58 @@
 # dread-assessment
 
-Performs quantitative risk assessment using the DREAD methodology to prioritize security threats with numerical scoring.
+Performs enhanced quantitative risk assessment using the DREAD methodology, integrated with current threat intelligence and sophisticated risk analysis models to prioritize security threats with evidence-based numerical scoring.
+
+**Enhanced DREAD Framework:**
+- **Risk Analysis Models**: Uses `{root}/utils/security-analysis.md` for quantitative risk assessment methodologies
+- **Threat Intelligence**: Leverages `{root}/data/threat-intelligence.md` for current attack feasibility and actor capabilities
+- **Industry Context**: References `{root}/data/security-methodologies.md` for DREAD best practices and sector-specific scoring
 
 ## Prerequisites
 
 - Completed threat model with identified threats
 - Understanding of system architecture and business impact
 - Access to technical documentation and threat scenarios
+- Current threat intelligence context for your industry/technology stack
 
 ## DREAD Assessment Process
 
 DREAD is a quantitative risk assessment framework that scores threats on five criteria using a 1-10 scale:
 
-### DREAD Scoring Criteria
+### Enhanced DREAD Scoring Criteria
+
+Before scoring, establish **threat actor context** using `{root}/data/threat-intelligence.md`:
+- **Relevant threat actors** for your industry (APTs, cybercriminals, insiders, hacktivists)
+- **Current attack campaigns** targeting your technology stack
+- **Known exploits** for your system components
 
 **Damage Potential (1-10):**
-- How much damage could this threat cause if successfully exploited?
-- 1-3: Minimal damage (minor inconvenience, limited data exposure)
-- 4-6: Moderate damage (service degradation, some data loss)
-- 7-8: Major damage (significant service disruption, substantial data breach)
-- 9-10: Catastrophic damage (complete system compromise, massive data breach)
+How much damage could this threat cause if successfully exploited?
+
+*Enhanced Scoring Guidance:*
+- **1-3: Minimal damage** - Limited functionality impact, no sensitive data exposure, minimal business disruption
+- **4-6: Moderate damage** - Service degradation, some confidential data exposure, short-term business impact
+- **7-8: Major damage** - Significant service disruption, substantial data breach, major business/reputation impact
+- **9-10: Catastrophic damage** - Complete system compromise, massive data breach, existential business threat
+
+*Damage Assessment Framework* (Reference: `{root}/utils/security-analysis.md`):
+- **Confidentiality Impact**: None/Partial/Complete data exposure
+- **Integrity Impact**: None/Partial/Complete data modification capabilities  
+- **Availability Impact**: None/Partial/Complete service disruption
+- **Business Impact**: Operational, financial, regulatory, reputational consequences
 
 **Reproducibility (1-10):**
-- How easy is it for an attacker to reproduce this exploit?
-- 1-3: Very difficult (requires sophisticated tools, rare conditions)
-- 4-6: Moderate difficulty (requires some technical knowledge, specific conditions)
-- 7-8: Easy to reproduce (straightforward steps, common conditions)
-- 9-10: Always reproducible (simple steps, any conditions)
+How easy is it for an attacker to reproduce this exploit?
+
+*Enhanced Scoring with Threat Intelligence:*
+- **1-3: Very difficult** - Requires nation-state capabilities, zero-day exploits, insider access
+- **4-6: Moderate difficulty** - Requires skilled cybercriminal capabilities, some specialized tools/knowledge
+- **7-8: Easy to reproduce** - Script kiddie level, publicly available exploits, common attack tools
+- **9-10: Always reproducible** - Automated exploits, widely available tools, minimal skill required
+
+*Reproducibility Factors* (Reference current threat intelligence):
+- **Exploit availability**: Are exploits publicly available or being used in active campaigns?
+- **Tool accessibility**: Are attack tools readily available to threat actors?
+- **Technical barriers**: What level of expertise is required for successful exploitation?
 
 **Exploitability (1-10):**
 - How much effort and skill is required to exploit this threat?
@@ -49,16 +75,35 @@ DREAD is a quantitative risk assessment framework that scores threats on five cr
 - 7-8: Easy to discover (visible, documented, well-known)
 - 9-10: Obvious to discover (publicly visible, widely known)
 
-### Risk Score Calculation
+### Enhanced Risk Score Calculation
 
-**Risk Score = (Damage + Reproducibility + Exploitability + Affected Users + Discoverability) / 5**
+**Primary DREAD Score = (Damage + Reproducibility + Exploitability + Affected Users + Discoverability) / 5**
 
-### Risk Score Interpretation
+**Advanced Risk Analysis** (Reference: `{root}/utils/security-analysis.md`):
 
-- **8.0-10.0**: Critical Risk - Immediate action required
-- **6.0-7.9**: High Risk - Address as high priority
-- **4.0-5.9**: Medium Risk - Address in planned timeline
-- **1.0-3.9**: Low Risk - Address as resources permit
+**Risk Adjustment Factors:**
+- **Threat Actor Capability Multiplier**: 
+  - Nation-state (1.2×), Organized cybercrime (1.1×), Insider threat (1.15×), Opportunistic (1.0×)
+- **Industry Risk Factor**: 
+  - Critical infrastructure (1.2×), Financial (1.15×), Healthcare (1.1×), Technology (1.05×), General (1.0×)
+- **Current Campaign Activity**: 
+  - Active targeting (+1.0), Recent campaign activity (+0.5), Historical activity (0.0)
+
+**Final Risk Score = Primary DREAD Score × Capability Multiplier × Industry Factor + Campaign Activity**
+
+### Enhanced Risk Score Interpretation
+
+**Quantitative Risk Matrix:**
+- **9.0-12.0**: **CRITICAL** - Emergency response required, executive notification
+- **7.0-8.9**: **HIGH** - Immediate priority, deploy resources within 48-72 hours  
+- **5.0-6.9**: **MEDIUM** - Planned remediation, address within current sprint/quarter
+- **3.0-4.9**: **LOW** - Long-term planning, address as resources permit
+- **1.0-2.9**: **NEGLIGIBLE** - Monitor, accept risk, or implement low-cost controls
+
+**Business Risk Translation:**
+- **Critical/High**: Board-level risk, potential regulatory action, major business impact
+- **Medium**: Department-level risk, moderate business impact, compliance concerns  
+- **Low/Negligible**: Operational risk, minimal business impact, best practice implementation
 
 ## Assessment Process
 

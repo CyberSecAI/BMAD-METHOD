@@ -2,7 +2,13 @@
 
 ## Purpose
 
-Conduct a comprehensive security assessment of the system, application, or infrastructure to identify security gaps, vulnerabilities, and risks. This task provides a holistic evaluation that informs threat modeling, risk assessment, and mitigation planning activities.
+Conduct a comprehensive security assessment of the system, application, or infrastructure using enterprise-grade methodologies and current threat intelligence. This task provides a holistic evaluation that informs threat modeling, risk assessment, and mitigation planning activities.
+
+**Enhanced Assessment Framework:**
+- **Security Methodologies**: Leverages `{root}/data/security-methodologies.md` for NIST, ISO 27001, CIS Controls frameworks
+- **Threat Intelligence**: Uses `{root}/data/threat-intelligence.md` for current threat landscape and attack vectors
+- **Analysis Framework**: Applies `{root}/utils/security-analysis.md` for risk assessment models and control evaluation
+- **Compliance Integration**: References `{root}/data/compliance-frameworks.md` for regulatory requirements
 
 ## Usage Scenarios
 
@@ -26,6 +32,30 @@ For systems preparing for production deployment:
 2. **Risk Validation**: Validate that identified risks have been addressed
 3. **Control Verification**: Verify security controls are properly implemented
 4. **Sign-off Preparation**: Prepare security sign-off documentation
+
+## Assessment Framework Selection
+
+Before beginning the assessment, select the appropriate security framework based on your context (**Default: NIST Cybersecurity Framework for most organizations**). Reference `{root}/data/security-methodologies.md`:
+
+### **NIST Cybersecurity Framework** (Recommended for most organizations)
+- **Best for**: Comprehensive cybersecurity program assessment
+- **Focus**: Five core functions - Identify, Protect, Detect, Respond, Recover
+- **Output**: Risk-based security posture assessment with prioritized improvements
+
+### **ISO 27001/27002 Assessment** (For formal ISMS requirements)
+- **Best for**: Organizations seeking ISO 27001 certification or formal ISMS
+- **Focus**: 14 security control families across 114 detailed controls
+- **Output**: Comprehensive control assessment with certification readiness
+
+### **CIS Controls Assessment** (For practical, prioritized security)
+- **Best for**: Organizations seeking practical, cost-effective security improvements
+- **Focus**: 20 critical security controls prioritized by effectiveness
+- **Output**: Prioritized control implementation roadmap
+
+### **Industry-Specific Assessment** (For regulated industries)
+- **Best for**: Organizations with specific compliance requirements
+- **Focus**: Industry frameworks (PCI-DSS, HIPAA, SOX, FedRAMP, etc.)
+- **Output**: Compliance-aligned security assessment with regulatory gap analysis
 
 ## Task Instructions
 

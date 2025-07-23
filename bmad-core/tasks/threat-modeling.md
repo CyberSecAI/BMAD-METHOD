@@ -13,7 +13,12 @@ When this task is invoked:
 
 ## Purpose
 
-Execute a structured threat modeling process using the STRIDE methodology to identify, analyze, and prioritize security threats against the system. This task creates the foundation for security architecture, risk assessment, and mitigation planning.
+Execute a comprehensive threat modeling process using industry-standard methodologies to identify, analyze, and prioritize security threats against the system. This task creates the foundation for security architecture, risk assessment, and mitigation planning.
+
+**Key Reference Materials:**
+- **Security Methodologies**: References `{root}/data/security-methodologies.md` for STRIDE, PASTA, LINDDUN frameworks
+- **Threat Intelligence**: Leverages `{root}/data/threat-intelligence.md` for current threat landscape and actor profiles  
+- **Analysis Framework**: Uses `{root}/utils/security-analysis.md` for risk assessment models and threat analysis templates
 
 ## Critical: Template and Documentation Integration
 
@@ -29,6 +34,27 @@ This task can operate in two modes:
 - Quick threat assessment for specific components or scenarios
 - Integration with existing threat model documents
 
+## Methodology Selection Guide
+
+Before beginning threat modeling, select the appropriate methodology based on your system context (**Default: STRIDE Framework for most systems**). Reference `{root}/data/security-methodologies.md` for detailed framework descriptions:
+
+### **STRIDE Framework** (Default - Recommended for most systems)
+- **Best for**: Software applications, web services, APIs
+- **Focus**: Technical threat identification across six categories
+- **Output**: Comprehensive threat catalog with technical mitigations
+
+### **PASTA Framework** (For business-risk focused analysis)  
+- **Best for**: Business-critical systems requiring risk quantification
+- **Focus**: Seven-stage process linking business impact to technical threats
+- **Output**: Business-risk aligned threat model with prioritized mitigations
+
+### **LINDDUN Framework** (For privacy-sensitive systems)
+- **Best for**: Systems processing personal data, GDPR compliance
+- **Focus**: Privacy threat identification and mitigation
+- **Output**: Privacy-by-design threat model
+
+**For this task, we'll primarily use STRIDE with elements from other frameworks as needed.**
+
 ## Instructions
 
 ### Phase 1: Preparation and Scoping
@@ -40,13 +66,19 @@ This task can operate in two modes:
    - Previous security assessments or threat models
    - Network diagrams and infrastructure documentation
 
-2. **Define scope and boundaries**:
+2. **Establish threat landscape context** (Reference: `{root}/data/threat-intelligence.md`):
+   - **Industry-specific threats**: Review sector-specific threat profiles (financial, healthcare, technology, etc.)
+   - **Current threat actors**: Consider relevant APTs, cybercriminals, insider threats based on your industry
+   - **Attack trends**: Incorporate current attack vectors and techniques from MITRE ATT&CK framework
+   - **Vulnerability landscape**: Consider recent vulnerability patterns relevant to your technology stack
+
+3. **Define scope and boundaries**:
    - Identify system components to be analyzed
    - Define trust boundaries and security perimeters
    - Establish data flow boundaries and external interfaces
    - Document assumptions and limitations
 
-3. **Stakeholder identification**:
+4. **Stakeholder identification**:
    - Identify domain experts for each system component
    - Engage architects, developers, and security professionals
    - Include business stakeholders for context and priorities
@@ -267,11 +299,37 @@ For each boundary, identify:
 - Cloud service abuse across cloud boundaries
 - VPN tunnel abuse and traffic manipulation
 
-### Phase 3: STRIDE Threat Analysis
+### Phase 3: STRIDE Threat Analysis with Intelligence Integration
 
-**Systematic STRIDE Application:**
+**Enhanced STRIDE Application:**
 
-Apply STRIDE methodology to each system component and data flow. Document findings using the structured threat table format:
+Apply STRIDE methodology systematically, enhanced with current threat intelligence and risk analysis frameworks. Reference materials:
+- **Threat Actor Context**: `{root}/data/threat-intelligence.md` for current threat landscape
+- **Analysis Framework**: `{root}/utils/security-analysis.md` for risk assessment models
+
+**Step 1: Threat Actor Profiling**
+Before applying STRIDE, establish relevant threat actor context for your system:
+
+**Primary Threat Actors** (Select applicable from threat intelligence data - **Default: Include Cybercriminal Groups and Opportunistic Attackers for most systems**):
+- [ ] **Nation-State APTs**: High sophistication, persistent, espionage/disruption motivated
+- [x] **Cybercriminal Groups**: Financial motivation, ransomware, data theft, fraud *(Default - most common threat)*
+- [ ] **Insider Threats**: Privileged access, varied motivation, lower detection probability  
+- [ ] **Hacktivists**: Ideological motivation, public campaigns, DDoS/defacement
+- [x] **Opportunistic Attackers**: Low sophistication, broad targeting, known exploits *(Default - baseline threat)*
+
+**Step 2: Attack Vector Assessment**
+Map current attack techniques to your system using MITRE ATT&CK framework:
+
+**Initial Access Vectors** (Reference threat intelligence for current trends):
+- Phishing and social engineering campaigns
+- Exploitation of public-facing applications
+- Supply chain compromise
+- Valid account compromise
+- External remote services exploitation
+
+**Step 3: Systematic STRIDE Application**
+
+Apply STRIDE methodology to each system component and data flow, considering identified threat actors and attack vectors. Document findings using the structured threat table format:
 
 **Quality Control Checklist for Each Threat:**
 
@@ -329,6 +387,25 @@ For each threat, use this structured format to ensure specific, actionable descr
 | THREAT ID | COMPONENT | THREAT NAME | STRIDE CATEGORY | THREAT DESCRIPTION | WHY APPLICABLE | HOW MITIGATED | MITIGATION | LIKELIHOOD | IMPACT | RISK SEVERITY |
 |-----------|-----------|-------------|-----------------|-------------------|----------------|---------------|------------|-------------|---------|---------------|
 | [T001]    | [Component] | [Clear descriptive title] | [S/T/R/I/D/E] | [Use grammar template above - be specific about actor, method, vector, impact, and affected assets] | [Why this threat applies to your system] | [Current mitigations in place] | [Required additional mitigations - categorize as P/D/C] | [Low/Medium/High with reasoning] | [Low/Medium/High with reasoning] | [Low/Medium/High/Critical] |
+
+**Enhanced Risk Assessment Framework** (Reference: `{root}/utils/security-analysis.md`):
+
+**Likelihood Assessment Criteria:**
+- **High (3)**: Current known exploits, accessible attack surface, minimal skill required
+- **Medium (2)**: Some technical barriers, moderate skill required, attack surface exists
+- **Low (1)**: Significant technical barriers, high skill required, limited attack surface
+
+**Impact Assessment Criteria:**
+- **Critical (4)**: Complete system compromise, data breach, business disruption
+- **High (3)**: Significant data exposure, partial system compromise, major service disruption  
+- **Medium (2)**: Limited data access, service degradation, isolated system impact
+- **Low (1)**: Minimal impact, non-sensitive data, limited functionality affected
+
+**Risk Calculation**: `Risk Score = Likelihood × Impact`
+- **Critical (9-12)**: Immediate action required, emergency response
+- **High (6-8)**: High priority, near-term remediation required
+- **Medium (3-4)**: Moderate priority, planned remediation
+- **Low (1-2)**: Monitor, accept, or long-term remediation
 
 **Mitigation Categories:**
 - **P (Preventive)**: Controls that block or prevent the threat from occurring
@@ -1080,6 +1157,16 @@ Create a section to capture:
    - Update enterprise risk registers with identified threats
    - Align threat priorities with business risk appetite
    - Integrate with vulnerability management processes
+
+2. **Security control implementation** (Reference: `{root}/data/security-methodologies.md`):
+   - Map threats to NIST Cybersecurity Framework controls (Identify, Protect, Detect, Respond, Recover)
+   - Apply CIS Critical Security Controls for preventive measures
+   - Implement ISO 27001/27002 controls for comprehensive coverage
+
+3. **Compliance integration** (Reference: `{root}/data/compliance-frameworks.md`):
+   - Map threats to regulatory requirements (GDPR, HIPAA, PCI-DSS, SOX as applicable)
+   - Ensure threat model supports compliance audit requirements
+   - Document risk treatment decisions for regulatory reporting
    - Support compliance and audit activities
 
 2. **Architecture integration**:

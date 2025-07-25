@@ -142,6 +142,20 @@ workflow:
         - Leaves checklist for remaining items
         - Updates story status (Review → Done or stays Review)
 
+    - agent: vulnerabilityTech
+      action: security_code_review
+      updates: implementation_files  
+      requires: implementation_files
+      optional: true
+      condition: security_sensitive_implementation
+      notes: |
+        OPTIONAL: VulnerabilityTech Agent (New Chat): @vulnerabilityTech → code-security-review
+        - Performs security-focused code review using static analysis
+        - Identifies vulnerabilities and security weaknesses
+        - Validates secure coding practices implementation
+        - Creates security findings report with remediation guidance
+        - Updates story status with security validation results
+
     - agent: dev
       action: address_qa_feedback
       updates: implementation_files
@@ -150,6 +164,16 @@ workflow:
         If QA left unchecked items:
         - Dev Agent (New Chat): Address remaining items
         - Return to QA for final approval
+
+    - agent: dev
+      action: address_security_findings
+      updates: implementation_files
+      condition: vulnerabilityTech_found_issues
+      notes: |
+        If VulnerabilityTech found security issues:
+        - Dev Agent (New Chat): Address security findings
+        - Implement recommended security fixes
+        - Return to VulnerabilityTech for validation
 
     - repeat_development_cycle:
       action: continue_for_all_stories
@@ -203,11 +227,17 @@ workflow:
         N --> O
         O --> P{QA review?}
         P -->|Yes| Q[qa: review implementation]
-        P -->|No| R{More stories?}
+        P -->|No| Q2{Security review?}
         Q --> S{QA found issues?}
+        Q2 -->|Yes| Q3[vulnerabilityTech: code review]
+        Q2 -->|No| R{More stories?}
         S -->|Yes| T[dev: address QA feedback]
-        S -->|No| R
+        S -->|No| Q2
+        Q3 --> S2{Security issues found?}
+        S2 -->|Yes| T2[dev: address security findings]
+        S2 -->|No| R
         T --> Q
+        T2 --> Q3
         R -->|Yes| L
         R -->|No| U{Epic retrospective?}
         U -->|Yes| V[po: epic retrospective]

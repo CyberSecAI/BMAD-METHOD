@@ -1,0 +1,320 @@
+template:
+  name: "Vulnerability Assessment Report"
+  description: "Comprehensive vulnerability assessment report template for documenting security findings, risk analysis, and remediation guidance"
+  version: "1.0"
+  author: "VulnerabilityTech Agent"
+  category: "Security Assessment"
+
+sections:
+  - id: executive_summary
+    title: "Executive Summary"
+    instruction: "Provide a high-level overview of the vulnerability assessment findings, focusing on business impact and strategic recommendations for executive stakeholders."
+    elicit: true
+    content: |
+      ## Assessment Overview
+      - **Assessment Scope**: [Define the systems, applications, and components included in this assessment]
+      - **Assessment Period**: [Specify the timeframe during which the assessment was conducted]
+      - **Methodology**: [Brief description of assessment methodology and tools used]
+
+      ## Key Findings Summary
+      - **Total Vulnerabilities Identified**: [Number breakdown by severity: Critical/High/Medium/Low]
+      - **Critical Risk Areas**: [Highlight the most significant security concerns]
+      - **Overall Risk Rating**: [Provide overall security posture assessment]
+
+      ## Business Impact
+      - **Immediate Risks**: [Describe vulnerabilities requiring immediate attention]
+      - **Potential Consequences**: [Outline potential business impact if vulnerabilities are exploited]
+      - **Compliance Implications**: [Note any regulatory or compliance concerns]
+
+      ## Strategic Recommendations
+      - **Priority Actions**: [List top 3-5 recommendations for immediate implementation]
+      - **Resource Requirements**: [Estimate effort and resources needed for remediation]
+      - **Timeline**: [Recommended timeline for addressing critical and high-priority issues]
+
+  - id: assessment_methodology
+    title: "Assessment Methodology"
+    instruction: "Document the comprehensive methodology used for the vulnerability assessment, including tools, techniques, and scope limitations."
+    elicit: false
+    content: |
+      ## Assessment Scope
+      - **Systems Assessed**: [List all systems, applications, and components included]
+      - **Assessment Boundaries**: [Define what was included and excluded from the assessment]
+      - **Environment Details**: [Describe the target environment (development, staging, production)]
+
+      ## Assessment Techniques
+      - **Automated Scanning**: [List vulnerability scanners and tools used]
+      - **Manual Testing**: [Describe manual testing techniques employed]
+      - **Code Review**: [Detail static analysis and code review activities]
+      - **Configuration Review**: [Describe configuration and deployment analysis]
+
+      ## Standards and Frameworks
+      - **Security Standards**: [Reference applicable standards (OWASP, NIST, CWE, etc.)]
+      - **Compliance Frameworks**: [Note relevant regulatory requirements]
+      - **Risk Assessment Methodology**: [Describe risk rating and prioritization approach]
+
+      ## Limitations and Assumptions
+      - **Assessment Limitations**: [Document any constraints or limitations encountered]
+      - **Assumptions Made**: [List key assumptions underlying the assessment]
+      - **Out of Scope Items**: [Clearly identify what was not assessed]
+
+  - id: vulnerability_summary
+    title: "Vulnerability Summary"
+    instruction: "Provide a comprehensive summary of all identified vulnerabilities, organized by severity and category for easy reference and prioritization."
+    elicit: true
+    content: |
+      ## Vulnerability Distribution
+
+      ### By Severity
+      - **Critical**: [Number] vulnerabilities
+      - **High**: [Number] vulnerabilities  
+      - **Medium**: [Number] vulnerabilities
+      - **Low**: [Number] vulnerabilities
+      - **Informational**: [Number] findings
+
+      ### By Category
+      - **Authentication & Authorization**: [Number] issues
+      - **Input Validation**: [Number] issues
+      - **Cryptography**: [Number] issues
+      - **Configuration**: [Number] issues
+      - **Dependencies**: [Number] issues
+      - **Other**: [Number] issues
+
+      ## Risk Matrix
+      [Include risk matrix visualization showing likelihood vs. impact]
+
+      ## Critical Vulnerabilities Overview
+      [Provide brief description of each critical vulnerability]
+      1. **[Vulnerability Name]**: [Brief description and immediate risk]
+      2. **[Vulnerability Name]**: [Brief description and immediate risk]
+      
+      ## Remediation Priority Summary
+      - **Immediate (0-30 days)**: [Number] vulnerabilities
+      - **Short-term (1-3 months)**: [Number] vulnerabilities
+      - **Medium-term (3-6 months)**: [Number] vulnerabilities
+      - **Long-term (6+ months)**: [Number] vulnerabilities
+
+  - id: detailed_findings
+    title: "Detailed Vulnerability Findings"
+    instruction: "Document each vulnerability in detail, providing technical information, evidence, risk analysis, and specific remediation guidance."
+    elicit: true
+    content: |
+      # Critical Vulnerabilities
+
+      ## [Vulnerability ID]: [Vulnerability Title]
+      
+      **Severity**: Critical
+      **CVSS Score**: [Score] ([Vector])
+      **Category**: [OWASP/CWE Category]
+      **Affected Components**: [List affected systems/applications]
+
+      ### Description
+      [Detailed technical description of the vulnerability]
+
+      ### Technical Details
+      - **Location**: [Specific file, function, or configuration location]
+      - **Attack Vector**: [How the vulnerability can be exploited]
+      - **Prerequisites**: [Conditions required for exploitation]
+      - **Impact**: [Detailed impact if exploited]
+
+      ### Evidence
+      [Include proof-of-concept, screenshots, or code snippets demonstrating the vulnerability]
+      ```
+      [Code example or configuration showing the issue]
+      ```
+
+      ### Risk Assessment
+      - **Likelihood**: High/Medium/Low - [Justification]
+      - **Impact**: High/Medium/Low - [Justification]
+      - **Exploitability**: [Assessment of ease of exploitation]
+      - **Business Risk**: [Specific business consequences]
+
+      ### Remediation
+      - **Solution**: [Specific fix or mitigation approach]
+      - **Implementation Steps**:
+        1. [Step-by-step remediation instructions]
+        2. [Include code examples where applicable]
+        3. [Configuration changes needed]
+      - **Testing**: [How to verify the fix is effective]
+      - **Timeline**: [Recommended timeframe for remediation]
+      - **Effort Estimate**: [Development effort required]
+
+      ### References
+      - [Relevant security advisories, documentation, or standards]
+
+      ---
+
+      # High Priority Vulnerabilities
+
+      [Repeat the above format for each high-priority vulnerability]
+
+      # Medium Priority Vulnerabilities
+
+      [Continue with medium priority vulnerabilities in similar format]
+
+      # Low Priority and Informational Findings
+
+      [Document lower priority issues with abbreviated format]
+
+  - id: remediation_roadmap
+    title: "Remediation Roadmap"
+    instruction: "Create a strategic remediation plan that prioritizes vulnerabilities, provides timeline recommendations, and outlines resource requirements."
+    elicit: true
+    content: |
+      ## Remediation Strategy
+
+      ### Immediate Actions (0-30 days)
+      **Priority**: Address critical vulnerabilities and quick wins
+      
+      | Vulnerability | Component | Effort | Owner | Status |
+      |---------------|-----------|---------|-------|---------|
+      | [Vuln Name] | [Component] | [Hours/Days] | [Team] | [Status] |
+
+      **Resource Requirements**:
+      - Development effort: [Hours/days]
+      - Testing effort: [Hours/days]
+      - Deployment coordination: [Requirements]
+
+      ### Short-term Improvements (1-3 months)
+      **Priority**: Address high-priority vulnerabilities and systemic issues
+      
+      | Vulnerability | Component | Effort | Owner | Dependencies |
+      |---------------|-----------|---------|-------|--------------|
+      | [Vuln Name] | [Component] | [Hours/Days] | [Team] | [Dependencies] |
+
+      **Resource Requirements**:
+      - Development effort: [Hours/days]
+      - Architecture changes: [Description]
+      - Training needs: [Requirements]
+
+      ### Medium-term Enhancements (3-6 months)
+      **Priority**: Address medium-priority vulnerabilities and process improvements
+      
+      ### Long-term Strategic Improvements (6+ months)
+      **Priority**: Address systemic issues and implement strategic security enhancements
+
+      ## Implementation Considerations
+      - **Change Management**: [Considerations for managing security fixes]
+      - **Testing Strategy**: [Approach for validating remediation efforts]
+      - **Rollback Plans**: [Contingency planning for remediation activities]
+      - **Communication Plan**: [Stakeholder communication during remediation]
+
+      ## Success Metrics
+      - **Vulnerability Reduction**: Target reduction in vulnerability count by severity
+      - **Time to Remediation**: Target timelines for different severity levels
+      - **Risk Reduction**: Measurable reduction in overall risk exposure
+      - **Process Improvements**: Implementation of security best practices
+
+  - id: compliance_assessment
+    title: "Compliance and Standards Assessment"
+    instruction: "Evaluate compliance with relevant security standards and regulatory requirements, identifying gaps and providing compliance-focused remediation guidance."
+    elicit: false
+    content: |
+      ## Regulatory Compliance Status
+
+      ### [Applicable Regulation 1 - e.g., GDPR, HIPAA, PCI-DSS]
+      - **Compliance Status**: [Compliant/Non-Compliant/Partially Compliant]
+      - **Key Requirements**: [List relevant security requirements]
+      - **Gaps Identified**: [Specific compliance gaps found]
+      - **Remediation Requirements**: [What needs to be fixed for compliance]
+
+      ### [Applicable Regulation 2]
+      [Repeat format for each applicable regulation]
+
+      ## Security Standards Alignment
+
+      ### OWASP Top 10 Assessment
+      | OWASP Category | Status | Findings | Remediation |
+      |----------------|---------|-----------|-------------|
+      | A01: Broken Access Control | [Status] | [Findings] | [Required fixes] |
+      | A02: Cryptographic Failures | [Status] | [Findings] | [Required fixes] |
+      | [Continue for all categories] |
+
+      ### NIST Cybersecurity Framework
+      - **Identify**: [Assessment of identification capabilities]
+      - **Protect**: [Assessment of protective measures]
+      - **Detect**: [Assessment of detection capabilities]
+      - **Respond**: [Assessment of response capabilities]
+      - **Recover**: [Assessment of recovery capabilities]
+
+      ## Recommendations for Compliance
+      - **Immediate Compliance Actions**: [Critical items for regulatory compliance]
+      - **Process Improvements**: [Changes needed in security processes]
+      - **Documentation Requirements**: [Additional documentation needed]
+      - **Ongoing Monitoring**: [Requirements for continuous compliance]
+
+  - id: recommendations
+    title: "Strategic Recommendations"
+    instruction: "Provide comprehensive strategic and tactical recommendations for improving the organization's security posture based on assessment findings."
+    elicit: true
+    content: |
+      ## Strategic Security Improvements
+
+      ### Immediate Priorities
+      1. **[Recommendation 1]**: [Description and justification]
+         - Implementation approach: [How to implement]
+         - Expected benefit: [Security improvement expected]
+         - Resource requirements: [Effort and resources needed]
+
+      2. **[Recommendation 2]**: [Continue format]
+
+      ### Process and Governance Improvements
+      - **Secure Development Lifecycle**: [Recommendations for integrating security into development]
+      - **Vulnerability Management**: [Process improvements for ongoing vulnerability management]
+      - **Security Training**: [Training and awareness recommendations]
+      - **Security Testing**: [Recommendations for security testing integration]
+
+      ### Technical Improvements
+      - **Architecture Enhancements**: [Architectural security improvements]
+      - **Security Controls**: [Additional security controls to implement]
+      - **Monitoring and Detection**: [Improvements to security monitoring]
+      - **Incident Response**: [Enhancements to incident response capabilities]
+
+      ### Tools and Technology
+      - **Security Tools**: [Recommended security tools and technologies]
+      - **Automation**: [Opportunities for security automation]
+      - **Integration**: [Integration recommendations for security tools]
+
+      ## Implementation Roadmap
+      - **Phase 1 (0-3 months)**: [High-priority implementations]
+      - **Phase 2 (3-6 months)**: [Medium-priority implementations]
+      - **Phase 3 (6-12 months)**: [Long-term strategic implementations]
+
+      ## Success Measurement
+      - **Metrics**: [Key performance indicators for security improvement]
+      - **Monitoring**: [Approach for tracking improvement progress]
+      - **Reporting**: [Ongoing reporting and communication plan]
+
+  - id: appendices
+    title: "Appendices"
+    instruction: "Include supporting documentation, technical details, evidence, and reference materials."
+    elicit: false
+    content: |
+      ## Appendix A: Technical Evidence
+      [Include detailed technical evidence such as:]
+      - Vulnerability scanner reports
+      - Code snippets and configuration files
+      - Network diagrams and system architecture
+      - Log files and error messages
+
+      ## Appendix B: Risk Assessment Details
+      [Include detailed risk assessment information:]
+      - CVSS scoring rationale for each vulnerability
+      - Risk matrix calculations and methodology
+      - Business impact analysis details
+      - Threat modeling information
+
+      ## Appendix C: Tool Configuration
+      [Document tool configurations used:]
+      - Vulnerability scanner configurations
+      - Custom scripts and testing procedures
+      - Assessment checklists and procedures
+
+      ## Appendix D: References and Standards
+      [Include references to:]
+      - Security standards and frameworks
+      - Vendor documentation and advisories
+      - Industry best practices and guidelines
+      - Regulatory guidance and requirements
+
+      ## Appendix E: Glossary
+      [Define technical terms and acronyms used in the report]

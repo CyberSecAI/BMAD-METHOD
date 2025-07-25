@@ -1,0 +1,49 @@
+name: "Software Assurance"
+version: "1.0.0"
+description: "Language-specific security expertise for vulnerability assessment and secure coding practices"
+category: "Security"
+author: "BMAD Method"
+license: "MIT"
+
+compatibility:
+  bmad_version: ">=4.31.0"
+  
+tags:
+  - security
+  - vulnerability-assessment
+  - secure-coding
+  - static-analysis
+  - code-review
+
+dependencies:
+  - "bmad-core"
+
+agents:
+  - vulnerabilityTech
+
+supported_languages:
+  - python
+  - javascript
+  - java
+  - csharp
+  - go
+  - rust
+  - php
+
+features:
+  - "Language-specific vulnerability patterns and detection"
+  - "Secure coding guidelines and best practices"
+  - "Technology-specific security testing approaches"
+  - "Framework-specific security configurations"
+  - "Industry-standard compliance mappings"
+
+installation:
+  requirements:
+    - "Security scanning tools (optional but recommended)"
+    - "Static analysis tools for target languages"
+    - "Access to vulnerability databases"
+    
+  post_install:
+    - "Configure language-specific security tools"
+    - "Update vulnerability databases"
+    - "Review and customize security templates"

@@ -1,0 +1,348 @@
+template:
+  name: "Security Code Review Report"
+  description: "Comprehensive template for documenting security code review findings, analysis results, and remediation guidance"
+  version: "1.0"
+  author: "VulnerabilityTech Agent"
+  category: "Code Security Assessment"
+
+sections:
+  - id: review_summary
+    title: "Code Review Summary"
+    instruction: "Provide an executive overview of the security code review, highlighting key findings and overall security posture of the codebase."
+    elicit: true
+    content: |
+      ## Review Overview
+      - **Codebase**: [Application/system name and version]
+      - **Review Scope**: [Files, modules, or components reviewed]
+      - **Review Period**: [Duration of the review process]
+      - **Lines of Code**: [Approximate size of codebase reviewed]
+      - **Technology Stack**: [Programming languages, frameworks, libraries]
+
+      ## Security Findings Summary
+      - **Critical Issues**: [Number] - Require immediate attention
+      - **High Priority Issues**: [Number] - Should be addressed promptly
+      - **Medium Priority Issues**: [Number] - Should be planned for remediation
+      - **Low Priority Issues**: [Number] - Can be addressed in future iterations
+      - **Best Practices Violations**: [Number] - Process and training opportunities
+
+      ## Overall Security Assessment
+      - **Security Posture**: [Excellent/Good/Fair/Poor] - [Brief justification]
+      - **Code Quality**: [Assessment of overall code security quality]
+      - **Risk Level**: [High/Medium/Low] - [Primary risk factors]
+
+      ## Key Recommendations
+      1. **[Priority 1 Recommendation]**: [Brief description and impact]
+      2. **[Priority 2 Recommendation]**: [Brief description and impact]
+      3. **[Priority 3 Recommendation]**: [Brief description and impact]
+
+  - id: review_methodology
+    title: "Review Methodology"
+    instruction: "Document the comprehensive methodology used for the security code review, including tools, techniques, and coverage areas."
+    elicit: false
+    content: |
+      ## Review Approach
+      - **Review Type**: [Manual review, automated analysis, or hybrid approach]
+      - **Coverage**: [Percentage or description of code coverage achieved]
+      - **Focus Areas**: [Specific security areas prioritized in the review]
+      - **Time Investment**: [Total effort hours and team members involved]
+
+      ## Analysis Techniques
+      - **Static Analysis**: [Tools and techniques used for static code analysis]
+      - **Manual Code Review**: [Approach for manual security code inspection]
+      - **Data Flow Analysis**: [Methods for tracing data flow and trust boundaries]
+      - **Threat Modeling**: [Integration with threat modeling activities]
+
+      ## Security Standards Applied
+      - **Coding Standards**: [Secure coding guidelines used as reference]
+      - **Security Frameworks**: [OWASP, SANS, CWE classifications applied]
+      - **Language-Specific Guidelines**: [Language-specific security best practices]
+      - **Industry Standards**: [Relevant industry security standards]
+
+      ## Review Scope and Limitations
+      - **Included Components**: [Specific modules, files, or functions reviewed]
+      - **Excluded Components**: [Parts of codebase not reviewed and rationale]
+      - **Environmental Assumptions**: [Assumptions about deployment and runtime environment]
+      - **Review Limitations**: [Any constraints or limitations in the review process]
+
+  - id: security_architecture_analysis
+    title: "Security Architecture Analysis"
+    instruction: "Analyze the overall security architecture and design patterns implemented in the codebase, identifying strengths and weaknesses."
+    elicit: true
+    content: |
+      ## Architecture Overview
+      - **System Architecture**: [High-level description of system components and interactions]
+      - **Security Boundaries**: [Trust boundaries and security perimeters identified]
+      - **Data Flow**: [Critical data paths and processing workflows]
+      - **External Dependencies**: [Third-party integrations and external system interactions]
+
+      ## Authentication and Authorization
+      - **Authentication Mechanisms**: [Methods used for user authentication]
+        - Implementation quality: [Assessment of implementation]
+        - Identified issues: [List any problems found]
+        - Recommendations: [Suggestions for improvement]
+      
+      - **Authorization Controls**: [Access control implementations]
+        - Authorization model: [RBAC, ABAC, or other model used]
+        - Implementation assessment: [Quality and completeness]
+        - Privilege escalation risks: [Any risks identified]
+
+      ## Input Validation and Data Handling
+      - **Input Validation**: [Approach to validating user and external input]
+        - Validation coverage: [Assessment of validation completeness]
+        - Bypass opportunities: [Potential validation bypasses]
+        - Encoding/decoding: [Proper encoding practices]
+      
+      - **Output Encoding**: [Methods for safe output rendering]
+        - XSS prevention: [Cross-site scripting protections]
+        - Injection prevention: [SQL, command, and other injection protections]
+
+      ## Cryptography and Key Management
+      - **Cryptographic Implementation**: [Use of cryptography in the application]
+        - Algorithms used: [Encryption and hashing algorithms]
+        - Implementation quality: [Assessment of cryptographic implementation]
+        - Key management: [Key generation, storage, and rotation practices]
+      
+      - **Secure Communication**: [Protection of data in transit]
+        - TLS implementation: [HTTPS and secure communication assessment]
+        - Certificate management: [Certificate validation and management]
+
+      ## Session Management
+      - **Session Handling**: [Session management implementation]
+        - Session generation: [Session ID generation and entropy]
+        - Session storage: [Secure session storage mechanisms]
+        - Session termination: [Proper session cleanup and logout]
+
+      ## Error Handling and Logging
+      - **Error Handling**: [Approach to handling errors and exceptions]
+        - Information disclosure: [Risk of sensitive information exposure]
+        - Error responses: [Appropriate error response handling]
+      
+      - **Security Logging**: [Security event logging and monitoring]
+        - Log coverage: [Security events being logged]
+        - Log protection: [Log integrity and confidentiality]
+
+  - id: vulnerability_findings
+    title: "Detailed Security Findings"
+    instruction: "Document each security vulnerability found during the code review, providing technical details, impact analysis, and remediation guidance."
+    elicit: true
+    content: |
+      # Critical Security Issues
+
+      ## [Finding ID]: [Vulnerability Title]
+      
+      **Severity**: Critical
+      **CWE Classification**: [CWE-XXX: Classification Name]
+      **OWASP Category**: [OWASP Top 10 category if applicable]
+      **File/Location**: [Specific file path and line numbers]
+
+      ### Vulnerability Description
+      [Detailed description of the security vulnerability]
+
+      ### Code Evidence
+      ```[language]
+      [Insert vulnerable code snippet with line numbers]
+      ```
+
+      ### Security Impact
+      - **Confidentiality**: [Impact on data confidentiality]
+      - **Integrity**: [Impact on data or system integrity]
+      - **Availability**: [Impact on system availability]
+      - **Attack Scenario**: [How an attacker could exploit this vulnerability]
+
+      ### Technical Analysis
+      - **Root Cause**: [Why this vulnerability exists]
+      - **Attack Vector**: [How the vulnerability can be exploited]
+      - **Prerequisites**: [Conditions required for successful exploitation]
+      - **Likelihood**: [Probability of exploitation]
+
+      ### Remediation
+      **Recommended Solution**: [Primary remediation approach]
+      
+      **Secure Code Example**:
+      ```[language]
+      [Insert secure code example showing proper implementation]
+      ```
+
+      **Implementation Steps**:
+      1. [Step-by-step remediation instructions]
+      2. [Include testing requirements]
+      3. [Consider rollback planning]
+
+      **Alternative Solutions**: [Other possible approaches to address the issue]
+
+      **Testing Verification**: [How to test that the fix is effective]
+
+      ---
+
+      # High Priority Security Issues
+
+      [Repeat the above format for each high-priority finding]
+
+      # Medium Priority Security Issues
+
+      [Continue with medium priority findings using similar structure]
+
+      # Low Priority and Code Quality Issues
+
+      [Document lower priority issues with abbreviated format]
+
+  - id: secure_coding_assessment
+    title: "Secure Coding Practices Assessment"
+    instruction: "Evaluate adherence to secure coding practices and identify opportunities for improvement in development processes."
+    elicit: true
+    content: |
+      ## Secure Coding Standards Compliance
+
+      ### Input Validation and Sanitization
+      - **Current State**: [Assessment of input validation practices]
+      - **Strengths**: [Areas where good practices are followed]
+      - **Weaknesses**: [Areas needing improvement]
+      - **Recommendations**: [Specific improvements needed]
+
+      ### Output Encoding and Escaping
+      - **Current State**: [Assessment of output encoding practices]
+      - **XSS Prevention**: [Cross-site scripting protection measures]
+      - **Injection Prevention**: [SQL injection and command injection protections]
+      - **Recommendations**: [Improvements needed]
+
+      ### Authentication and Session Management
+      - **Password Handling**: [Password storage and validation practices]
+      - **Session Security**: [Session management security assessment]
+      - **Multi-factor Authentication**: [MFA implementation assessment]
+      - **Recommendations**: [Security enhancements needed]
+
+      ### Cryptography and Key Management
+      - **Algorithm Selection**: [Assessment of cryptographic algorithm choices]
+      - **Implementation Quality**: [Quality of cryptographic implementations]
+      - **Key Management**: [Key generation, storage, and lifecycle management]
+      - **Recommendations**: [Cryptographic improvements needed]
+
+      ### Error Handling and Information Disclosure
+      - **Error Handling**: [Assessment of error handling practices]
+      - **Information Leakage**: [Risk of sensitive information disclosure]
+      - **Logging Practices**: [Security logging and monitoring assessment]
+      - **Recommendations**: [Improvements in error handling and logging]
+
+      ### Dependency Management
+      - **Third-party Libraries**: [Assessment of third-party library usage]
+      - **Vulnerability Management**: [Process for managing library vulnerabilities]
+      - **License Compliance**: [Assessment of license compliance]
+      - **Recommendations**: [Dependency management improvements]
+
+      ## Development Process Security
+      - **Code Review Process**: [Assessment of existing code review practices]
+      - **Security Testing**: [Integration of security testing in development]
+      - **Secure Development Training**: [Developer security awareness and training]
+      - **Security Champion Program**: [Recommendations for security champions]
+
+  - id: remediation_plan
+    title: "Remediation Plan and Timeline"
+    instruction: "Create a comprehensive remediation plan that prioritizes security issues and provides realistic timelines for addressing identified vulnerabilities."
+    elicit: true
+    content: |
+      ## Remediation Strategy
+
+      ### Immediate Actions (0-2 weeks)
+      **Focus**: Address critical vulnerabilities that pose immediate risk
+
+      | Finding | Component | Effort | Owner | Dependencies |
+      |---------|-----------|---------|-------|--------------|
+      | [Critical Issue 1] | [Component] | [Hours] | [Team/Person] | [Prerequisites] |
+      | [Critical Issue 2] | [Component] | [Hours] | [Team/Person] | [Prerequisites] |
+
+      **Total Effort**: [Estimated hours/days]
+      **Resource Requirements**: [Development and testing resources needed]
+
+      ### Short-term Improvements (2-8 weeks)
+      **Focus**: Address high-priority vulnerabilities and implement security controls
+
+      | Finding | Component | Effort | Owner | Timeline |
+      |---------|-----------|---------|-------|----------|
+      | [High Priority Issue 1] | [Component] | [Hours] | [Team/Person] | [Target Date] |
+      | [High Priority Issue 2] | [Component] | [Hours] | [Team/Person] | [Target Date] |
+
+      **Process Improvements**:
+      - [Security process enhancement 1]
+      - [Security process enhancement 2]
+      - [Training and awareness initiatives]
+
+      ### Medium-term Enhancements (2-6 months)
+      **Focus**: Address medium-priority issues and implement strategic improvements
+
+      ### Long-term Security Enhancements (6+ months)
+      **Focus**: Architectural improvements and advanced security capabilities
+
+      ## Implementation Considerations
+      - **Testing Requirements**: [Security testing needed for each fix]
+      - **Deployment Strategy**: [Approach for deploying security fixes]
+      - **Risk Management**: [Managing risks during remediation]
+      - **Communication Plan**: [Stakeholder communication strategy]
+
+      ## Success Metrics
+      - **Vulnerability Reduction**: [Target reduction in vulnerability count]
+      - **Code Quality Improvement**: [Metrics for measuring code security improvement]
+      - **Process Maturity**: [Improvements in secure development processes]
+
+  - id: recommendations
+    title: "Strategic Recommendations"
+    instruction: "Provide comprehensive recommendations for improving the organization's secure development practices and overall application security posture."
+    elicit: true
+    content: |
+      ## Immediate Security Improvements
+      1. **[Recommendation 1]**: [Specific recommendation with implementation guidance]
+         - **Rationale**: [Why this is important]
+         - **Implementation**: [How to implement]
+         - **Expected Benefit**: [Security improvement expected]
+         - **Effort**: [Estimated effort required]
+
+      2. **[Recommendation 2]**: [Continue format for other recommendations]
+
+      ## Process and Training Improvements
+      - **Secure Code Review Process**: [Recommendations for improving code review]
+      - **Security Testing Integration**: [Integration of security testing in CI/CD]
+      - **Developer Training**: [Security training recommendations for development team]
+      - **Security Champions**: [Establishing security advocates within development teams]
+
+      ## Tool and Technology Recommendations
+      - **Static Analysis Tools**: [Recommended SAST tools for continuous scanning]
+      - **Dynamic Analysis Tools**: [DAST tools for runtime security testing]
+      - **Dependency Scanning**: [Tools for managing third-party library risks]
+      - **IDE Security Plugins**: [Security plugins for development environments]
+
+      ## Architectural Improvements
+      - **Security Architecture**: [High-level architectural security improvements]
+      - **Defense in Depth**: [Implementing layered security controls]
+      - **Secure Design Patterns**: [Adopting secure design and implementation patterns]
+      - **API Security**: [Specific improvements for API security]
+
+      ## Compliance and Standards
+      - **Standards Adoption**: [Security standards to adopt and implement]
+      - **Compliance Requirements**: [Meeting regulatory and industry requirements]
+      - **Security Metrics**: [KPIs for measuring security improvement]
+      - **Continuous Monitoring**: [Ongoing security monitoring and assessment]
+
+  - id: appendices
+    title: "Supporting Documentation"
+    instruction: "Include detailed technical evidence, reference materials, and supporting documentation for the security code review."
+    elicit: false
+    content: |
+      ## Appendix A: Code Snippets and Evidence
+      [Include detailed code examples showing vulnerabilities and recommended fixes]
+
+      ## Appendix B: Static Analysis Tool Reports
+      [Include relevant excerpts from automated security scanning tools]
+
+      ## Appendix C: Security Testing Results
+      [Include results from any dynamic testing or penetration testing performed]
+
+      ## Appendix D: Reference Materials
+      - **Secure Coding Guidelines**: [Links to relevant secure coding standards]
+      - **Security Frameworks**: [References to OWASP, SANS, and other frameworks]
+      - **Vendor Documentation**: [Links to relevant vendor security documentation]
+      - **Regulatory Guidance**: [References to applicable regulatory requirements]
+
+      ## Appendix E: Tool Configuration
+      [Document configuration settings for security analysis tools used]
+
+      ## Appendix F: Glossary
+      [Define technical terms and security concepts used throughout the report]

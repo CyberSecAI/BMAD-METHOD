@@ -50,6 +50,24 @@ sections:
     owner: scrum-master
     editors: [scrum-master]
     
+  - id: security-requirements
+    title: Security Requirements
+    type: numbered-list
+    instruction: |
+      Define security-specific requirements for this story based on threat analysis and security controls needed.
+      Include authentication, authorization, input validation, data protection, and compliance requirements.
+    template: |
+      1. Authentication: [Specify auth requirements]
+      2. Authorization: [Define access controls needed]
+      3. Input Validation: [Required input sanitization]
+      4. Data Protection: [Encryption, masking requirements]
+      5. Compliance: [Regulatory/standard requirements]
+    elicit: true
+    owner: scrum-master
+    editors: [scrum-master, security-agent]
+    optional: conditional
+    condition: story_has_security_implications
+    
   - id: tasks-subtasks
     title: Tasks / Subtasks
     type: bullet-list
@@ -59,10 +77,19 @@ sections:
     template: |
       - [ ] Task 1 (AC: # if applicable)
         - [ ] Subtask1.1...
+        - [ ] Security validation for Task 1 (if security requirements apply)
       - [ ] Task 2 (AC: # if applicable)
         - [ ] Subtask 2.1...
+        - [ ] Security validation for Task 2 (if security requirements apply)
       - [ ] Task 3 (AC: # if applicable)
         - [ ] Subtask 3.1...
+        - [ ] Security validation for Task 3 (if security requirements apply)
+      - [ ] Security Requirements Implementation (if applicable)
+        - [ ] Implement authentication controls
+        - [ ] Implement authorization controls
+        - [ ] Implement input validation
+        - [ ] Implement data protection
+        - [ ] Verify compliance requirements
     elicit: true
     owner: scrum-master
     editors: [scrum-master, dev-agent]
@@ -75,10 +102,37 @@ sections:
       - If known add Relevant Source Tree info that relates to this story
       - If there were important notes from previous story that are relevant to this one, include them here
       - Put enough information in this section so that the dev agent should NEVER need to read the architecture documents, these notes along with the tasks and subtasks must give the Dev Agent the complete context it needs to comprehend with the least amount of overhead the information to complete the story, meeting all AC and completing all tasks+subtasks
+      - Include security considerations and threat context relevant to this story implementation
     elicit: true
     owner: scrum-master
     editors: [scrum-master]
     sections:
+      - id: threat-considerations
+        title: Threat Considerations
+        instruction: |
+          Document security threats and attack vectors relevant to this story:
+          - Potential attack surfaces introduced
+          - Threat actors and attack scenarios
+          - Security controls that must be implemented
+          - Risk mitigation strategies
+          - Security architecture constraints
+        template: |
+          **Attack Surfaces**:
+          - [List new attack surfaces this story introduces]
+          
+          **Threat Scenarios**:
+          - [Describe potential attack scenarios]
+          
+          **Required Security Controls**:
+          - [List security controls that must be implemented]
+          
+          **Risk Mitigation**:
+          - [Describe how risks will be mitigated]
+        elicit: true
+        owner: scrum-master
+        editors: [scrum-master, security-agent]
+        optional: conditional
+        condition: story_has_security_implications
       - id: testing-standards
         title: Testing
         instruction: |
@@ -90,6 +144,28 @@ sections:
         elicit: true
         owner: scrum-master
         editors: [scrum-master]
+        sections:
+          - id: security-testing
+            title: Security Testing Requirements
+            instruction: |
+              Define security testing requirements for this story:
+              - Security unit tests needed
+              - Integration security tests
+              - Penetration testing requirements
+              - Vulnerability scanning needs
+              - Security compliance validation
+            template: |
+              - [ ] Input validation tests for all user inputs
+              - [ ] Authentication/authorization tests
+              - [ ] SQL injection prevention tests
+              - [ ] XSS prevention tests
+              - [ ] Data encryption validation
+              - [ ] Security header verification
+            elicit: true
+            owner: scrum-master
+            editors: [scrum-master, security-agent]
+            optional: conditional
+            condition: story_has_security_requirements
         
   - id: change-log
     title: Change Log
@@ -135,3 +211,32 @@ sections:
     instruction: Results from QA Agent QA review of the completed story implementation
     owner: qa-agent
     editors: [qa-agent]
+    
+  - id: security-review-results
+    title: Security Review Results
+    instruction: Results from VulnerabilityTech Agent security code review of the completed story implementation
+    owner: vulnerabilityTech-agent
+    editors: [vulnerabilityTech-agent]
+    optional: true
+    sections:
+      - id: vulnerability-findings
+        title: Vulnerability Findings
+        instruction: Document any security vulnerabilities identified during code review
+        owner: vulnerabilityTech-agent
+        editors: [vulnerabilityTech-agent]
+        
+      - id: security-compliance
+        title: Security Compliance Status
+        instruction: |
+          Document compliance with security requirements and standards:
+          - NIST SSDF practice compliance
+          - Security requirement validation
+          - Threat mitigation verification
+        owner: vulnerabilityTech-agent
+        editors: [vulnerabilityTech-agent]
+        
+      - id: remediation-recommendations
+        title: Remediation Recommendations
+        instruction: Provide specific recommendations for addressing any security issues found
+        owner: vulnerabilityTech-agent
+        editors: [vulnerabilityTech-agent]

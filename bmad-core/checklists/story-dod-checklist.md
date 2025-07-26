@@ -37,7 +37,10 @@ The goal is quality delivery, not just checking boxes.]]
    - [ ] All new/modified code aligns with `Project Structure` (file locations, naming, etc.).
    - [ ] Adherence to `Tech Stack` for technologies/versions used (if story introduces or modifies tech usage).
    - [ ] Adherence to `Api Reference` and `Data Models` (if story involves API or data model changes).
+   - [ ] Security requirements from story are fully implemented.
+   - [ ] Security controls and validations are properly implemented.
    - [ ] Basic security best practices (e.g., input validation, proper error handling, no hardcoded secrets) applied for new/modified code.
+   - [ ] Threat mitigations specified in story are implemented.
    - [ ] No new linter errors or warnings introduced.
    - [ ] Code is well-commented where necessary (clarifying complex logic, not obvious statements).
 
@@ -47,6 +50,7 @@ The goal is quality delivery, not just checking boxes.]]
 
    - [ ] All required unit tests as per the story and `Operational Guidelines` Testing Strategy are implemented.
    - [ ] All required integration tests (if applicable) as per the story and `Operational Guidelines` Testing Strategy are implemented.
+   - [ ] Security testing requirements from story are implemented and passing.
    - [ ] All tests (unit, integration, E2E if applicable) pass successfully.
    - [ ] Test coverage meets project standards (if defined).
 

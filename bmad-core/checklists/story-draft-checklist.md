@@ -95,7 +95,23 @@ Note: We don't need every file listed - just the important ones.]]
 - [ ] Domain-specific terms or concepts are explained
 - [ ] Edge cases or error scenarios are addressed
 
-## 5. TESTING GUIDANCE
+## 5. SECURITY VALIDATION
+
+[[LLM: Security must be considered for every story. Check:
+
+1. Security implications have been assessed
+2. Security requirements are defined where needed
+3. Threat considerations are documented
+4. Security testing approach is specified
+5. Compliance requirements are identified]]
+
+- [ ] Security implications have been assessed (even if none identified)
+- [ ] Security requirements are defined (if applicable)
+- [ ] Threat considerations are documented (if security-relevant)
+- [ ] Security testing requirements are specified (if applicable)
+- [ ] Compliance requirements are identified (if applicable)
+
+## 6. TESTING GUIDANCE
 
 [[LLM: Testing ensures the implementation actually works. Check:
 
@@ -147,7 +163,8 @@ Be pragmatic - perfect documentation doesn't exist, but it must be enough to pro
 | 2. Technical Implementation Guidance | _TBD_  |        |
 | 3. Reference Effectiveness           | _TBD_  |        |
 | 4. Self-Containment Assessment       | _TBD_  |        |
-| 5. Testing Guidance                  | _TBD_  |        |
+| 5. Security Validation              | _TBD_  |        |
+| 6. Testing Guidance                  | _TBD_  |        |
 
 **Final Assessment:**
 

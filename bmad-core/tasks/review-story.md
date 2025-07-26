@@ -36,10 +36,18 @@ When a developer agent marks a story as "Ready for Review", perform a comprehens
      - Refactoring opportunities
      - Code duplication or inefficiencies
      - Performance optimizations
-     - Security concerns
+     - Security concerns and threat mitigation implementation
      - Best practices and patterns
 
-5. **Active Refactoring**
+5. **Security Implementation Validation**
+   - Verify security requirements from story are implemented
+   - Check threat mitigations are properly addressed
+   - Validate security controls and input validation
+   - Ensure security testing requirements are met
+   - Review for common security vulnerabilities (OWASP Top 10)
+   - Confirm compliance with security standards mentioned in story
+
+6. **Active Refactoring**
    - As a senior developer, you CAN and SHOULD refactor code where improvements are needed
    - When refactoring:
      - Make the changes directly in the files
@@ -48,28 +56,28 @@ When a developer agent marks a story as "Ready for Review", perform a comprehens
      - Ensure all tests still pass after refactoring
      - Update the File List if you modify additional files
 
-6. **Standards Compliance Check**
+7. **Standards Compliance Check**
    - Verify adherence to `docs/coding-standards.md`
    - Check compliance with `docs/unified-project-structure.md`
    - Validate testing approach against `docs/testing-strategy.md`
    - Ensure all guidelines mentioned in the story are followed
 
-7. **Acceptance Criteria Validation**
+8. **Acceptance Criteria Validation**
    - Verify each AC is fully implemented
    - Check for any missing functionality
    - Validate edge cases are handled
 
-8. **Test Coverage Review**
+9. **Test Coverage Review**
    - Ensure unit tests cover edge cases
    - Add missing tests if critical coverage is lacking
    - Verify integration tests (if required) are comprehensive
    - Check that test assertions are meaningful
    - Look for missing test scenarios
 
-9. **Documentation and Comments**
-   - Verify code is self-documenting where possible
-   - Add comments for complex logic if missing
-   - Ensure any API changes are documented
+10. **Documentation and Comments**
+    - Verify code is self-documenting where possible
+    - Add comments for complex logic if missing
+    - Ensure any API changes are documented
 
 ## Update Story File - QA Results Section ONLY
 
@@ -109,7 +117,14 @@ After review and any refactoring, append your results to the story file in the Q
 - [ ] Update API documentation for new error codes
 
 ### Security Review
-[Any security concerns found and whether addressed]
+**Security Requirements Validation**: [✓/✗] [All security requirements from story implemented]
+**Threat Mitigation**: [✓/✗] [Threat considerations properly addressed]
+**Security Controls**: [✓/✗] [Input validation, authentication, authorization implemented]
+**Security Testing**: [✓/✗] [Security tests implemented and passing]
+**Vulnerability Assessment**: [✓/✗] [No common vulnerabilities detected]
+**Security Standards Compliance**: [✓/✗] [Meets security standards referenced in story]
+
+[Additional security concerns found and whether addressed]
 
 ### Performance Considerations
 [Any performance issues found and whether addressed]

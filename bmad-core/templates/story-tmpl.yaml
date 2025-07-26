@@ -65,8 +65,7 @@ sections:
     elicit: true
     owner: scrum-master
     editors: [scrum-master, security-agent]
-    optional: conditional
-    condition: story_has_security_implications
+    optional: false
     
   - id: tasks-subtasks
     title: Tasks / Subtasks

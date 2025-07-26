@@ -1,0 +1,435 @@
+template:
+  name: "NIST SSDF Compliance Assessment Report"
+  description: "Comprehensive assessment of NIST Secure Software Development Framework compliance"
+  version: "1.0"
+  author: "BMad Security Framework"
+  category: "Security Compliance"
+
+sections:
+  - id: executive_summary
+    title: "Executive Summary"
+    instruction: "Provide a high-level overview of NIST SSDF compliance status and key findings"
+    elicit: true
+    content: |
+      ## NIST SSDF Compliance Assessment Summary
+      
+      **Assessment Date**: {{assessment_date}}
+      **Project**: {{project_name}}
+      **Assessor**: {{assessor_name}}
+      **Overall Compliance Level**: {{compliance_percentage}}%
+      
+      ### Key Findings
+      - **Compliant Practices**: {{compliant_count}} out of {{total_practices}} practices
+      - **Critical Gaps**: {{critical_gaps_count}} practices require immediate attention
+      - **Moderate Gaps**: {{moderate_gaps_count}} practices need improvement
+      - **Estimated Remediation Time**: {{remediation_timeline}}
+      
+      ### Recommendations Summary
+      1. **Immediate Actions**: {{immediate_actions}}
+      2. **Short-term Goals**: {{short_term_goals}}
+      3. **Long-term Strategy**: {{long_term_strategy}}
+
+  - id: po_practices_assessment
+    title: "PO: Prepare the Organization - Assessment Results"
+    instruction: "Document compliance status for all PO (Prepare Organization) practices"
+    elicit: true
+    content: |
+      # Prepare the Organization (PO) Practices Assessment
+      
+      ## PO.1: Define Security Requirements for Software Development
+      
+      ### PO.1.1: Development Infrastructure Security Requirements
+      **Compliance Status**: {{po11_status}}
+      **Assessment**: {{po11_assessment}}
+      
+      **Current State**:
+      - Development environment security: {{dev_env_security_status}}
+      - CI/CD pipeline security: {{cicd_security_status}}
+      - Tool security configuration: {{tool_security_status}}
+      
+      **Gaps Identified**:
+      - {{po11_gap_1}}
+      - {{po11_gap_2}}
+      - {{po11_gap_3}}
+      
+      **Recommendations**:
+      - {{po11_rec_1}}
+      - {{po11_rec_2}}
+      - {{po11_rec_3}}
+      
+      ### PO.1.2: Software Security Requirements
+      **Compliance Status**: {{po12_status}}
+      **Assessment**: {{po12_assessment}}
+      
+      **Current State**:
+      - Security requirements documentation: {{sec_req_doc_status}}
+      - Compliance requirements: {{compliance_req_status}}
+      - Requirements traceability: {{req_traceability_status}}
+      
+      **Gaps Identified**:
+      - {{po12_gap_1}}
+      - {{po12_gap_2}}
+      
+      **Recommendations**:
+      - {{po12_rec_1}}
+      - {{po12_rec_2}}
+      
+      ### PO.1.3: Third-Party Component Requirements
+      **Compliance Status**: {{po13_status}}
+      **Assessment**: {{po13_assessment}}
+      
+      **Current State**:
+      - Vendor security assessment: {{vendor_assessment_status}}
+      - Component evaluation: {{component_eval_status}}
+      - Supply chain security: {{supply_chain_status}}
+      
+      ## PO.2: Implement Roles and Responsibilities
+      
+      ### PO.2.1: Security Roles Definition
+      **Compliance Status**: {{po21_status}}
+      **Assessment**: {{po21_assessment}}
+      
+      **Current State**:
+      - Security roles defined: {{security_roles_status}}
+      - Role responsibilities documented: {{role_resp_status}}
+      - SDLC coverage: {{sdlc_coverage_status}}
+      
+      ### PO.2.2: Security Training Requirements
+      **Compliance Status**: {{po22_status}}
+      **Assessment**: {{po22_assessment}}
+      
+      **Current State**:
+      - Secure coding training: {{secure_coding_training_status}}
+      - Security tool training: {{security_tool_training_status}}
+      - Role-specific training: {{role_specific_training_status}}
+      
+      ### PO.2.3: Management Commitment
+      **Compliance Status**: {{po23_status}}
+      **Assessment**: {{po23_assessment}}
+      
+      **Current State**:
+      - Executive sponsorship: {{executive_sponsor_status}}
+      - Resource allocation: {{resource_allocation_status}}
+      - Security prioritization: {{security_priority_status}}
+      
+      ## PO.3: Implement Supporting Toolchains
+      
+      ### PO.3.1: Tool Requirements Definition
+      **Compliance Status**: {{po31_status}}
+      **Assessment**: {{po31_assessment}}
+      
+      **Current State**:
+      - SAST tools: {{sast_tools_status}}
+      - DAST tools: {{dast_tools_status}}
+      - Dependency scanning: {{dependency_scan_status}}
+      - Container scanning: {{container_scan_status}}
+      
+      ### PO.3.2: Tool Security Practices
+      **Compliance Status**: {{po32_status}}
+      **Assessment**: {{po32_assessment}}
+      
+      **Current State**:
+      - Tool access controls: {{tool_access_status}}
+      - Tool configuration security: {{tool_config_status}}
+      - Tool maintenance: {{tool_maintenance_status}}
+      
+      ### PO.3.3: Security Artifact Generation
+      **Compliance Status**: {{po33_status}}
+      **Assessment**: {{po33_assessment}}
+      
+      **Current State**:
+      - Security reports: {{security_reports_status}}
+      - Vulnerability tracking: {{vuln_tracking_status}}
+      - Compliance evidence: {{compliance_evidence_status}}
+      
+      ## PO.4: Define and Use Criteria for Software Security Checks
+      
+      ### PO.4.1: Security Criteria Definition
+      **Compliance Status**: {{po41_status}}
+      **Assessment**: {{po41_assessment}}
+      
+      **Current State**:
+      - Security gates defined: {{security_gates_status}}
+      - Pass/fail criteria: {{pass_fail_criteria_status}}
+      - Vulnerability thresholds: {{vuln_thresholds_status}}
+      
+      ### PO.4.2: Information Gathering Processes
+      **Compliance Status**: {{po42_status}}
+      **Assessment**: {{po42_assessment}}
+      
+      **Current State**:
+      - Security metrics collection: {{metrics_collection_status}}
+      - Audit trail maintenance: {{audit_trail_status}}
+      - Compliance tracking: {{compliance_tracking_status}}
+      
+      ## PO.5: Implement and Maintain Secure Development Environments
+      
+      ### PO.5.1: Environment Separation and Protection
+      **Compliance Status**: {{po51_status}}
+      **Assessment**: {{po51_assessment}}
+      
+      **Current State**:
+      - Environment isolation: {{env_isolation_status}}
+      - Access controls: {{env_access_status}}
+      - Risk-based protection: {{risk_based_protection_status}}
+      
+      ### PO.5.2: Development Endpoint Security
+      **Compliance Status**: {{po52_status}}
+      **Assessment**: {{po52_assessment}}
+      
+      **Current State**:
+      - Endpoint hardening: {{endpoint_hardening_status}}
+      - Network security: {{network_security_status}}
+      - Monitoring: {{endpoint_monitoring_status}}
+
+  - id: ps_practices_assessment
+    title: "PS: Protect the Software - Assessment Results"
+    instruction: "Document compliance status for all PS (Protect Software) practices"
+    elicit: true
+    content: |
+      # Protect the Software (PS) Practices Assessment
+      
+      ## PS.1: Protect All Forms of Code from Unauthorized Access and Tampering
+      
+      ### PS.1.1: Code Access Protection
+      **Compliance Status**: {{ps11_status}}
+      **Assessment**: {{ps11_assessment}}
+      
+      **Current State**:
+      - Source code access controls: {{source_access_status}}
+      - Repository security: {{repo_security_status}}
+      - Configuration protection: {{config_protection_status}}
+      - Secrets management: {{secrets_mgmt_status}}
+      
+      **Gaps Identified**:
+      - {{ps11_gap_1}}
+      - {{ps11_gap_2}}
+      
+      **Recommendations**:
+      - {{ps11_rec_1}}
+      - {{ps11_rec_2}}
+      
+      ## PS.2: Provide a Mechanism for Verifying Software Release Integrity
+      
+      ### PS.2.1: Software Integrity Verification
+      **Compliance Status**: {{ps21_status}}
+      **Assessment**: {{ps21_assessment}}
+      
+      **Current State**:
+      - Code signing implementation: {{code_signing_status}}
+      - Checksum generation: {{checksum_status}}
+      - Digital signatures: {{digital_sig_status}}
+      - SBOM generation: {{sbom_status}}
+      
+      **Gaps Identified**:
+      - {{ps21_gap_1}}
+      - {{ps21_gap_2}}
+      
+      **Recommendations**:
+      - {{ps21_rec_1}}
+      - {{ps21_rec_2}}
+      
+      ## PS.3: Archive and Protect Each Software Release
+      
+      ### PS.3.1: Secure Release Archival
+      **Compliance Status**: {{ps31_status}}
+      **Assessment**: {{ps31_assessment}}
+      
+      **Current State**:
+      - Release archival process: {{release_archival_status}}
+      - Artifact retention: {{artifact_retention_status}}
+      - Backup and recovery: {{backup_recovery_status}}
+      
+      ### PS.3.2: Provenance Data Collection
+      **Compliance Status**: {{ps32_status}}
+      **Assessment**: {{ps32_assessment}}
+      
+      **Current State**:
+      - Component provenance: {{component_provenance_status}}
+      - Dependency tracking: {{dependency_tracking_status}}
+      - License compliance: {{license_compliance_status}}
+
+  - id: gap_analysis
+    title: "Gap Analysis and Risk Assessment"
+    instruction: "Analyze compliance gaps and assess associated risks"
+    elicit: true
+    content: |
+      # Gap Analysis and Risk Assessment
+      
+      ## Critical Gaps (High Risk)
+      | Practice | Gap Description | Risk Level | Business Impact | Remediation Priority |
+      |----------|----------------|------------|-----------------|---------------------|
+      | {{critical_gap_1_practice}} | {{critical_gap_1_desc}} | High | {{critical_gap_1_impact}} | Immediate |
+      | {{critical_gap_2_practice}} | {{critical_gap_2_desc}} | High | {{critical_gap_2_impact}} | Immediate |
+      | {{critical_gap_3_practice}} | {{critical_gap_3_desc}} | High | {{critical_gap_3_impact}} | Immediate |
+      
+      ## Moderate Gaps (Medium Risk)
+      | Practice | Gap Description | Risk Level | Business Impact | Remediation Priority |
+      |----------|----------------|------------|-----------------|---------------------|
+      | {{moderate_gap_1_practice}} | {{moderate_gap_1_desc}} | Medium | {{moderate_gap_1_impact}} | Short-term |
+      | {{moderate_gap_2_practice}} | {{moderate_gap_2_desc}} | Medium | {{moderate_gap_2_impact}} | Short-term |
+      
+      ## Minor Gaps (Low Risk)
+      | Practice | Gap Description | Risk Level | Business Impact | Remediation Priority |
+      |----------|----------------|------------|-----------------|---------------------|
+      | {{minor_gap_1_practice}} | {{minor_gap_1_desc}} | Low | {{minor_gap_1_impact}} | Long-term |
+      | {{minor_gap_2_practice}} | {{minor_gap_2_desc}} | Low | {{minor_gap_2_impact}} | Long-term |
+      
+      ## Risk Matrix
+      
+      ### Security Risks
+      - **High**: {{high_security_risks}}
+      - **Medium**: {{medium_security_risks}}
+      - **Low**: {{low_security_risks}}
+      
+      ### Compliance Risks
+      - **Regulatory**: {{regulatory_risks}}
+      - **Audit**: {{audit_risks}}
+      - **Contractual**: {{contractual_risks}}
+      
+      ### Business Risks
+      - **Reputation**: {{reputation_risks}}
+      - **Financial**: {{financial_risks}}
+      - **Operational**: {{operational_risks}}
+
+  - id: implementation_roadmap
+    title: "Implementation Roadmap"
+    instruction: "Provide a prioritized roadmap for achieving NIST SSDF compliance"
+    elicit: true
+    content: |
+      # NIST SSDF Compliance Implementation Roadmap
+      
+      ## Phase 1: Immediate Actions (0-30 days)
+      **Priority**: Critical gaps that pose immediate security risks
+      
+      ### Week 1-2
+      - [ ] {{phase1_week1_task1}}
+      - [ ] {{phase1_week1_task2}}
+      - [ ] {{phase1_week1_task3}}
+      
+      ### Week 3-4
+      - [ ] {{phase1_week3_task1}}
+      - [ ] {{phase1_week3_task2}}
+      - [ ] {{phase1_week3_task3}}
+      
+      **Resources Required**:
+      - Personnel: {{phase1_personnel}}
+      - Budget: {{phase1_budget}}
+      - Tools: {{phase1_tools}}
+      
+      ## Phase 2: Short-term Implementation (1-3 months)
+      **Priority**: Moderate gaps and foundational improvements
+      
+      ### Month 1
+      - [ ] {{phase2_month1_task1}}
+      - [ ] {{phase2_month1_task2}}
+      - [ ] {{phase2_month1_task3}}
+      
+      ### Month 2
+      - [ ] {{phase2_month2_task1}}
+      - [ ] {{phase2_month2_task2}}
+      
+      ### Month 3
+      - [ ] {{phase2_month3_task1}}
+      - [ ] {{phase2_month3_task2}}
+      
+      **Resources Required**:
+      - Personnel: {{phase2_personnel}}
+      - Budget: {{phase2_budget}}
+      - Training: {{phase2_training}}
+      
+      ## Phase 3: Long-term Optimization (3-6 months)
+      **Priority**: Process improvements and advanced capabilities
+      
+      ### Quarter 1
+      - [ ] {{phase3_q1_task1}}
+      - [ ] {{phase3_q1_task2}}
+      
+      ### Quarter 2
+      - [ ] {{phase3_q2_task1}}
+      - [ ] {{phase3_q2_task2}}
+      
+      **Resources Required**:
+      - Personnel: {{phase3_personnel}}
+      - Budget: {{phase3_budget}}
+      - Technology: {{phase3_technology}}
+      
+      ## Success Metrics
+      
+      ### Compliance Metrics
+      - **Target Compliance Level**: {{target_compliance_level}}%
+      - **Current Baseline**: {{current_compliance_level}}%
+      - **Quarterly Milestones**: {{compliance_milestones}}
+      
+      ### Security Metrics
+      - **Vulnerability Detection**: {{vuln_detection_target}}
+      - **Remediation Time**: {{remediation_time_target}}
+      - **Security Incidents**: {{incident_reduction_target}}
+      
+      ### Business Metrics
+      - **Cost Savings**: {{cost_savings_target}}
+      - **Risk Reduction**: {{risk_reduction_target}}
+      - **Audit Readiness**: {{audit_readiness_target}}
+
+  - id: monitoring_validation
+    title: "Ongoing Monitoring and Validation"
+    instruction: "Define processes for continuous compliance monitoring and validation"
+    elicit: true
+    content: |
+      # Ongoing Monitoring and Validation
+      
+      ## Compliance Monitoring Framework
+      
+      ### Automated Monitoring
+      - **Tool-based checks**: {{automated_monitoring_tools}}
+      - **Compliance dashboards**: {{compliance_dashboards}}
+      - **Alerting mechanisms**: {{alerting_mechanisms}}
+      - **Reporting frequency**: {{reporting_frequency}}
+      
+      ### Manual Reviews
+      - **Quarterly assessments**: {{quarterly_assessment_scope}}
+      - **Annual deep-dive review**: {{annual_review_scope}}
+      - **Audit preparation**: {{audit_prep_process}}
+      - **Third-party validation**: {{third_party_validation}}
+      
+      ## Key Performance Indicators (KPIs)
+      
+      ### Compliance KPIs
+      - Practice compliance percentage: {{compliance_percentage_target}}%
+      - Gap closure rate: {{gap_closure_rate}}
+      - Time to remediation: {{time_to_remediation}}
+      - Compliance audit score: {{audit_score_target}}
+      
+      ### Security KPIs
+      - Vulnerability density: {{vuln_density_target}}
+      - Mean time to detection: {{mttd_target}}
+      - Mean time to remediation: {{mttr_target}}
+      - Security incident frequency: {{incident_frequency_target}}
+      
+      ## Continuous Improvement Process
+      
+      ### Regular Reviews
+      - Monthly compliance check-ins
+      - Quarterly gap analysis updates
+      - Semi-annual process improvements
+      - Annual SSDF practice updates
+      
+      ### Feedback Loops
+      - Development team feedback on security practices
+      - Security team feedback on process effectiveness
+      - Management feedback on business alignment
+      - Customer feedback on security posture
+      
+      ## Documentation Maintenance
+      
+      ### Living Documents
+      - SSDF compliance status (updated monthly)
+      - Security requirements (updated per project)
+      - Tool configurations (updated as needed)
+      - Training materials (updated annually)
+      
+      ### Version Control
+      - Document versioning strategy
+      - Change approval process
+      - Distribution and communication plan
+      - Archive and retention policy

@@ -7,8 +7,8 @@ The BMad Method is designed to provide agentic modes, tasks and templates to all
 The systems core module facilitates a full development lifecycle tailored to the challenges of current modern AI Agentic tooling:
 
 1. **Ideation & Planning**: Brainstorming, market research, and creating project briefs.
-2. **Architecture & Design**: Defining system architecture and UI/UX specifications.
-3. **Development Execution**: A cyclical workflow where a Scrum Master (SM) agent drafts stories with extremely specific context and a Developer (Dev) agent implements them one at a time. This process works for both new (Greenfield) and existing (Brownfield) projects.
+2. **Architecture & Design**: Defining system architecture, UI/UX specifications, and security architecture.
+3. **Development Execution**: A cyclical workflow where a Scrum Master (SM) agent drafts stories with extremely specific context and a Developer (Dev) agent implements them one at a time, with optional QA and security code review. This process works for both new (Greenfield) and existing (Brownfield) projects.
 
 ## 2. System Architecture Diagram
 
@@ -65,7 +65,7 @@ The `bmad-core` directory contains all the definitions and resources that give t
 
 ### 3.1. Agents (`bmad-core/agents/`)
 
-- **Purpose**: These are the foundational building blocks of the system. Each markdown file (e.g., `bmad-master.md`, `pm.md`, `dev.md`) defines the persona, capabilities, and dependencies of a single AI agent.
+- **Purpose**: These are the foundational building blocks of the system. Each markdown file (e.g., `bmad-master.md`, `pm.md`, `dev.md`, `security.md`, `vulnerabilityTech.md`) defines the persona, capabilities, and dependencies of a single AI agent.
 - **Structure**: An agent file contains a YAML header that specifies its role, persona, dependencies, and startup instructions. These dependencies are lists of tasks, templates, checklists, and data files that the agent is allowed to use.
 - **Startup Instructions**: Agents can include startup sequences that load project-specific documentation from the `docs/` folder, such as coding standards, API specifications, or project structure documents. This provides immediate project context upon activation.
 - **Document Integration**: Agents can reference and load documents from the project's `docs/` folder as part of tasks, workflows, or startup sequences. Users can also drag documents directly into chat interfaces to provide additional context.
@@ -86,7 +86,7 @@ The `bmad-core` directory contains all the definitions and resources that give t
 - **Purpose**: These folders house the modular components that are dynamically loaded by agents based on their dependencies.
   - **`templates/`**: Contains markdown templates for common documents like PRDs, architecture specifications, and user stories.
   - **`tasks/`**: Defines the instructions for carrying out specific, repeatable actions like "shard-doc" or "create-next-story".
-  - **`checklists/`**: Provides quality assurance checklists for agents like the Product Owner (`po`) or Architect.
+  - **`checklists/`**: Provides quality assurance checklists for agents like the Product Owner (`po`), Architect, Security, and VulnerabilityTech.
   - **`data/`**: Contains the core knowledge base (`bmad-kb.md`), technical preferences (`technical-preferences.md`), and other key data files.
 
 #### 3.4.1. Template Processing System
@@ -159,7 +159,11 @@ graph TD
     C --> D["Analyst: Create Project Brief"]
     D --> E["PM: Create PRD from Brief"]
     E --> F["Architect: Create Architecture from PRD"]
-    F --> G["PO: Run Master Checklist"]
+    F --> S["Security: Security Assessment & Architecture"]
+    S --> F1{"Architecture Updates Needed?"}
+    F1 -->|Yes| F2["Architect: Update Architecture"]
+    F1 -->|No| G["PO: Run Master Checklist"]
+    F2 --> G
     G --> H{"Documents Aligned?"}
     H -->|Yes| I["Planning Complete"]
     H -->|No| J["PO: Update Epics & Stories"]
@@ -181,10 +185,12 @@ graph TD
 2. **Project Brief**: Foundation document created by Analyst or user
 3. **PRD Creation**: PM transforms brief into comprehensive product requirements
 4. **Architecture Design**: Architect creates technical foundation based on PRD
-5. **Validation & Alignment**: PO ensures all documents are consistent and complete
-6. **Refinement**: Updates to epics, stories, and documents as needed
-7. **Environment Transition**: Critical switch from web UI to IDE for development workflow
-8. **Document Preparation**: PO shards large documents for development consumption
+5. **Security Assessment**: Security agent performs threat modeling and creates security architecture
+6. **Architecture Updates**: Architect incorporates security recommendations as needed
+7. **Validation & Alignment**: PO ensures all documents are consistent and complete
+8. **Refinement**: Updates to epics, stories, and documents as needed
+9. **Environment Transition**: Critical switch from web UI to IDE for development workflow
+10. **Document Preparation**: PO shards large documents for development consumption
 
 **Workflow Orchestration**: The `bmad-orchestrator` agent uses these workflow definitions to guide users through the complete process, ensuring proper transitions between planning (web UI) and development (IDE) phases.
 
@@ -205,15 +211,22 @@ graph TD
     H --> I["Dev: Mark Ready for Review"]
     I --> J{"User Verification"}
     J -->|Request QA Review| K["QA: Run review-story task"]
-    J -->|Approve Without QA| M["Mark Story as Done"]
+    J -->|Approve Without QA| N{"Security Review?"}
     K --> L{"QA Review Results"}
     L -->|Needs Work| G
-    L -->|Approved| M["Mark Story as Done"]
+    L -->|Approved| N{"Security Review?"}
     J -->|Needs Fixes| G
+    N -->|Yes| O["VulnerabilityTech: Security Code Review"]
+    N -->|No| M["Mark Story as Done"]
+    O --> P{"Security Issues Found?"}
+    P -->|Yes| Q["Dev: Address Security Findings"]
+    P -->|No| M["Mark Story as Done"]
+    Q --> O
     M --> E
 
     style M fill:#34a853,color:#fff
     style K fill:#f9ab00,color:#fff
+    style O fill:#ff6b6b,color:#fff
 ```
 
-This cycle continues, with the Scrum Master, Developer, and optionally QA agents working together. The QA agent provides senior developer review capabilities through the `review-story` task, offering code refactoring, quality improvements, and knowledge transfer. This ensures high code quality while maintaining development velocity.
+This cycle continues, with the Scrum Master, Developer, and optionally QA and VulnerabilityTech agents working together. The QA agent provides senior developer review capabilities through the `review-story` task, offering code refactoring, quality improvements, and knowledge transfer. The VulnerabilityTech agent provides optional post-implementation security code review through the `code-security-review` task, identifying vulnerabilities and ensuring secure coding practices. This comprehensive review process ensures both high code quality and security while maintaining development velocity.

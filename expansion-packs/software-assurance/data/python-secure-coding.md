@@ -2,9 +2,14 @@
 
 ## Overview
 
-This guide provides comprehensive security guidance for Python development, covering common vulnerabilities, secure coding practices, and recommended security libraries and tools.
+This guide provides comprehensive security guidance for Python development, covering common vulnerabilities, secure coding practices, and recommended security libraries and tools. Content is mapped to NIST SSDF practices for compliance validation.
+
+**NIST SSDF Practice Mapping**: This document supports PW.4 (Create Source Code with Secure Coding Practices) validation
 
 ## Input Validation and Sanitization
+
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**Compliance Criteria**: Server-side validation for all inputs, proper sanitization, type checking
 
 ### User Input Validation
 
@@ -52,6 +57,10 @@ def read_file(filename):
 
 ## SQL Injection Prevention
 
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**Compliance Criteria**: Parameterized queries, input sanitization, ORM usage
+**Vulnerability Mapping**: CWE-89 (SQL Injection)
+
 ### Database Queries
 
 ```python
@@ -88,6 +97,10 @@ def get_user_orm(session, user_id):
 ```
 
 ## Command Injection Prevention
+
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**Compliance Criteria**: Safe command execution, input validation, avoid shell=True
+**Vulnerability Mapping**: CWE-78 (Command Injection)
 
 ### System Commands
 
@@ -128,6 +141,10 @@ def convert_file(filename):
 ```
 
 ## Cross-Site Scripting (XSS) Prevention
+
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**Compliance Criteria**: Output encoding, template auto-escaping, CSP headers
+**Vulnerability Mapping**: CWE-79 (Cross-Site Scripting)
 
 ### Template Rendering
 
@@ -181,6 +198,10 @@ def user_data_template(user_data):
 ```
 
 ## Cryptography and Password Security
+
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**Compliance Criteria**: Strong password hashing, secure session management, proper cryptographic implementation
+**Vulnerability Mapping**: CWE-327 (Weak Cryptography), CWE-384 (Session Fixation)
 
 ### Password Hashing
 
@@ -271,6 +292,10 @@ def encrypt_aes(data, key):
 
 ## Secure Random Number Generation
 
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**Compliance Criteria**: Cryptographically secure random generation for security purposes
+**Vulnerability Mapping**: CWE-330 (Weak Random Number Generation)
+
 ### Random Values
 
 ```python
@@ -298,6 +323,10 @@ def generate_session_id():
 ```
 
 ## Deserialization Security
+
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**Compliance Criteria**: Safe serialization formats, restricted unpickling for untrusted data
+**Vulnerability Mapping**: CWE-502 (Deserialization Vulnerabilities)
 
 ### Pickle Security
 
@@ -339,6 +368,10 @@ def safe_pickle_loads(data):
 ```
 
 ## File Upload Security
+
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**Compliance Criteria**: File type validation, size limits, content verification, safe storage
+**Vulnerability Mapping**: CWE-434 (Unrestricted File Upload), CWE-22 (Path Traversal)
 
 ### Secure File Handling
 
@@ -403,6 +436,10 @@ def generate_safe_filename(filename):
 ```
 
 ## Session Management
+
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**Compliance Criteria**: Secure session generation, proper expiration, CSRF protection
+**Vulnerability Mapping**: CWE-384 (Session Fixation), CWE-613 (Insufficient Session Expiration)
 
 ### Secure Sessions
 
@@ -473,6 +510,10 @@ class SecureSession:
 
 ## Error Handling and Logging
 
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**Compliance Criteria**: Proper error handling without information disclosure, secure logging
+**Vulnerability Mapping**: CWE-209 (Information Exposure Through Error Messages)
+
 ### Secure Error Handling
 
 ```python
@@ -513,6 +554,10 @@ def process_request(data):
 
 ## XML Processing Security
 
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**Compliance Criteria**: XXE prevention, secure XML parsing configuration
+**Vulnerability Mapping**: CWE-611 (XML External Entity References)
+
 ### XML External Entity (XXE) Prevention
 
 ```python
@@ -550,6 +595,10 @@ def parse_xml_safe(xml_data):
 
 ## Security Headers and Configuration
 
+**NIST SSDF Practice**: PW.8.1 - Default Security Configuration  
+**Compliance Criteria**: Secure headers, proper session configuration, secure defaults
+**Vulnerability Mapping**: Various security misconfigurations
+
 ### Flask Security Configuration
 
 ```python
@@ -582,6 +631,10 @@ app.config.update(
 ```
 
 ## Security Testing
+
+**NIST SSDF Practice**: PW.7.1 - Security Testing Implementation  
+**Compliance Criteria**: Unit tests with security coverage, security-specific test cases
+**Testing Framework**: Support for authentication, authorization, input validation testing
 
 ### Unit Tests for Security
 
@@ -626,6 +679,10 @@ class SecurityTests(unittest.TestCase):
 
 ## Common Python Security Libraries
 
+**NIST SSDF Practice**: PW.3.1 - Third-Party Component Security  
+**Compliance Criteria**: Use of well-secured, maintained security libraries
+**Component Assessment**: Regular security evaluation of dependencies
+
 ### Essential Security Libraries
 
 ```python
@@ -660,6 +717,10 @@ from sqlalchemy import text  # For parameterized queries
 
 ## Security Checklist for Python Code
 
+**NIST SSDF Practice**: PW.6.1 - Code Review Process Validation  
+**Compliance Criteria**: Security-focused code reviews, comprehensive security checklist
+**Review Coverage**: All security-critical code components
+
 ### Pre-deployment Security Review
 
 - [ ] All user inputs are validated and sanitized
@@ -680,7 +741,13 @@ from sqlalchemy import text  # For parameterized queries
 
 ### Tools and Static Analysis
 
-- **Bandit**: Security linter for Python
+**NIST SSDF Practice**: RV.1.1 - Vulnerability Detection Process Validation  
+**Compliance Criteria**: Automated vulnerability scanning, SAST/DAST integration
+**Tool Integration**: CI/CD pipeline integration for continuous security validation
+
+**Recommended Tools**:
+
+- **Bandit**: Security linter for Python (SAST)
 - **Safety**: Dependency vulnerability scanner
 - **Semgrep**: Static analysis for security patterns
 - **PyUp**: Dependency monitoring

@@ -2,11 +2,16 @@
 
 ## Overview
 
-This database catalogs common security vulnerabilities found in Python applications, organized by vulnerability category with examples, detection methods, and remediation guidance.
+This database catalogs common security vulnerabilities found in Python applications, organized by vulnerability category with examples, detection methods, and remediation guidance. Content is mapped to NIST SSDF practices for compliance validation.
+
+**NIST SSDF Practice Mapping**: This document supports RV.1 (Identify and Confirm Vulnerabilities) and PW.4 (Secure Coding Practices) validation
 
 ## Injection Vulnerabilities
 
 ### SQL Injection (CWE-89)
+
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**NIST Impact**: Violation of secure coding practices for database operations
 
 **Description**: Occurs when untrusted input is inserted into SQL queries without proper sanitization.
 
@@ -44,6 +49,9 @@ session.query(User).filter(User.id == user_id).first()
 **CWE**: CWE-89
 
 ### Command Injection (CWE-78)
+
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**NIST Impact**: Violation of secure coding practices for system command execution
 
 **Description**: Execution of arbitrary commands through unsanitized input to system calls.
 
@@ -118,6 +126,9 @@ db.users.find({"username": username, "password": hashed_password})
 ## Cross-Site Scripting (XSS)
 
 ### Reflected XSS (CWE-79)
+
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**NIST Impact**: Violation of secure coding practices for output encoding
 
 **Description**: User input is reflected back in the response without proper encoding.
 
@@ -196,6 +207,9 @@ return f"<div>{escape(post['content'])}</div>"
 
 ### Pickle Deserialization (CWE-502)
 
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**NIST Impact**: Critical violation of secure coding practices for data serialization
+
 **Description**: Arbitrary code execution through deserializing untrusted pickle data.
 
 **Common Patterns**:
@@ -273,6 +287,9 @@ data = yaml.load(request.body, Loader=yaml.SafeLoader)
 ## Cryptographic Failures
 
 ### Weak Password Hashing (CWE-327)
+
+**NIST SSDF Practice**: PW.4.1 - Source Code Security Implementation  
+**NIST Impact**: Violation of cryptographic implementation requirements
 
 **Description**: Use of weak or inappropriate hashing algorithms for passwords.
 
@@ -760,9 +777,12 @@ def safe_operation():
 
 ## Detection Tools and Techniques
 
+**NIST SSDF Practice**: RV.1.1 - Vulnerability Detection Process Validation  
+**Compliance Criteria**: Automated vulnerability scanning, tool integration, continuous monitoring
+
 ### Static Analysis Tools
 
-- **Bandit**: Python security linter
+- **Bandit**: Python security linter (SAST)
 - **Semgrep**: Pattern-based static analysis
 - **PyUp Safety**: Dependency vulnerability scanner
 - **Snyk**: Security vulnerability scanner
@@ -777,13 +797,16 @@ def safe_operation():
 
 ### Manual Code Review Checklist
 
-- [ ] Input validation on all user inputs
-- [ ] Parameterized queries for database operations
-- [ ] Proper error handling without information disclosure
-- [ ] Secure random number generation
-- [ ] Strong cryptographic implementations
-- [ ] Proper session management
-- [ ] File upload validation
-- [ ] XML processing security
-- [ ] Regular expression safety
-- [ ] Debug information disabled in production
+**NIST SSDF Practice**: PW.6.1 - Code Review Process Validation  
+**Compliance Criteria**: Security-focused reviews, vulnerability identification
+
+- [ ] Input validation on all user inputs (PW.4.1)
+- [ ] Parameterized queries for database operations (PW.4.1)
+- [ ] Proper error handling without information disclosure (PW.4.1)
+- [ ] Secure random number generation (PW.4.1)
+- [ ] Strong cryptographic implementations (PW.4.1)
+- [ ] Proper session management (PW.4.1)
+- [ ] File upload validation (PW.4.1)
+- [ ] XML processing security (PW.4.1)
+- [ ] Regular expression safety (PW.4.1)
+- [ ] Debug information disabled in production (PW.8.1)

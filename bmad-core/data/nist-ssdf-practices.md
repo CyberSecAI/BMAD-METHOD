@@ -117,21 +117,179 @@ Organizations should protect all components of their software from tampering and
 - Implement backup and disaster recovery for archives
 - Track third-party component licenses and vulnerabilities
 
+## PW: Produce Well-Secured Software
+
+Organizations should produce well-secured software with minimal security vulnerabilities in its releases.
+
+### PW.1: Design Software to Meet Security Requirements and Mitigate Security Risks
+**Purpose**: Translate security requirements into secure software design decisions and risk mitigation strategies.
+
+**Tasks**:
+- **PW.1.1**: Design software to meet security requirements and mitigate security risks
+
+**Implementation Guidance**:
+- Implement security requirements from planning phase
+- Apply threat modeling results to design decisions
+- Design security controls and defensive mechanisms
+- Validate design against security architecture
+
+### PW.2: Review the Software Design to Verify Compliance with Security Requirements and Risk Information
+**Purpose**: Ensure that software design properly addresses security requirements and identified risks.
+
+**Tasks**:
+- **PW.2.1**: Review the software design to verify compliance with security requirements and risk information
+
+**Implementation Guidance**:
+- Conduct security design reviews
+- Verify security control implementation in design
+- Validate threat mitigation strategies
+- Document design security decisions
+
+### PW.3: Reuse Existing, Well-Secured Software When Feasible Instead of Duplicating Functionality
+**Purpose**: Leverage existing secure software components to reduce security risks and development effort.
+
+**Tasks**:
+- **PW.3.1**: Reuse existing, well-secured software when feasible instead of duplicating functionality
+
+**Implementation Guidance**:
+- Evaluate security of third-party components
+- Assess component security track records
+- Validate component security configurations
+- Monitor components for security updates
+
+### PW.4: Create Source Code Adhering to Secure Coding Practices
+**Purpose**: Implement software using secure coding practices to prevent common vulnerabilities.
+
+**Tasks**:
+- **PW.4.1**: Create source code adhering to secure coding practices
+
+**Implementation Guidance**:
+- Follow secure coding standards (OWASP, CERT)
+- Implement input validation and output encoding
+- Use secure authentication and session management
+- Apply proper error handling and logging
+- Implement cryptographic controls correctly
+
+### PW.5: Configure the Compilation, Interpreter, and Build Processes to Improve Executable Security
+**Purpose**: Use build-time security enhancements to improve the security of the executable software.
+
+**Tasks**:
+- **PW.5.1**: Configure the compilation, interpreter, and build processes to improve executable security
+
+**Implementation Guidance**:
+- Enable compiler security flags
+- Configure build process security controls
+- Implement build-time security scanning
+- Secure build environment and processes
+
+### PW.6: Review and/or Analyze Human-Readable Code to Identify Vulnerabilities
+**Purpose**: Systematically examine code to identify security vulnerabilities and weaknesses.
+
+**Tasks**:
+- **PW.6.1**: Review and/or analyze human-readable code to identify vulnerabilities and verify compliance with security requirements
+
+**Implementation Guidance**:
+- Conduct manual code reviews with security focus
+- Use static application security testing (SAST) tools
+- Implement automated code analysis
+- Document and track identified vulnerabilities
+
+### PW.7: Test Executable Code to Identify Vulnerabilities and Verify Compliance with Security Requirements
+**Purpose**: Execute software in controlled environments to identify runtime security vulnerabilities.
+
+**Tasks**:
+- **PW.7.1**: Test executable code to identify vulnerabilities and verify compliance with security requirements
+
+**Implementation Guidance**:
+- Perform dynamic application security testing (DAST)
+- Execute security-specific test cases
+- Conduct penetration testing
+- Validate security control effectiveness
+
+### PW.8: Configure Software to Have Secure Settings by Default
+**Purpose**: Ensure that software installations have secure configurations that don't require additional security setup.
+
+**Tasks**:
+- **PW.8.1**: Configure software to have secure settings by default
+
+**Implementation Guidance**:
+- Implement secure default configurations
+- Disable unnecessary features and services
+- Configure security headers and settings
+- Provide secure installation documentation
+
+## RV: Respond to Vulnerabilities
+
+Organizations should identify residual vulnerabilities in software releases and respond appropriately to address those vulnerabilities.
+
+### RV.1: Identify and Confirm Vulnerabilities on an Ongoing Basis
+**Purpose**: Continuously discover and validate security vulnerabilities in software.
+
+**Tasks**:
+- **RV.1.1**: Gather information from software acquirers, users, and public sources on potential vulnerabilities
+- **RV.1.2**: Review, analyze, and/or test software to identify vulnerabilities
+- **RV.1.3**: Determine the exploitability, potential impact, and other characteristics of each vulnerability
+
+**Implementation Guidance**:
+- Implement vulnerability disclosure processes
+- Monitor public vulnerability databases
+- Perform regular security assessments
+- Validate vulnerability reports and findings
+
+### RV.2: Assess, Prioritize, and Remediate Vulnerabilities
+**Purpose**: Systematically address identified vulnerabilities based on risk and impact.
+
+**Tasks**:
+- **RV.2.1**: Analyze each vulnerability to gather sufficient information for remediation
+- **RV.2.2**: Plan and implement risk-based responses to vulnerabilities
+- **RV.2.3**: Analyze vulnerabilities to identify their root causes
+
+**Implementation Guidance**:
+- Implement CVSS scoring for vulnerability assessment
+- Establish risk-based remediation priorities
+- Develop remediation timelines and processes
+- Track remediation progress and validation
+
+### RV.3: Analyze Vulnerabilities to Identify Their Root Causes
+**Purpose**: Understand why vulnerabilities occurred to prevent similar issues in the future.
+
+**Tasks**:
+- **RV.3.1**: Analyze vulnerabilities to identify their root causes
+- **RV.3.2**: Analyze the root causes over time to identify patterns
+- **RV.3.3**: Review the software for similar vulnerabilities
+
+**Implementation Guidance**:
+- Conduct systematic root cause analysis
+- Identify process and training improvements
+- Update secure development practices
+- Implement preventive controls and measures
+
 ## Integration with BMad Security Framework
 
 ### Security Agent (Planning Phase)
-The Security agent should implement PO practices during the planning and architecture phases:
+The Security agent should implement PO and PS practices during the planning and architecture phases:
 - **PO.1**: Define security requirements in architecture documents
 - **PO.2**: Establish security roles and training requirements  
 - **PO.3**: Specify security toolchain requirements
 - **PO.4**: Define security check criteria for the project
 - **PO.5**: Design secure development environment requirements
+- **PS.1**: Plan code access controls and protection measures
+- **PS.2**: Plan software integrity mechanisms
+- **PS.3**: Plan archival and provenance tracking
 
 ### VulnerabilityTech Agent (Implementation Phase)
-The VulnerabilityTech agent should validate PS practices during code review:
-- **PS.1**: Verify code access controls and protection measures
-- **PS.2**: Validate software integrity mechanisms
-- **PS.3**: Ensure proper archival and provenance tracking
+The VulnerabilityTech agent should validate PW and RV practices during code review:
+- **PW.1**: Validate security requirements implementation
+- **PW.2**: Verify software design compliance
+- **PW.3**: Assess third-party component security
+- **PW.4**: Review secure coding practice implementation
+- **PW.5**: Validate build process security
+- **PW.6**: Conduct code review and analysis
+- **PW.7**: Perform security testing validation
+- **PW.8**: Verify secure default configurations
+- **RV.1**: Validate vulnerability identification processes
+- **RV.2**: Assess vulnerability response procedures
+- **RV.3**: Conduct root cause analysis
 
 ## Compliance Mapping
 

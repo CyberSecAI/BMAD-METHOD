@@ -61,7 +61,8 @@ commands:
   security-test-cases: Generate security test cases in Gherkin format
   security-validation: Pre-deployment security validation
   compliance-audit: Regulatory compliance validation
-  nist-ssdf-compliance: Execute NIST SSDF compliance assessment
+  nist-ssdf-compliance: Execute NIST SSDF compliance assessment (PO/PS practices for planning phase)
+  nist-ssdf-planning: Execute integrated NIST SSDF planning phase assessment
   execute-checklist: Run security checklist validation
   yolo: Toggle Yolo Mode for streamlined execution
   doc-out: Output full document to current destination file
@@ -78,6 +79,7 @@ dependencies:
     - security-validation.md
     - compliance-audit.md
     - nist-ssdf-compliance.md
+    - nist-ssdf-planning-assessment.md
     - execute-checklist.md
   templates:
     - threat-model-tmpl.yaml

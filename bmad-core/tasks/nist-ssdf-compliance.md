@@ -1,7 +1,11 @@
-# NIST SSDF Compliance Assessment
+# NIST SSDF Compliance Assessment (Legacy)
 
 ## Objective
-Assess and ensure compliance with NIST Secure Software Development Framework (SSDF) practices throughout the project planning and architecture phases, focusing on PO (Prepare Organization) and PS (Protect Software) practices.
+**DEPRECATED**: This task is superseded by `nist-ssdf-planning-assessment.md` which provides enhanced integration with the VulnerabilityTech agent's implementation-phase validation.
+
+Legacy assessment for NIST Secure Software Development Framework (SSDF) practices throughout the project planning and architecture phases, focusing on PO (Prepare Organization) and PS (Protect Software) practices.
+
+**Recommended Usage**: Use `nist-ssdf-planning-assessment.md` for new projects to leverage the integrated framework architecture.
 
 ## When to Use
 - During security assessment phase of project planning

@@ -1,0 +1,548 @@
+template:
+  name: "NIST SSDF Code Validation Report"
+  description: "Comprehensive validation of code implementation against NIST SSDF PW and RV practices"
+  version: "1.0"
+  author: "BMad VulnerabilityTech Framework"
+  category: "Security Code Validation"
+
+sections:
+  - id: executive_summary
+    title: "Executive Summary"
+    instruction: "Provide a high-level overview of NIST SSDF code validation results and compliance status"
+    elicit: true
+    content: |
+      ## NIST SSDF Code Validation Summary
+      
+      **Validation Date**: {{validation_date}}
+      **Project**: {{project_name}}
+      **Code Version**: {{code_version}}
+      **Validator**: {{validator_name}}
+      **Overall Compliance Score**: {{overall_compliance_score}}/100
+      
+      ### PW (Produce Well-Secured Software) Compliance
+      - **Average PW Score**: {{pw_average_score}}/100
+      - **Practices Assessed**: {{pw_practices_assessed}} out of 8
+      - **Fully Compliant**: {{pw_compliant_count}} practices
+      - **Partially Compliant**: {{pw_partial_count}} practices
+      - **Non-Compliant**: {{pw_noncompliant_count}} practices
+      
+      ### RV (Respond to Vulnerabilities) Compliance  
+      - **Average RV Score**: {{rv_average_score}}/100
+      - **Practices Assessed**: {{rv_practices_assessed}} out of 3
+      - **Fully Compliant**: {{rv_compliant_count}} practices
+      - **Partially Compliant**: {{rv_partial_count}} practices
+      - **Non-Compliant**: {{rv_noncompliant_count}} practices
+      
+      ### Key Findings
+      - **Critical Issues**: {{critical_issues_count}} - Require immediate remediation
+      - **High Priority Issues**: {{high_issues_count}} - Should be addressed before deployment
+      - **Medium Priority Issues**: {{medium_issues_count}} - Should be addressed in next iteration
+      - **Low Priority Issues**: {{low_issues_count}} - Can be addressed in future releases
+      
+      ### Recommendations Summary
+      1. **Immediate Actions**: {{immediate_actions}}
+      2. **Pre-Deployment Requirements**: {{pre_deployment_requirements}}
+      3. **Process Improvements**: {{process_improvements}}
+
+  - id: pw_practices_validation
+    title: "PW: Produce Well-Secured Software - Validation Results"
+    instruction: "Document detailed validation results for all PW (Produce Well-Secured Software) practices"
+    elicit: true
+    content: |
+      # Produce Well-Secured Software (PW) Practices Validation
+      
+      ## PW.1: Design Software to Meet Security Requirements
+      
+      ### PW.1.1: Security Requirements Implementation
+      **Compliance Score**: {{pw11_score}}/100
+      **Status**: {{pw11_status}}
+      
+      **Implementation Assessment**:
+      - Authentication mechanisms: {{pw11_auth_status}}
+      - Authorization controls: {{pw11_authz_status}}
+      - Input validation: {{pw11_input_validation_status}}
+      - Data protection: {{pw11_data_protection_status}}
+      - Security architecture compliance: {{pw11_architecture_status}}
+      
+      **Code Review Findings**:
+      ```
+      {{pw11_code_findings}}
+      ```
+      
+      **Vulnerabilities Identified**:
+      - {{pw11_vuln_1}}
+      - {{pw11_vuln_2}}
+      - {{pw11_vuln_3}}
+      
+      **Recommendations**:
+      - {{pw11_rec_1}}
+      - {{pw11_rec_2}}
+      - {{pw11_rec_3}}
+      
+      ## PW.2: Review Software Design Implementation
+      
+      ### PW.2.1: Design Implementation Verification
+      **Compliance Score**: {{pw21_score}}/100
+      **Status**: {{pw21_status}}
+      
+      **Design Pattern Assessment**:
+      - Security patterns implementation: {{pw21_patterns_status}}
+      - Design principle adherence: {{pw21_principles_status}}
+      - Security control placement: {{pw21_controls_status}}
+      - Component integration security: {{pw21_integration_status}}
+      - Data flow security: {{pw21_dataflow_status}}
+      
+      **Security Architecture Validation**:
+      ```
+      {{pw21_architecture_validation}}
+      ```
+      
+      **Design Flaws Identified**:
+      - {{pw21_flaw_1}}
+      - {{pw21_flaw_2}}
+      
+      **Recommendations**:
+      - {{pw21_rec_1}}
+      - {{pw21_rec_2}}
+      
+      ## PW.3: Reuse Existing, Well-Secured Software
+      
+      ### PW.3.1: Third-Party Component Security
+      **Compliance Score**: {{pw31_score}}/100
+      **Status**: {{pw31_status}}
+      
+      **Component Security Assessment**:
+      - Third-party component evaluations: {{pw31_evaluations_status}}
+      - Component version currency: {{pw31_versions_status}}
+      - Security configurations: {{pw31_configs_status}}
+      - Dependency vulnerabilities: {{pw31_dependencies_status}}
+      - License compliance: {{pw31_licenses_status}}
+      
+      **Dependency Scan Results**:
+      | Component | Version | Vulnerabilities | Risk Level | Update Available |
+      |-----------|---------|----------------|------------|------------------|
+      | {{dep1_name}} | {{dep1_version}} | {{dep1_vulns}} | {{dep1_risk}} | {{dep1_update}} |
+      | {{dep2_name}} | {{dep2_version}} | {{dep2_vulns}} | {{dep2_risk}} | {{dep2_update}} |
+      | {{dep3_name}} | {{dep3_version}} | {{dep3_vulns}} | {{dep3_risk}} | {{dep3_update}} |
+      
+      **Critical Dependencies**:
+      - {{pw31_critical_dep_1}}
+      - {{pw31_critical_dep_2}}
+      
+      **Recommendations**:
+      - {{pw31_rec_1}}
+      - {{pw31_rec_2}}
+      
+      ## PW.4: Create Source Code with Secure Coding Practices
+      
+      ### PW.4.1: Source Code Security Implementation
+      **Compliance Score**: {{pw41_score}}/100
+      **Status**: {{pw41_status}}
+      
+      **Secure Coding Practice Assessment**:
+      - Input validation and sanitization: {{pw41_input_validation}}
+      - Output encoding: {{pw41_output_encoding}}
+      - SQL injection prevention: {{pw41_sql_injection}}
+      - XSS prevention: {{pw41_xss_prevention}}
+      - Authentication security: {{pw41_authentication}}
+      - Session management: {{pw41_session_mgmt}}
+      - Cryptographic implementation: {{pw41_crypto}}
+      - Error handling: {{pw41_error_handling}}
+      
+      **Static Analysis Results**:
+      ```
+      {{pw41_sast_results}}
+      ```
+      
+      **Security Code Patterns Found**:
+      - Secure patterns: {{pw41_secure_patterns}}
+      - Insecure patterns: {{pw41_insecure_patterns}}
+      - Missing security controls: {{pw41_missing_controls}}
+      
+      **Critical Security Issues**:
+      - {{pw41_critical_1}}
+      - {{pw41_critical_2}}
+      - {{pw41_critical_3}}
+      
+      **Recommendations**:
+      - {{pw41_rec_1}}
+      - {{pw41_rec_2}}
+      - {{pw41_rec_3}}
+      
+      ## PW.5: Configure Compilation and Build Processes to Improve Executable Security
+      
+      ### PW.5.1: Build Process Security
+      **Compliance Score**: {{pw51_score}}/100
+      **Status**: {{pw51_status}}
+      
+      **Build Security Assessment**:
+      - Compiler security flags: {{pw51_compiler_flags}}
+      - Static analysis integration: {{pw51_sast_integration}}
+      - Build environment security: {{pw51_build_env}}
+      - Artifact integrity: {{pw51_artifact_integrity}}
+      - Supply chain security: {{pw51_supply_chain}}
+      
+      **Build Configuration Review**:
+      ```
+      {{pw51_build_config}}
+      ```
+      
+      **Security Enhancements Identified**:
+      - {{pw51_enhancement_1}}
+      - {{pw51_enhancement_2}}
+      
+      **Recommendations**:
+      - {{pw51_rec_1}}
+      - {{pw51_rec_2}}
+      
+      ## PW.6: Review and/or Analyze Human-Readable Code
+      
+      ### PW.6.1: Code Review Process Validation
+      **Compliance Score**: {{pw61_score}}/100
+      **Status**: {{pw61_status}}
+      
+      **Code Review Assessment**:
+      - Security-focused reviews conducted: {{pw61_security_reviews}}
+      - Review coverage of critical code: {{pw61_coverage}}
+      - Vulnerability identification: {{pw61_vuln_identification}}
+      - Review documentation: {{pw61_documentation}}
+      - Security expertise involvement: {{pw61_expertise}}
+      
+      **Review Quality Metrics**:
+      - Lines of code reviewed: {{pw61_loc_reviewed}}
+      - Security issues found: {{pw61_issues_found}}
+      - Review completion rate: {{pw61_completion_rate}}
+      - Average review time: {{pw61_avg_time}}
+      
+      **Review Process Gaps**:
+      - {{pw61_gap_1}}
+      - {{pw61_gap_2}}
+      
+      **Recommendations**:
+      - {{pw61_rec_1}}
+      - {{pw61_rec_2}}
+      
+      ## PW.7: Test Executable Code to Identify Vulnerabilities
+      
+      ### PW.7.1: Security Testing Implementation
+      **Compliance Score**: {{pw71_score}}/100
+      **Status**: {{pw71_status}}
+      
+      **Security Testing Assessment**:
+      - Unit test security coverage: {{pw71_unit_tests}}
+      - Integration test security: {{pw71_integration_tests}}
+      - Security-specific tests: {{pw71_security_tests}}
+      - Dynamic security testing: {{pw71_dast}}
+      - Penetration testing: {{pw71_pentest}}
+      
+      **Dynamic Analysis Results**:
+      ```
+      {{pw71_dast_results}}
+      ```
+      
+      **Security Test Coverage**:
+      - Authentication testing: {{pw71_auth_testing}}
+      - Authorization testing: {{pw71_authz_testing}}
+      - Input validation testing: {{pw71_input_testing}}
+      - SQL injection testing: {{pw71_sql_testing}}
+      - XSS testing: {{pw71_xss_testing}}
+      
+      **Testing Gaps Identified**:
+      - {{pw71_gap_1}}
+      - {{pw71_gap_2}}
+      
+      **Recommendations**:
+      - {{pw71_rec_1}}
+      - {{pw71_rec_2}}
+      
+      ## PW.8: Configure Software to Have Secure Settings by Default
+      
+      ### PW.8.1: Default Security Configuration
+      **Compliance Score**: {{pw81_score}}/100
+      **Status**: {{pw81_status}}
+      
+      **Configuration Security Assessment**:
+      - Secure default configurations: {{pw81_defaults}}
+      - Unnecessary features disabled: {{pw81_features_disabled}}
+      - Security headers configured: {{pw81_security_headers}}
+      - Database security configurations: {{pw81_database_config}}
+      - Network security configurations: {{pw81_network_config}}
+      
+      **Configuration Review Results**:
+      ```
+      {{pw81_config_review}}
+      ```
+      
+      **Insecure Configurations Found**:
+      - {{pw81_insecure_1}}
+      - {{pw81_insecure_2}}
+      
+      **Recommendations**:
+      - {{pw81_rec_1}}
+      - {{pw81_rec_2}}
+
+  - id: rv_practices_validation
+    title: "RV: Respond to Vulnerabilities - Validation Results"
+    instruction: "Document detailed validation results for all RV (Respond to Vulnerabilities) practices"
+    elicit: true
+    content: |
+      # Respond to Vulnerabilities (RV) Practices Validation
+      
+      ## RV.1: Identify and Confirm Vulnerabilities on an Ongoing Basis
+      
+      ### RV.1.1: Vulnerability Detection Process Validation
+      **Compliance Score**: {{rv11_score}}/100
+      **Status**: {{rv11_status}}
+      
+      **Vulnerability Detection Assessment**:
+      - Automated vulnerability scanning: {{rv11_auto_scanning}}
+      - Manual security testing: {{rv11_manual_testing}}
+      - Vulnerability assessment tools: {{rv11_va_tools}}
+      - Security monitoring: {{rv11_monitoring}}
+      - Incident detection procedures: {{rv11_incident_detection}}
+      
+      **Scanning Tool Results**:
+      | Tool Type | Tool Name | Findings | Critical | High | Medium | Low |
+      |-----------|-----------|----------|----------|------|--------|-----|
+      | SAST | {{sast_tool}} | {{sast_findings}} | {{sast_critical}} | {{sast_high}} | {{sast_medium}} | {{sast_low}} |
+      | DAST | {{dast_tool}} | {{dast_findings}} | {{dast_critical}} | {{dast_high}} | {{dast_medium}} | {{dast_low}} |
+      | Dependency | {{dep_tool}} | {{dep_findings}} | {{dep_critical}} | {{dep_high}} | {{dep_medium}} | {{dep_low}} |
+      | Container | {{container_tool}} | {{container_findings}} | {{container_critical}} | {{container_high}} | {{container_medium}} | {{container_low}} |
+      
+      **Vulnerability Summary**:
+      - Total vulnerabilities found: {{rv11_total_vulns}}
+      - Critical vulnerabilities: {{rv11_critical_vulns}}
+      - High vulnerabilities: {{rv11_high_vulns}}
+      - Medium vulnerabilities: {{rv11_medium_vulns}}
+      - Low vulnerabilities: {{rv11_low_vulns}}
+      
+      **Detection Process Gaps**:
+      - {{rv11_gap_1}}
+      - {{rv11_gap_2}}
+      
+      **Recommendations**:
+      - {{rv11_rec_1}}
+      - {{rv11_rec_2}}
+      
+      ## RV.2: Assess, Prioritize, and Remediate Vulnerabilities
+      
+      ### RV.2.1: Vulnerability Response Process Validation
+      **Compliance Score**: {{rv21_score}}/100
+      **Status**: {{rv21_status}}
+      
+      **Vulnerability Response Assessment**:
+      - Severity assessment process: {{rv21_severity_assessment}}
+      - Prioritization criteria: {{rv21_prioritization}}
+      - Remediation timeline: {{rv21_timeline}}
+      - Vulnerability tracking: {{rv21_tracking}}
+      - Remediation validation: {{rv21_validation}}
+      
+      **CVSS Scoring Implementation**:
+      - CVSS scoring methodology: {{rv21_cvss_methodology}}
+      - Environmental score adjustments: {{rv21_environmental_scoring}}
+      - Risk-based prioritization: {{rv21_risk_prioritization}}
+      
+      **Vulnerability Remediation Status**:
+      | Vulnerability ID | CVSS Score | Priority | Status | ETA | Owner |
+      |------------------|------------|----------|--------|-----|-------|
+      | {{vuln1_id}} | {{vuln1_cvss}} | {{vuln1_priority}} | {{vuln1_status}} | {{vuln1_eta}} | {{vuln1_owner}} |
+      | {{vuln2_id}} | {{vuln2_cvss}} | {{vuln2_priority}} | {{vuln2_status}} | {{vuln2_eta}} | {{vuln2_owner}} |
+      | {{vuln3_id}} | {{vuln3_cvss}} | {{vuln3_priority}} | {{vuln3_status}} | {{vuln3_eta}} | {{vuln3_owner}} |
+      
+      **SLA Compliance**:
+      - Critical vulnerability SLA: {{rv21_critical_sla}}
+      - High vulnerability SLA: {{rv21_high_sla}}
+      - Medium vulnerability SLA: {{rv21_medium_sla}}
+      
+      **Response Process Gaps**:
+      - {{rv21_gap_1}}
+      - {{rv21_gap_2}}
+      
+      **Recommendations**:
+      - {{rv21_rec_1}}
+      - {{rv21_rec_2}}
+      
+      ## RV.3: Analyze Vulnerabilities to Identify Their Root Causes
+      
+      ### RV.3.1: Root Cause Analysis Process Validation
+      **Compliance Score**: {{rv31_score}}/100
+      **Status**: {{rv31_status}}
+      
+      **Root Cause Analysis Assessment**:
+      - RCA methodology implementation: {{rv31_rca_methodology}}
+      - Process improvement identification: {{rv31_process_improvement}}
+      - Training gap analysis: {{rv31_training_gaps}}
+      - Tool effectiveness assessment: {{rv31_tool_effectiveness}}
+      - Preventive measure implementation: {{rv31_preventive_measures}}
+      
+      **Vulnerability Pattern Analysis**:
+      - Most common vulnerability types: {{rv31_common_vulns}}
+      - Recurring vulnerability patterns: {{rv31_patterns}}
+      - Development phase where introduced: {{rv31_introduction_phase}}
+      - Detection method effectiveness: {{rv31_detection_effectiveness}}
+      
+      **Root Cause Categories**:
+      | Category | Count | Percentage | Root Cause |
+      |----------|-------|------------|------------|
+      | {{rca1_category}} | {{rca1_count}} | {{rca1_percentage}} | {{rca1_cause}} |
+      | {{rca2_category}} | {{rca2_count}} | {{rca2_percentage}} | {{rca2_cause}} |
+      | {{rca3_category}} | {{rca3_count}} | {{rca3_percentage}} | {{rca3_cause}} |
+      
+      **Process Improvements Identified**:
+      - {{rv31_improvement_1}}
+      - {{rv31_improvement_2}}
+      - {{rv31_improvement_3}}
+      
+      **Training Recommendations**:
+      - {{rv31_training_1}}
+      - {{rv31_training_2}}
+      
+      **Tool Enhancement Recommendations**:
+      - {{rv31_tool_1}}
+      - {{rv31_tool_2}}
+      
+      **Preventive Measures**:
+      - {{rv31_preventive_1}}
+      - {{rv31_preventive_2}}
+
+  - id: compliance_matrix
+    title: "NIST SSDF Compliance Matrix"
+    instruction: "Provide a comprehensive compliance matrix showing status for all PW and RV practices"
+    elicit: true
+    content: |
+      # NIST SSDF Compliance Matrix
+      
+      ## PW (Produce Well-Secured Software) Compliance Summary
+      
+      | Practice | Task | Compliance Score | Status | Evidence | Gaps | Priority |
+      |----------|------|------------------|--------|----------|------|----------|
+      | PW.1 | Design Software to Meet Security Requirements | {{pw1_score}}/100 | {{pw1_status}} | {{pw1_evidence}} | {{pw1_gaps}} | {{pw1_priority}} |
+      | PW.2 | Review Software Design | {{pw2_score}}/100 | {{pw2_status}} | {{pw2_evidence}} | {{pw2_gaps}} | {{pw2_priority}} |
+      | PW.3 | Reuse Existing, Well-Secured Software | {{pw3_score}}/100 | {{pw3_status}} | {{pw3_evidence}} | {{pw3_gaps}} | {{pw3_priority}} |
+      | PW.4 | Create Source Code with Secure Coding Practices | {{pw4_score}}/100 | {{pw4_status}} | {{pw4_evidence}} | {{pw4_gaps}} | {{pw4_priority}} |
+      | PW.5 | Configure Compilation and Build Processes | {{pw5_score}}/100 | {{pw5_status}} | {{pw5_evidence}} | {{pw5_gaps}} | {{pw5_priority}} |
+      | PW.6 | Review and/or Analyze Human-Readable Code | {{pw6_score}}/100 | {{pw6_status}} | {{pw6_evidence}} | {{pw6_gaps}} | {{pw6_priority}} |
+      | PW.7 | Test Executable Code | {{pw7_score}}/100 | {{pw7_status}} | {{pw7_evidence}} | {{pw7_gaps}} | {{pw7_priority}} |
+      | PW.8 | Configure Software to Have Secure Settings | {{pw8_score}}/100 | {{pw8_status}} | {{pw8_evidence}} | {{pw8_gaps}} | {{pw8_priority}} |
+      
+      **PW Overall Compliance**: {{pw_overall_score}}/100 ({{pw_overall_percentage}}%)
+      
+      ## RV (Respond to Vulnerabilities) Compliance Summary
+      
+      | Practice | Task | Compliance Score | Status | Evidence | Gaps | Priority |
+      |----------|------|------------------|--------|----------|------|----------|
+      | RV.1 | Identify and Confirm Vulnerabilities | {{rv1_score}}/100 | {{rv1_status}} | {{rv1_evidence}} | {{rv1_gaps}} | {{rv1_priority}} |
+      | RV.2 | Assess, Prioritize, and Remediate Vulnerabilities | {{rv2_score}}/100 | {{rv2_status}} | {{rv2_evidence}} | {{rv2_gaps}} | {{rv2_priority}} |
+      | RV.3 | Analyze Vulnerabilities to Identify Root Causes | {{rv3_score}}/100 | {{rv3_status}} | {{rv3_evidence}} | {{rv3_gaps}} | {{rv3_priority}} |
+      
+      **RV Overall Compliance**: {{rv_overall_score}}/100 ({{rv_overall_percentage}}%)
+      
+      ## Combined Compliance Score
+      **Total NIST SSDF (PW/RV) Compliance**: {{total_compliance_score}}/100 ({{total_compliance_percentage}}%)
+
+  - id: remediation_plan
+    title: "Remediation Plan and Next Steps"
+    instruction: "Provide a detailed remediation plan for addressing identified gaps and improving NIST SSDF compliance"
+    elicit: true
+    content: |
+      # Remediation Plan and Next Steps
+      
+      ## Immediate Actions Required (0-7 days)
+      **Critical Issues That Must Be Addressed Before Deployment**
+      
+      ### Critical Security Vulnerabilities
+      1. **{{critical_issue_1}}**
+         - **Risk Level**: Critical
+         - **CVSS Score**: {{critical_issue_1_cvss}}
+         - **Affected Components**: {{critical_issue_1_components}}
+         - **Remediation**: {{critical_issue_1_remediation}}
+         - **Owner**: {{critical_issue_1_owner}}
+         - **ETA**: {{critical_issue_1_eta}}
+      
+      2. **{{critical_issue_2}}**
+         - **Risk Level**: Critical
+         - **CVSS Score**: {{critical_issue_2_cvss}}
+         - **Affected Components**: {{critical_issue_2_components}}
+         - **Remediation**: {{critical_issue_2_remediation}}
+         - **Owner**: {{critical_issue_2_owner}}
+         - **ETA**: {{critical_issue_2_eta}}
+      
+      ### Critical Compliance Gaps
+      - **{{critical_gap_1}}**: {{critical_gap_1_description}}
+      - **{{critical_gap_2}}**: {{critical_gap_2_description}}
+      
+      ## Short-term Actions (1-4 weeks)
+      **High Priority Issues and Process Improvements**
+      
+      ### High Priority Vulnerabilities
+      1. **{{high_issue_1}}** - {{high_issue_1_description}}
+      2. **{{high_issue_2}}** - {{high_issue_2_description}}
+      3. **{{high_issue_3}}** - {{high_issue_3_description}}
+      
+      ### Process Improvements
+      - **{{process_improvement_1}}**: {{process_improvement_1_description}}
+      - **{{process_improvement_2}}**: {{process_improvement_2_description}}
+      - **{{process_improvement_3}}**: {{process_improvement_3_description}}
+      
+      ### Training Requirements
+      - **{{training_requirement_1}}**: {{training_requirement_1_description}}
+      - **{{training_requirement_2}}**: {{training_requirement_2_description}}
+      
+      ## Medium-term Actions (1-3 months)
+      **Medium Priority Issues and Strategic Improvements**
+      
+      ### Medium Priority Vulnerabilities
+      1. **{{medium_issue_1}}** - {{medium_issue_1_description}}
+      2. **{{medium_issue_2}}** - {{medium_issue_2_description}}
+      
+      ### Tool and Process Enhancements
+      - **{{tool_enhancement_1}}**: {{tool_enhancement_1_description}}
+      - **{{tool_enhancement_2}}**: {{tool_enhancement_2_description}}
+      
+      ### Compliance Improvements
+      - **{{compliance_improvement_1}}**: {{compliance_improvement_1_description}}
+      - **{{compliance_improvement_2}}**: {{compliance_improvement_2_description}}
+      
+      ## Long-term Actions (3-6 months)
+      **Strategic Security and Compliance Initiatives**
+      
+      ### Security Program Maturity
+      - **{{maturity_initiative_1}}**: {{maturity_initiative_1_description}}
+      - **{{maturity_initiative_2}}**: {{maturity_initiative_2_description}}
+      
+      ### Advanced Security Capabilities
+      - **{{advanced_capability_1}}**: {{advanced_capability_1_description}}
+      - **{{advanced_capability_2}}**: {{advanced_capability_2_description}}
+      
+      ## Success Metrics and Monitoring
+      
+      ### Key Performance Indicators
+      - **Vulnerability Remediation Time**: Target {{vuln_remediation_target}} days
+      - **NIST SSDF Compliance Score**: Target {{compliance_target}}%
+      - **Security Test Coverage**: Target {{test_coverage_target}}%
+      - **Code Review Coverage**: Target {{review_coverage_target}}%
+      
+      ### Monitoring and Reporting
+      - **Weekly**: Critical vulnerability status updates
+      - **Monthly**: Compliance score tracking and gap analysis
+      - **Quarterly**: Root cause analysis and process improvement review
+      - **Annually**: Comprehensive NIST SSDF compliance assessment
+      
+      ## Resource Requirements
+      
+      ### Personnel
+      - **Security Engineer**: {{security_engineer_hours}} hours
+      - **Developer**: {{developer_hours}} hours  
+      - **DevOps Engineer**: {{devops_hours}} hours
+      - **Training**: {{training_hours}} hours
+      
+      ### Tools and Technology
+      - **Security Tools**: {{security_tools_budget}}
+      - **Training Programs**: {{training_budget}}
+      - **Infrastructure**: {{infrastructure_budget}}
+      
+      ### Timeline Summary
+      - **Immediate (0-7 days)**: {{immediate_timeline}}
+      - **Short-term (1-4 weeks)**: {{short_term_timeline}}
+      - **Medium-term (1-3 months)**: {{medium_term_timeline}}
+      - **Long-term (3-6 months)**: {{long_term_timeline}}

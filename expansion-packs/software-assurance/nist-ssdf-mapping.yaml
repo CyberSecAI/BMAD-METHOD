@@ -1,0 +1,519 @@
+# NIST SSDF Practice Mapping for Software Assurance Expansion Pack
+# Version: 1.0.0
+# This file maps NIST SSDF practices to technical validation components
+
+metadata:
+  version: "1.0.0"
+  description: "Mapping between NIST SSDF practices and Software Assurance expansion pack technical validation"
+  last_updated: "2025-01-26"
+  compatible_with: "NIST SP 800-218 v1.1"
+
+# PW: Produce Well-Secured Software Practices
+pw_practices:
+  
+  PW.1:
+    name: "Design Software to Meet Security Requirements"
+    description: "Security requirements are included in software requirements and the software is designed to satisfy the security requirements"
+    
+    sub_practices:
+      PW.1.1:
+        name: "Security Requirements Implementation"
+        technical_validation:
+          data_sources:
+            - "data/python-secure-coding.md#authentication"
+            - "data/python-secure-coding.md#authorization"
+            - "data/python-secure-coding.md#input-validation"
+            - "data/python-secure-coding.md#cryptography"
+          
+          validation_criteria:
+            authentication_mechanisms:
+              required_patterns: ["bcrypt.hashpw", "argon2.PasswordHasher", "secure session management"]
+              prohibited_patterns: ["md5 hashing", "sha1 hashing", "plaintext passwords"]
+              weight: 0.3
+            
+            authorization_controls:
+              required_patterns: ["role-based access", "permission checking", "least privilege"]
+              prohibited_patterns: ["hardcoded permissions", "admin bypass", "privilege escalation"]
+              weight: 0.25
+            
+            input_validation:
+              required_patterns: ["server-side validation", "sanitization", "type checking"]
+              prohibited_patterns: ["client-side only", "eval() usage", "exec() usage"]
+              weight: 0.25
+            
+            data_protection:
+              required_patterns: ["encryption at rest", "encryption in transit", "secure key management"]
+              prohibited_patterns: ["plaintext storage", "weak encryption", "hardcoded keys"]
+              weight: 0.2
+          
+          compliance_scoring:
+            method: "weighted_average"
+            passing_threshold: 85
+            
+          supported_languages:
+            python:
+              tools: ["bandit", "semgrep"]
+              patterns_file: "data/python-secure-coding.md"
+              vulnerabilities_file: "data/python-common-vulns.md"
+            
+            javascript:
+              tools: ["eslint-security", "semgrep"]
+              patterns_file: "data/javascript-secure-coding.md"
+              vulnerabilities_file: "data/javascript-common-vulns.md"
+
+  PW.2:
+    name: "Review Software Design"
+    description: "Software design is reviewed to identify and address security weaknesses"
+    
+    sub_practices:
+      PW.2.1:
+        name: "Design Implementation Verification"
+        technical_validation:
+          data_sources:
+            - "data/python-secure-coding.md#design-patterns"
+            - "data/python-architecture-security.md"
+          
+          validation_criteria:
+            security_patterns:
+              required_patterns: ["defense in depth", "fail secure", "least privilege", "secure by default"]
+              prohibited_patterns: ["security through obscurity", "single point of failure"]
+              weight: 0.4
+            
+            architecture_compliance:
+              required_patterns: ["separation of concerns", "secure communication", "proper encapsulation"]
+              prohibited_patterns: ["tight coupling", "god objects", "exposed internals"]
+              weight: 0.35
+            
+            component_integration:
+              required_patterns: ["secure APIs", "input validation at boundaries", "proper error handling"]
+              prohibited_patterns: ["direct database access", "unvalidated inputs", "information leakage"]
+              weight: 0.25
+          
+          compliance_scoring:
+            method: "weighted_average"
+            passing_threshold: 80
+
+  PW.3:
+    name: "Reuse Existing, Well-Secured Software"
+    description: "Third-party software components are evaluated and maintained to reduce vulnerabilities"
+    
+    sub_practices:
+      PW.3.1:
+        name: "Third-Party Component Security"
+        technical_validation:
+          data_sources:
+            - "data/python-dependency-security.md"
+            - "templates/python-vuln-scan-tmpl.yaml"
+          
+          validation_criteria:
+            component_evaluation:
+              required_checks: ["security scan", "version currency", "license review", "maintenance status"]
+              tools: ["safety", "pip-audit", "snyk", "OWASP dependency check"]
+              weight: 0.4
+            
+            vulnerability_assessment:
+              required_checks: ["CVE scanning", "CVSS scoring", "exploitability analysis"]
+              severity_thresholds:
+                critical: 0  # No critical vulnerabilities allowed
+                high: 2      # Maximum 2 high severity
+                medium: 10   # Maximum 10 medium severity
+              weight: 0.35
+            
+            update_management:
+              required_processes: ["update tracking", "patch management", "regression testing"]
+              weight: 0.25
+          
+          compliance_scoring:
+            method: "dependency_risk_assessment"
+            passing_threshold: 85
+
+  PW.4:
+    name: "Create Source Code with Secure Coding Practices"
+    description: "Source code is created according to secure coding practices"
+    
+    sub_practices:
+      PW.4.1:
+        name: "Source Code Security Implementation"
+        technical_validation:
+          data_sources:
+            - "data/python-secure-coding.md"
+            - "data/python-common-vulns.md"
+          
+          validation_criteria:
+            input_validation:
+              required_patterns: ["parameter validation", "sanitization", "type checking", "bounds checking"]
+              prohibited_patterns: ["eval() usage", "exec() usage", "unsafe deserialization"]
+              vulnerability_mapping: ["CWE-79", "CWE-89", "CWE-502"]
+              weight: 0.25
+            
+            sql_injection_prevention:
+              required_patterns: ["parameterized queries", "ORM usage", "input sanitization"]
+              prohibited_patterns: ["string concatenation in SQL", "f-strings in queries", "% formatting in SQL"]
+              vulnerability_mapping: ["CWE-89"]
+              weight: 0.2
+            
+            xss_prevention:
+              required_patterns: ["output encoding", "template auto-escaping", "CSP headers"]
+              prohibited_patterns: ["|safe filter usage", "innerHTML assignment", "document.write"]
+              vulnerability_mapping: ["CWE-79"]
+              weight: 0.15
+            
+            authentication_security:
+              required_patterns: ["strong password hashing", "secure session management", "MFA support"]
+              prohibited_patterns: ["weak hashing algorithms", "session fixation", "plaintext storage"]
+              vulnerability_mapping: ["CWE-327", "CWE-384", "CWE-256"]
+              weight: 0.2
+            
+            cryptography:
+              required_patterns: ["strong algorithms", "proper key management", "secure random generation"]
+              prohibited_patterns: ["deprecated algorithms", "hardcoded keys", "predictable randomness"]
+              vulnerability_mapping: ["CWE-327", "CWE-330", "CWE-321"]
+              weight: 0.2
+          
+          compliance_scoring:
+            method: "vulnerability_impact_weighted"
+            vulnerability_weights:
+              critical: -25  # Each critical vulnerability reduces score by 25 points
+              high: -15      # Each high vulnerability reduces score by 15 points
+              medium: -8     # Each medium vulnerability reduces score by 8 points
+              low: -3        # Each low vulnerability reduces score by 3 points
+            pattern_bonus: 5  # Each secure pattern implemented adds 5 points
+            base_score: 100
+            passing_threshold: 85
+          
+          supported_languages:
+            python:
+              sast_tools: ["bandit", "semgrep", "pylint"]
+              dependency_tools: ["safety", "pip-audit"]
+              patterns_file: "data/python-secure-coding.md"
+              vulnerabilities_file: "data/python-common-vulns.md"
+              
+            javascript:
+              sast_tools: ["eslint-security", "semgrep", "jshint"]
+              dependency_tools: ["npm audit", "snyk"]
+              patterns_file: "data/javascript-secure-coding.md"
+              vulnerabilities_file: "data/javascript-common-vulns.md"
+
+  PW.5:
+    name: "Configure Compilation and Build Processes"
+    description: "Build processes are configured to improve executable security"
+    
+    sub_practices:
+      PW.5.1:
+        name: "Build Process Security"
+        technical_validation:
+          data_sources:
+            - "data/python-build-security.md"
+            - "templates/build-security-tmpl.yaml"
+          
+          validation_criteria:
+            compiler_security:
+              required_flags: ["optimization", "stack protection", "format string protection"]
+              weight: 0.3
+            
+            static_analysis:
+              required_tools: ["SAST integration", "linting", "dependency scanning"]
+              ci_integration: true
+              weight: 0.35
+            
+            build_environment:
+              required_security: ["access controls", "integrity verification", "isolated environments"]
+              weight: 0.35
+          
+          compliance_scoring:
+            method: "build_security_checklist"
+            passing_threshold: 80
+
+  PW.6:
+    name: "Review and/or Analyze Human-Readable Code"
+    description: "Code is reviewed or analyzed to identify vulnerabilities"
+    
+    sub_practices:
+      PW.6.1:
+        name: "Code Review Process Validation"
+        technical_validation:
+          data_sources:
+            - "data/python-review-patterns.md"
+            - "checklists/code-security-checklist.md"
+          
+          validation_criteria:
+            review_coverage:
+              required_coverage: 90  # Percentage of security-critical code reviewed
+              security_focus: true
+              weight: 0.4
+            
+            vulnerability_detection:
+              required_categories: ["injection", "authentication", "session management", "cryptography"]
+              detection_rate_threshold: 80  # Percentage of planted vulnerabilities found
+              weight: 0.35
+            
+            reviewer_expertise:
+              security_training: true
+              certification_preferred: true
+              weight: 0.25
+          
+          compliance_scoring:
+            method: "review_effectiveness"
+            passing_threshold: 85
+
+  PW.7:
+    name: "Test Executable Code"
+    description: "Code is tested to identify vulnerabilities and unexpected behaviors"
+    
+    sub_practices:
+      PW.7.1:
+        name: "Security Testing Implementation"
+        technical_validation:
+          data_sources:
+            - "data/python-testing-patterns.md"
+            - "templates/security-test-tmpl.yaml"
+          
+          validation_criteria:
+            unit_test_security:
+              required_coverage: ["authentication tests", "authorization tests", "input validation tests"]
+              coverage_threshold: 80
+              weight: 0.25
+            
+            integration_testing:
+              required_tests: ["API security", "database security", "session management"]
+              weight: 0.25
+            
+            dynamic_analysis:
+              required_tools: ["DAST", "fuzzing", "penetration testing"]
+              frequency: "per_release"
+              weight: 0.5
+          
+          compliance_scoring:
+            method: "testing_coverage_weighted"
+            passing_threshold: 85
+
+  PW.8:
+    name: "Configure Software to Have Secure Settings by Default"
+    description: "Software is deployed with secure configurations"
+    
+    sub_practices:
+      PW.8.1:
+        name: "Default Security Configuration"
+        technical_validation:
+          data_sources:
+            - "data/python-config-security.md"
+            - "templates/secure-config-tmpl.yaml"
+          
+          validation_criteria:
+            secure_defaults:
+              required_settings: ["disable debug", "secure headers", "proper permissions", "encrypted connections"]
+              weight: 0.4
+            
+            hardening:
+              required_measures: ["unnecessary features disabled", "secure protocols only", "proper logging"]
+              weight: 0.35
+            
+            configuration_management:
+              required_processes: ["config validation", "secure storage", "change tracking"]
+              weight: 0.25
+          
+          compliance_scoring:
+            method: "configuration_security_score"
+            passing_threshold: 85
+
+# RV: Respond to Vulnerabilities Practices
+rv_practices:
+  
+  RV.1:
+    name: "Identify and Confirm Vulnerabilities"
+    description: "Vulnerabilities are identified and confirmed on an ongoing basis"
+    
+    sub_practices:
+      RV.1.1:
+        name: "Vulnerability Detection Process Validation"
+        technical_validation:
+          data_sources:
+            - "templates/python-vuln-scan-tmpl.yaml"
+            - "data/python-vulnerability-detection.md"
+          
+          validation_criteria:
+            automated_scanning:
+              required_tools: ["SAST", "DAST", "dependency scanning", "container scanning"]
+              frequency: "continuous"
+              weight: 0.4
+            
+            manual_testing:
+              required_activities: ["code review", "penetration testing", "security assessment"]
+              frequency: "per_release"
+              weight: 0.3
+            
+            vulnerability_confirmation:
+              required_processes: ["triage", "validation", "impact assessment"]
+              sla: "24_hours_critical"
+              weight: 0.3
+          
+          compliance_scoring:
+            method: "detection_effectiveness"
+            passing_threshold: 90
+
+  RV.2:
+    name: "Assess, Prioritize, and Remediate Vulnerabilities"
+    description: "Vulnerabilities are assessed and remediated according to risk"
+    
+    sub_practices:
+      RV.2.1:
+        name: "Vulnerability Response Process Validation"
+        technical_validation:
+          data_sources:
+            - "data/python-vulnerability-response.md"
+            - "templates/vulnerability-response-tmpl.yaml"
+          
+          validation_criteria:
+            severity_assessment:
+              required_framework: "CVSS_v3"
+              environmental_scoring: true
+              weight: 0.3
+            
+            prioritization:
+              required_criteria: ["severity", "exploitability", "business_impact", "exposure"]
+              weight: 0.3
+            
+            remediation_sla:
+              critical: "24_hours"
+              high: "7_days"
+              medium: "30_days"
+              low: "90_days"
+              weight: 0.4
+          
+          compliance_scoring:
+            method: "sla_compliance_rate"
+            passing_threshold: 95
+
+  RV.3:
+    name: "Analyze Vulnerabilities to Identify Root Causes"
+    description: "Root causes of vulnerabilities are identified and addressed"
+    
+    sub_practices:
+      RV.3.1:
+        name: "Root Cause Analysis Process Validation"
+        technical_validation:
+          data_sources:
+            - "data/python-rca-patterns.md"
+            - "templates/rca-analysis-tmpl.yaml"
+          
+          validation_criteria:
+            rca_methodology:
+              required_techniques: ["five_whys", "fishbone_diagram", "timeline_analysis"]
+              weight: 0.3
+            
+            pattern_analysis:
+              required_tracking: ["vulnerability_types", "introduction_phase", "detection_method"]
+              weight: 0.35
+            
+            process_improvement:
+              required_outputs: ["process_updates", "training_plans", "tool_enhancements"]
+              weight: 0.35
+          
+          compliance_scoring:
+            method: "improvement_implementation_rate"
+            passing_threshold: 85
+
+# Language-Specific Configurations
+language_configurations:
+  
+  python:
+    name: "Python Security Analysis"
+    supported_frameworks: ["flask", "django", "fastapi", "sqlalchemy", "requests"]
+    
+    tools:
+      sast:
+        primary: "bandit"
+        secondary: ["semgrep", "pylint", "flake8"]
+        configuration_file: "configs/bandit.yaml"
+      
+      dependency:
+        primary: "safety"
+        secondary: ["pip-audit", "snyk"]
+        configuration_file: "configs/safety.json"
+      
+      dast:
+        primary: "zap"
+        secondary: ["burp"]
+        configuration_file: "configs/zap.yaml"
+    
+    data_sources:
+      secure_coding: "data/python-secure-coding.md"
+      vulnerabilities: "data/python-common-vulns.md"
+      testing_patterns: "data/python-testing-patterns.md"
+      configuration: "data/python-config-security.md"
+    
+    vulnerability_mappings:
+      sql_injection: ["CWE-89", "OWASP-A03"]
+      xss: ["CWE-79", "OWASP-A03"]
+      deserialization: ["CWE-502", "OWASP-A08"]
+      weak_crypto: ["CWE-327", "OWASP-A02"]
+      injection: ["CWE-77", "CWE-78", "OWASP-A03"]
+    
+    scoring_weights:
+      vulnerability_severity: 0.4
+      pattern_compliance: 0.3
+      test_coverage: 0.2
+      documentation: 0.1
+
+  javascript:
+    name: "JavaScript/Node.js Security Analysis"
+    supported_frameworks: ["express", "react", "vue", "angular", "next.js"]
+    
+    tools:
+      sast:
+        primary: "eslint-security"
+        secondary: ["semgrep", "jshint"]
+      dependency:
+        primary: "npm-audit"
+        secondary: ["snyk", "retire.js"]
+      dast:
+        primary: "zap"
+        secondary: ["burp"]
+    
+    data_sources:
+      secure_coding: "data/javascript-secure-coding.md"
+      vulnerabilities: "data/javascript-common-vulns.md"
+    
+    vulnerability_mappings:
+      prototype_pollution: ["CWE-1321"]
+      regex_dos: ["CWE-1333"]
+      xss: ["CWE-79", "OWASP-A03"]
+
+# Integration Configuration
+integration:
+  api_version: "1.0"
+  request_timeout: 300  # seconds
+  max_file_size: "100MB"
+  supported_file_types: [".py", ".js", ".ts", ".java", ".cs", ".go", ".rs", ".php"]
+  
+  error_handling:
+    unsupported_language:
+      action: "fallback_to_manual"
+      message: "Language not supported - manual review required"
+    
+    tool_failure:
+      action: "partial_analysis"
+      message: "Some tools unavailable - analysis may be incomplete"
+    
+    timeout:
+      action: "return_partial_results"
+      message: "Analysis timed out - partial results available"
+
+# Reporting Configuration
+reporting:
+  formats: ["json", "yaml", "markdown", "pdf"]
+  
+  sections:
+    - executive_summary
+    - practice_compliance_scores
+    - vulnerability_findings
+    - technical_details
+    - recommendations
+    - remediation_timeline
+  
+  compliance_visualization:
+    charts: ["compliance_radar", "trend_analysis", "practice_heatmap"]
+    thresholds:
+      compliant: 90
+      partial: 70
+      non_compliant: 0

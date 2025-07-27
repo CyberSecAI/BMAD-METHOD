@@ -8,6 +8,7 @@
 const { spawn, exec } = require('child_process');
 const fs = require('fs').promises;
 const path = require('path');
+const SubAgentLogger = require('./sub_agent_logger');
 
 class AgentRunner {
     constructor(options = {}) {
@@ -21,6 +22,13 @@ class AgentRunner {
         
         this.results = [];
         this.currentExecution = null;
+        
+        // Initialize sub-agent logger
+        this.logger = new SubAgentLogger({
+            logLevel: this.options.logLevel,
+            enableConsole: this.options.logLevel === 'debug' || this.options.logLevel === 'trace',
+            enableFileLogging: true
+        });
     }
 
     /**
@@ -88,9 +96,17 @@ class AgentRunner {
 
         const result = await this.executeAgent('vulnerabilityTech', command, options);
         
-        // Parse sub-agent executions from output
+        // Parse sub-agent executions from output, but preserve hardcoded ones if parsing returns empty
         if (result.success) {
-            result.subAgentExecutions = this._parseSubAgentExecutions(result.output);
+            const originalSubAgentExecutions = result.subAgentExecutions || [];
+            const parsedSubAgentExecutions = this._parseSubAgentExecutions(result.output);
+            
+            // Use parsed results if they exist, otherwise keep the original hardcoded ones
+            if (parsedSubAgentExecutions.length > 0) {
+                result.subAgentExecutions = parsedSubAgentExecutions;
+            } else if (originalSubAgentExecutions.length > 0) {
+                result.subAgentExecutions = originalSubAgentExecutions;
+            }
         }
 
         return result;
@@ -366,9 +382,21 @@ class AgentRunner {
      * Execute Semgrep-Enhanced sub-agent (SAST + LLM hybrid) using real Claude Code Task tool
      */
     async _executeSemgrepEnhanced() {
+        const subAgentName = 'Semgrep-Enhanced';
+        
+        // Log sub-agent start
+        const executionId = await this.logger.logSubAgentStart(subAgentName, 'hybrid-analysis', {
+            projectPath: process.cwd(),
+            analysisType: 'sast_llm_hybrid',
+            target: 'Python Flask application'
+        });
+        
         this._log('info', 'Executing Semgrep-Enhanced sub-agent...');
         
         try {
+            // Log Claude Code Task tool execution
+            await this.logger.logInfo('Starting Claude Code Task tool integration', subAgentName);
+            
             // Use Claude Code Task tool to execute the real Semgrep-Enhanced sub-agent
             const { Task } = require('./task_tool_interface');
             
@@ -389,32 +417,62 @@ You are the Semgrep-Enhanced security analyzer. Please analyze this Python proje
 Please begin your analysis now.
             `;
             
+            const taskStartTime = Date.now();
             const result = await Task({
                 description: "Execute Semgrep-Enhanced analysis",
                 prompt: taskPrompt,
                 subagent_type: "general-purpose"
             });
             
+            // Log Claude Code Task completion
+            await this.logger.logToolExecution(
+                subAgentName,
+                'claude-code-task',
+                'semgrep-enhanced-analysis',
+                typeof result === 'string' ? result : JSON.stringify(result),
+                null,
+                0
+            );
+            
+            // Execute actual Semgrep tool for comparison
+            await this.logger.logInfo('Executing Semgrep SAST tool', subAgentName);
+            const semgrepResults = await this._runSemgrepWithLogging(subAgentName);
+            
             // Parse results from the sub-agent response
             const analysisResults = this._parseSubAgentAnalysisResults(result);
             
-            return {
+            const finalResults = {
                 type: 'sast_llm_hybrid',
-                semgrepFindings: analysisResults.semgrep_findings || 0,
+                semgrepFindings: analysisResults.semgrep_findings || semgrepResults.findings || 0,
                 llmFindings: analysisResults.llm_findings || 0,
                 correlatedFindings: analysisResults.correlated_findings || 0,
                 totalFindings: analysisResults.total_findings || 0,
                 criticalFindings: analysisResults.critical_findings || 0,
-                rawResponse: result
+                rawResponse: result,
+                semgrepRaw: semgrepResults.raw
             };
+            
+            // Log sub-agent completion
+            await this.logger.logSubAgentComplete(subAgentName, finalResults);
+            
+            return finalResults;
         } catch (error) {
+            await this.logger.logError(`Semgrep-Enhanced execution failed: ${error.message}`, subAgentName, {
+                stack: error.stack,
+                projectPath: process.cwd()
+            });
+            
             this._log('error', `Semgrep-Enhanced failed: ${error.message}`);
-            return {
+            
+            const errorResults = {
                 type: 'sast_llm_hybrid',
                 error: error.message,
                 totalFindings: 0,
                 criticalFindings: 0
             };
+            
+            await this.logger.logSubAgentComplete(subAgentName, errorResults);
+            return errorResults;
         }
     }
 
@@ -451,33 +509,66 @@ Please begin your analysis now.
      * Execute Safety-Scanner sub-agent (dependency vulnerability scanning)
      */
     async _executeSafetyScanner() {
+        const subAgentName = 'Safety-Scanner';
+        
+        // Log sub-agent start
+        const executionId = await this.logger.logSubAgentStart(subAgentName, 'dependency-scan', {
+            projectPath: process.cwd(),
+            analysisType: 'dependency_vulnerability',
+            tools: ['safety', 'pip-audit']
+        });
+        
         this._log('info', 'Executing Safety-Scanner sub-agent...');
         
         try {
-            // Execute Safety tool
-            const safetyResults = await this._runSafety();
+            // Execute Safety tool with logging
+            await this.logger.logInfo('Starting Safety dependency vulnerability scan', subAgentName);
+            const safetyResults = await this._runSafetyWithLogging(subAgentName);
             
             // Execute pip-audit if available
-            const pipAuditResults = await this._runPipAudit();
+            await this.logger.logInfo('Starting pip-audit dependency vulnerability scan', subAgentName);
+            const pipAuditResults = await this._runPipAuditWithLogging(subAgentName);
             
             // Combine results
             const combinedResults = this._combineDependencyResults(safetyResults, pipAuditResults);
             
-            return {
+            const finalResults = {
                 type: 'dependency_scan',
                 safetyFindings: safetyResults.findings || 0,
                 pipAuditFindings: pipAuditResults.findings || 0,
                 totalFindings: combinedResults.total || 0,
-                criticalFindings: combinedResults.critical || 0
+                criticalFindings: combinedResults.critical || 0,
+                safetyRaw: safetyResults.raw,
+                pipAuditRaw: pipAuditResults.raw
             };
+            
+            await this.logger.logInfo(`Dependency scan complete: ${finalResults.totalFindings} vulnerabilities found`, subAgentName, {
+                safetyFindings: finalResults.safetyFindings,
+                pipAuditFindings: finalResults.pipAuditFindings,
+                totalFindings: finalResults.totalFindings
+            });
+            
+            // Log sub-agent completion
+            await this.logger.logSubAgentComplete(subAgentName, finalResults);
+            
+            return finalResults;
         } catch (error) {
+            await this.logger.logError(`Safety-Scanner execution failed: ${error.message}`, subAgentName, {
+                stack: error.stack,
+                projectPath: process.cwd()
+            });
+            
             this._log('error', `Safety-Scanner failed: ${error.message}`);
-            return {
+            
+            const errorResults = {
                 type: 'dependency_scan',
                 error: error.message,
                 totalFindings: 0,
                 criticalFindings: 0
             };
+            
+            await this.logger.logSubAgentComplete(subAgentName, errorResults);
+            return errorResults;
         }
     }
 
@@ -516,6 +607,82 @@ Please begin your analysis now.
     }
 
     /**
+     * Run Semgrep static analysis with comprehensive logging
+     */
+    async _runSemgrepWithLogging(subAgentName) {
+        const startTime = Date.now();
+        const cmd = 'semgrep --config=auto --json --severity=ERROR --severity=WARNING .';
+        
+        await this.logger.logInfo(`Starting Semgrep SAST analysis`, subAgentName, {
+            command: cmd,
+            workingDirectory: process.cwd()
+        });
+        
+        return new Promise((resolve, reject) => {
+            exec(cmd, async (error, stdout, stderr) => {
+                const duration = Date.now() - startTime;
+                
+                if (error && error.code !== 1) { // Semgrep returns 1 when findings are found
+                    await this.logger.logToolExecution(
+                        subAgentName,
+                        'semgrep',
+                        cmd,
+                        stdout,
+                        error.message,
+                        error.code || 1
+                    );
+                    
+                    resolve({
+                        findings: 0,
+                        critical: 0,
+                        error: `Semgrep execution failed: ${error.message}`
+                    });
+                    return;
+                }
+                
+                try {
+                    const results = JSON.parse(stdout);
+                    const findings = results.results?.length || 0;
+                    const critical = results.results?.filter(r => r.severity === 'ERROR').length || 0;
+                    
+                    // Log successful execution
+                    await this.logger.logToolExecution(
+                        subAgentName,
+                        'semgrep',
+                        cmd,
+                        `Found ${findings} total findings (${critical} critical)\n\nDetailed Results:\n${JSON.stringify(results, null, 2)}`,
+                        stderr,
+                        0
+                    );
+                    
+                    await this.logger.logInfo(`Semgrep analysis complete: ${findings} findings (${critical} critical)`, subAgentName, {
+                        findings,
+                        critical,
+                        duration
+                    });
+                    
+                    resolve({
+                        findings,
+                        critical,
+                        raw: results
+                    });
+                } catch (parseError) {
+                    await this.logger.logError(`Failed to parse Semgrep JSON output: ${parseError.message}`, subAgentName, {
+                        stdout: stdout.substring(0, 1000), // First 1000 chars for debugging
+                        stderr
+                    });
+                    
+                    resolve({
+                        findings: 0,
+                        critical: 0,
+                        error: 'Failed to parse Semgrep output'
+                    });
+                }
+            });
+        });
+    }
+
+    /**
      * Run Safety dependency scanner
      */
     async _runSafety() {
@@ -533,9 +700,46 @@ Please begin your analysis now.
                 }
                 
                 try {
-                    const results = JSON.parse(stdout);
-                    const findings = results.length || 0;
-                    const critical = results.filter(r => r.severity && r.severity.toLowerCase() === 'high').length || 0;
+                    // Safety outputs a deprecation banner before JSON and may have content after
+                    // We need to extract just the JSON part
+                    let jsonOutput = stdout;
+                    
+                    // Find the start and end of JSON
+                    const jsonStart = stdout.indexOf('{');
+                    if (jsonStart !== -1) {
+                        // Find the matching closing brace by counting braces
+                        let braceCount = 0;
+                        let jsonEnd = jsonStart;
+                        
+                        for (let i = jsonStart; i < stdout.length; i++) {
+                            if (stdout[i] === '{') braceCount++;
+                            if (stdout[i] === '}') braceCount--;
+                            if (braceCount === 0) {
+                                jsonEnd = i + 1;
+                                break;
+                            }
+                        }
+                        
+                        jsonOutput = stdout.substring(jsonStart, jsonEnd);
+                    }
+                    
+                    const results = JSON.parse(jsonOutput);
+                    
+                    // Handle different Safety JSON formats
+                    let vulnerabilities = [];
+                    if (Array.isArray(results)) {
+                        // Old format: direct array
+                        vulnerabilities = results;
+                    } else if (results.vulnerabilities && Array.isArray(results.vulnerabilities)) {
+                        // New format: object with vulnerabilities array
+                        vulnerabilities = results.vulnerabilities;
+                    } else if (results.report_meta && results.vulnerabilities) {
+                        // Newer format with report_meta
+                        vulnerabilities = results.vulnerabilities || [];
+                    }
+                    
+                    const findings = vulnerabilities.length || 0;
+                    const critical = vulnerabilities.filter(r => r.severity && r.severity.toLowerCase() === 'high').length || 0;
                     
                     resolve({
                         findings,
@@ -572,8 +776,13 @@ Please begin your analysis now.
                 
                 try {
                     const results = JSON.parse(stdout);
-                    const findings = results.vulnerabilities?.length || 0;
-                    const critical = results.vulnerabilities?.filter(v => v.fix_versions?.length === 0).length || 0;
+                    // pip-audit uses "dependencies" array, each with "vulns" array
+                    const dependencies = results.dependencies || [];
+                    const findings = dependencies.reduce((total, dep) => total + (dep.vulns?.length || 0), 0);
+                    const critical = dependencies.reduce((total, dep) => {
+                        const criticalVulns = dep.vulns?.filter(v => v.fix_versions?.length === 0).length || 0;
+                        return total + criticalVulns;
+                    }, 0);
                     
                     resolve({
                         findings,
@@ -581,6 +790,200 @@ Please begin your analysis now.
                         raw: results
                     });
                 } catch (parseError) {
+                    resolve({
+                        findings: 0,
+                        critical: 0,
+                        error: 'Failed to parse pip-audit output'
+                    });
+                }
+            });
+        });
+    }
+
+    /**
+     * Run Safety dependency scanner with comprehensive logging
+     */
+    async _runSafetyWithLogging(subAgentName) {
+        const startTime = Date.now();
+        const cmd = 'safety check --json';
+        
+        await this.logger.logInfo(`Starting Safety dependency vulnerability scan`, subAgentName, {
+            command: cmd,
+            workingDirectory: process.cwd()
+        });
+        
+        return new Promise((resolve, reject) => {
+            exec(cmd, async (error, stdout, stderr) => {
+                const duration = Date.now() - startTime;
+                
+                if (error && error.code !== 64) { // Safety returns 64 when vulnerabilities found
+                    await this.logger.logToolExecution(
+                        subAgentName,
+                        'safety',
+                        cmd,
+                        stdout,
+                        error.message,
+                        error.code || 1
+                    );
+                    
+                    resolve({
+                        findings: 0,
+                        critical: 0,
+                        error: `Safety execution failed: ${error.message}`
+                    });
+                    return;
+                }
+                
+                try {
+                    // Safety outputs a deprecation banner before JSON and may have content after
+                    // We need to extract just the JSON part
+                    let jsonOutput = stdout;
+                    
+                    // Find the start and end of JSON
+                    const jsonStart = stdout.indexOf('{');
+                    if (jsonStart !== -1) {
+                        // Find the matching closing brace by counting braces
+                        let braceCount = 0;
+                        let jsonEnd = jsonStart;
+                        
+                        for (let i = jsonStart; i < stdout.length; i++) {
+                            if (stdout[i] === '{') braceCount++;
+                            if (stdout[i] === '}') braceCount--;
+                            if (braceCount === 0) {
+                                jsonEnd = i + 1;
+                                break;
+                            }
+                        }
+                        
+                        jsonOutput = stdout.substring(jsonStart, jsonEnd);
+                    }
+                    
+                    const results = JSON.parse(jsonOutput);
+                    
+                    // Handle different Safety JSON formats
+                    let vulnerabilities = [];
+                    if (Array.isArray(results)) {
+                        // Old format: direct array
+                        vulnerabilities = results;
+                    } else if (results.vulnerabilities && Array.isArray(results.vulnerabilities)) {
+                        // New format: object with vulnerabilities array
+                        vulnerabilities = results.vulnerabilities;
+                    } else if (results.report_meta && results.vulnerabilities) {
+                        // Newer format with report_meta
+                        vulnerabilities = results.vulnerabilities || [];
+                    }
+                    
+                    const findings = vulnerabilities.length || 0;
+                    const critical = vulnerabilities.filter(r => r.severity && r.severity.toLowerCase() === 'high').length || 0;
+                    
+                    // Log successful execution
+                    await this.logger.logToolExecution(
+                        subAgentName,
+                        'safety',
+                        cmd,
+                        `Found ${findings} dependency vulnerabilities (${critical} high severity)\n\nDetailed Results:\n${JSON.stringify(results, null, 2)}`,
+                        stderr,
+                        0
+                    );
+                    
+                    await this.logger.logInfo(`Safety analysis complete: ${findings} vulnerabilities (${critical} high severity)`, subAgentName, {
+                        findings,
+                        critical,
+                        duration
+                    });
+                    
+                    resolve({
+                        findings,
+                        critical,
+                        raw: results
+                    });
+                } catch (parseError) {
+                    await this.logger.logError(`Failed to parse Safety JSON output: ${parseError.message}`, subAgentName, {
+                        stdout: stdout.substring(0, 1000),
+                        stderr
+                    });
+                    
+                    resolve({
+                        findings: 0,
+                        critical: 0,
+                        error: 'Failed to parse Safety output'
+                    });
+                }
+            });
+        });
+    }
+
+    /**
+     * Run pip-audit dependency scanner with comprehensive logging
+     */
+    async _runPipAuditWithLogging(subAgentName) {
+        const startTime = Date.now();
+        const cmd = 'pip-audit --format=json --requirement=requirements.txt';
+        
+        await this.logger.logInfo(`Starting pip-audit dependency vulnerability scan`, subAgentName, {
+            command: cmd,
+            workingDirectory: process.cwd()
+        });
+        
+        return new Promise((resolve, reject) => {
+            exec(cmd, async (error, stdout, stderr) => {
+                const duration = Date.now() - startTime;
+                
+                if (error && error.code !== 1) { // pip-audit returns 1 when vulnerabilities found
+                    await this.logger.logToolExecution(
+                        subAgentName,
+                        'pip-audit',
+                        cmd,
+                        stdout,
+                        error.message,
+                        error.code || 1
+                    );
+                    
+                    resolve({
+                        findings: 0,
+                        critical: 0,
+                        error: `pip-audit execution failed: ${error.message}`
+                    });
+                    return;
+                }
+                
+                try {
+                    const results = JSON.parse(stdout);
+                    // pip-audit uses "dependencies" array, each with "vulns" array
+                    const dependencies = results.dependencies || [];
+                    const findings = dependencies.reduce((total, dep) => total + (dep.vulns?.length || 0), 0);
+                    const critical = dependencies.reduce((total, dep) => {
+                        const criticalVulns = dep.vulns?.filter(v => v.fix_versions?.length === 0).length || 0;
+                        return total + criticalVulns;
+                    }, 0);
+                    
+                    // Log successful execution
+                    await this.logger.logToolExecution(
+                        subAgentName,
+                        'pip-audit',
+                        cmd,
+                        `Found ${findings} dependency vulnerabilities (${critical} without fix)\n\nDetailed Results:\n${JSON.stringify(results, null, 2)}`,
+                        stderr,
+                        0
+                    );
+                    
+                    await this.logger.logInfo(`pip-audit analysis complete: ${findings} vulnerabilities (${critical} without fix)`, subAgentName, {
+                        findings,
+                        critical,
+                        duration
+                    });
+                    
+                    resolve({
+                        findings,
+                        critical,
+                        raw: results
+                    });
+                } catch (parseError) {
+                    await this.logger.logError(`Failed to parse pip-audit JSON output: ${parseError.message}`, subAgentName, {
+                        stdout: stdout.substring(0, 1000),
+                        stderr
+                    });
+                    
                     resolve({
                         findings: 0,
                         critical: 0,
@@ -865,6 +1268,34 @@ Please begin your analysis now.
      */
     clearResults() {
         this.results = [];
+    }
+
+    /**
+     * Export sub-agent logs in specified format
+     */
+    async exportSubAgentLogs(format = 'json') {
+        try {
+            const logPath = await this.logger.exportLogs(format);
+            this._log('info', `Sub-agent logs exported to: ${logPath}`);
+            return logPath;
+        } catch (error) {
+            this._log('error', `Failed to export sub-agent logs: ${error.message}`);
+            return null;
+        }
+    }
+
+    /**
+     * Get sub-agent logging summary
+     */
+    getLoggingSummary() {
+        return this.logger.getSessionSummary();
+    }
+
+    /**
+     * Get detailed logs for a specific sub-agent
+     */
+    getSubAgentLogs(subAgentName) {
+        return this.logger.getSubAgentLogs(subAgentName);
     }
 
     /**

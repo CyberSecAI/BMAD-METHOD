@@ -78,7 +78,7 @@ class AgentTestRunner {
             const report = await this._generateTestReport(testSession);
             
             // Print summary
-            this._printTestSummary(testSession, report);
+            await this._printTestSummary(testSession, report);
             
             return testSession;
             
@@ -257,7 +257,7 @@ class AgentTestRunner {
     /**
      * Print test summary
      */
-    _printTestSummary(testSession, report) {
+    async _printTestSummary(testSession, report) {
         console.log(`\n📊 Test Summary for ${testSession.agentName} Agent`);
         console.log(`════════════════════════════════════════`);
         
@@ -277,6 +277,29 @@ class AgentTestRunner {
             report.outputs.forEach(output => {
                 console.log(`  ${output.format}: ${output.path}`);
             });
+        }
+
+        // Export and show sub-agent logs
+        try {
+            const logSummary = this.agentRunner.getLoggingSummary();
+            if (logSummary.subAgentsExecuted > 0) {
+                console.log(`\n🔍 Sub-Agent Execution Summary:`);
+                console.log(`  Sub-Agents Executed: ${logSummary.subAgentsExecuted}`);
+                console.log(`  Total Tool Executions: ${logSummary.totalToolExecutions}`);
+                console.log(`  Total Errors: ${logSummary.totalErrors}`);
+                
+                // Export detailed logs
+                const jsonLogPath = await this.agentRunner.exportSubAgentLogs('json');
+                const markdownLogPath = await this.agentRunner.exportSubAgentLogs('markdown');
+                
+                if (jsonLogPath || markdownLogPath) {
+                    console.log(`\n📋 Sub-Agent Logs Exported:`);
+                    if (jsonLogPath) console.log(`  JSON: ${jsonLogPath}`);
+                    if (markdownLogPath) console.log(`  Markdown: ${markdownLogPath}`);
+                }
+            }
+        } catch (error) {
+            console.warn(`⚠️ Failed to export sub-agent logs: ${error.message}`);
         }
         
         // Show failed tests

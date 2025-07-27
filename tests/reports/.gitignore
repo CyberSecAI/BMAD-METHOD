@@ -1,0 +1,5 @@
+# Test reports (generated files)
+*.json
+*.html
+*.md
+!README.md

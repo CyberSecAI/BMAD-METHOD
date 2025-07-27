@@ -424,6 +424,8 @@ commands:
   security-test-cases: Generate security test cases in Gherkin format
   security-validation: Pre-deployment security validation
   compliance-audit: Regulatory compliance validation
+  nist-ssdf-compliance: Execute NIST SSDF compliance assessment (PO/PS practices for planning phase)
+  nist-ssdf-planning: Execute integrated NIST SSDF planning phase assessment
   execute-checklist: Run security checklist validation
   yolo: Toggle Yolo Mode for streamlined execution
   doc-out: Output full document to current destination file
@@ -439,6 +441,8 @@ dependencies:
     - security-test-cases.md
     - security-validation.md
     - compliance-audit.md
+    - nist-ssdf-compliance.md
+    - nist-ssdf-planning-assessment.md
     - execute-checklist.md
   templates:
     - threat-model-tmpl.yaml
@@ -447,6 +451,7 @@ dependencies:
     - dread-assessment-tmpl.yaml
     - security-test-cases-tmpl.yaml
     - security-architecture-tmpl.yaml
+    - nist-ssdf-assessment-tmpl.yaml
   checklists:
     - security-architecture-checklist.md
     - security-implementation-checklist.md
@@ -456,6 +461,7 @@ dependencies:
     - security-methodologies.md
     - compliance-frameworks.md
     - threat-intelligence.md
+    - nist-ssdf-practices.md
   utils:
     - security-analysis.md
     - mermaid-syntax-guide.md
@@ -10976,6 +10982,675 @@ Regular compliance validation and monitoring activities:
 - Regulatory risk exposure maintained within acceptable thresholds
 ==================== END: .bmad-core/tasks/compliance-audit.md ====================
 
+==================== START: .bmad-core/tasks/nist-ssdf-compliance.md ====================
+# NIST SSDF Compliance Assessment (Legacy)
+
+## Objective
+**DEPRECATED**: This task is superseded by `nist-ssdf-planning-assessment.md` which provides enhanced integration with the VulnerabilityTech agent's implementation-phase validation.
+
+Legacy assessment for NIST Secure Software Development Framework (SSDF) practices throughout the project planning and architecture phases, focusing on PO (Prepare Organization) and PS (Protect Software) practices.
+
+**Recommended Usage**: Use `nist-ssdf-planning-assessment.md` for new projects to leverage the integrated framework architecture.
+
+## When to Use
+- During security assessment phase of project planning
+- When creating security architecture documentation
+- For compliance validation and audit preparation
+- When establishing secure development standards for a project
+
+## Prerequisites
+- Project requirements document (PRD) available
+- System architecture document available  
+- Understanding of project scope and technology stack
+- Access to organizational security policies and standards
+
+## Process
+
+### Phase 1: Organizational Preparedness Assessment (PO Practices)
+
+#### Step 1: Security Requirements Definition (PO.1)
+**Assess PO.1.1 - Development Infrastructure Security Requirements**
+
+Review and document:
+- [ ] Development environment security requirements
+- [ ] CI/CD pipeline security requirements  
+- [ ] Development tool security requirements
+- [ ] Network segmentation requirements for development
+- [ ] Access control requirements for development infrastructure
+
+**Questions to Address:**
+1. What security requirements exist for the development infrastructure?
+2. Are development environments properly isolated and secured?
+3. What tools and processes need security configuration?
+4. How will security requirements be maintained over time?
+
+**Assessment PO.1.2 - Software Security Requirements**
+
+Document software-specific security requirements:
+- [ ] Authentication and authorization requirements
+- [ ] Data protection and encryption requirements
+- [ ] Input validation and sanitization requirements  
+- [ ] Logging and monitoring requirements
+- [ ] Compliance requirements (GDPR, HIPAA, PCI-DSS, etc.)
+
+**Questions to Address:**
+1. What are the specific security requirements for this software?
+2. What compliance standards must be met?
+3. How will security requirements be traced through development?
+4. What are the security acceptance criteria?
+
+**Assessment PO.1.3 - Third-Party Component Requirements**
+
+Evaluate third-party component security:
+- [ ] Third-party component security evaluation criteria
+- [ ] Vendor security assessment requirements
+- [ ] Component vulnerability management requirements
+- [ ] License compliance requirements
+- [ ] Supply chain security requirements
+
+#### Step 2: Roles and Responsibilities (PO.2)
+**Assess PO.2.1 - Security Roles Definition**
+
+Define and validate security roles:
+- [ ] Security Architect role and responsibilities
+- [ ] Security Engineer role and responsibilities  
+- [ ] Developer security responsibilities
+- [ ] QA security testing responsibilities
+- [ ] DevOps security responsibilities
+
+**Assessment PO.2.2 - Security Training Requirements**
+
+Document training needs:
+- [ ] Secure coding training requirements
+- [ ] Security tool training requirements
+- [ ] Threat modeling training requirements
+- [ ] Incident response training requirements
+- [ ] Compliance training requirements
+
+**Assessment PO.2.3 - Management Commitment**
+
+Validate management support:
+- [ ] Security budget allocation
+- [ ] Security resource allocation
+- [ ] Security timeline considerations
+- [ ] Executive sponsorship confirmation
+- [ ] Security priority establishment
+
+#### Step 3: Supporting Toolchains (PO.3)
+**Assess PO.3.1 - Tool Requirements**
+
+Define required security tools:
+- [ ] Static Application Security Testing (SAST) tools
+- [ ] Dynamic Application Security Testing (DAST) tools
+- [ ] Dependency scanning tools
+- [ ] Container security scanning tools
+- [ ] Infrastructure as Code (IaC) scanning tools
+
+**Assessment PO.3.2 - Tool Security Practices**
+
+Evaluate tool deployment security:
+- [ ] Tool access controls and authentication
+- [ ] Tool configuration security
+- [ ] Tool update and patch management
+- [ ] Tool data protection and privacy
+- [ ] Tool integration security
+
+**Assessment PO.3.3 - Artifact Generation**
+
+Configure tools for security artifacts:
+- [ ] Security scan reports generation
+- [ ] Vulnerability tracking artifacts
+- [ ] Compliance evidence generation
+- [ ] Security metrics collection
+- [ ] Audit trail generation
+
+#### Step 4: Security Check Criteria (PO.4)
+**Assess PO.4.1 - Security Criteria Definition**
+
+Define security gates and criteria:
+- [ ] Code review security criteria
+- [ ] Security testing pass/fail criteria
+- [ ] Vulnerability severity thresholds
+- [ ] Security compliance checkpoints
+- [ ] Release security criteria
+
+**Assessment PO.4.2 - Information Gathering**
+
+Establish processes for security information:
+- [ ] Security metrics collection processes
+- [ ] Vulnerability data gathering
+- [ ] Security incident tracking
+- [ ] Compliance evidence collection
+- [ ] Security audit trail maintenance
+
+#### Step 5: Secure Development Environments (PO.5)
+**Assess PO.5.1 - Environment Separation**
+
+Evaluate environment security:
+- [ ] Development environment isolation
+- [ ] Testing environment security
+- [ ] Staging environment protection
+- [ ] Production environment separation
+- [ ] Environment access controls
+
+**Assessment PO.5.2 - Endpoint Security**
+
+Assess development endpoint security:
+- [ ] Developer workstation security requirements
+- [ ] Network access controls
+- [ ] Endpoint monitoring and logging
+- [ ] Data loss prevention measures
+- [ ] Remote access security
+
+### Phase 2: Software Protection Assessment (PS Practices)
+
+#### Step 6: Code Protection (PS.1)
+**Assess PS.1.1 - Code Access Controls**
+
+Evaluate code protection measures:
+- [ ] Source code repository access controls
+- [ ] Code branching and merging controls
+- [ ] Code review access permissions
+- [ ] Configuration-as-code protection
+- [ ] Secrets management in code
+
+**Questions to Address:**
+1. Who has access to source code repositories?
+2. How are code changes tracked and audited?
+3. What controls prevent unauthorized code modifications?
+4. How are secrets and credentials protected in code?
+
+#### Step 7: Software Integrity (PS.2)
+**Assess PS.2.1 - Integrity Verification**
+
+Plan software integrity measures:
+- [ ] Code signing implementation
+- [ ] Software checksums and hashes
+- [ ] Digital signatures for releases
+- [ ] Supply chain integrity verification
+- [ ] Software Bill of Materials (SBOM) generation
+
+**Questions to Address:**
+1. How will software integrity be verified?
+2. What mechanisms will detect tampering?
+3. How will supply chain integrity be assured?
+4. What information will be provided to software acquirers?
+
+#### Step 8: Software Archival (PS.3)
+**Assess PS.3.1 - Release Archival**
+
+Plan release archival strategy:
+- [ ] Release artifact retention requirements
+- [ ] Source code archival strategy
+- [ ] Dependency archival requirements
+- [ ] Documentation archival plan
+- [ ] Configuration archival strategy
+
+**Assessment PS.3.2 - Provenance Data**
+
+Plan provenance tracking:
+- [ ] Component origin tracking
+- [ ] Dependency provenance documentation
+- [ ] Build environment documentation
+- [ ] Third-party component tracking
+- [ ] License and compliance tracking
+
+## Deliverables
+
+### 1. NIST SSDF Compliance Assessment Report
+Create a comprehensive report documenting:
+- Compliance status for each NIST SSDF practice
+- Gap analysis and recommendations
+- Implementation timeline and priorities
+- Resource requirements for compliance
+- Risk assessment for non-compliance areas
+
+### 2. Security Architecture Updates
+Update security architecture documentation to include:
+- NIST SSDF practice implementation details
+- Security requirements derived from SSDF practices
+- Security controls mapped to SSDF requirements
+- Compliance monitoring and validation procedures
+
+### 3. Security Implementation Plan
+Develop an implementation plan covering:
+- Priority order for SSDF practice implementation
+- Resource allocation and timeline
+- Training and skills development requirements
+- Tool and process implementation steps
+- Compliance validation and monitoring procedures
+
+## Templates
+
+Use the following templates for documentation:
+- `nist-ssdf-assessment-tmpl.yaml` - Compliance assessment report
+- `security-architecture-tmpl.yaml` - Updated security architecture
+- `security-implementation-plan-tmpl.yaml` - Implementation planning
+
+## Integration Points
+
+### With Other BMad Tasks
+- **assess-plan**: Incorporate SSDF compliance into overall security assessment
+- **create-doc**: Use for generating SSDF compliance documentation
+- **threat-modeling**: Align threat models with SSDF security requirements
+
+### With Story Templates
+- Security requirements sections should reflect SSDF requirements
+- Security testing requirements should validate SSDF compliance
+- Threat considerations should align with SSDF practices
+
+## Success Criteria
+
+- [ ] All applicable NIST SSDF practices have been assessed
+- [ ] Gap analysis identifies specific compliance issues
+- [ ] Implementation plan addresses all identified gaps
+- [ ] Security architecture incorporates SSDF requirements
+- [ ] Teams understand their SSDF compliance responsibilities
+- [ ] Compliance monitoring processes are established
+
+## References
+
+- NIST SP 800-218: Secure Software Development Framework (SSDF) Version 1.1
+- `nist-ssdf-practices.md` - BMad SSDF practice reference
+- OWASP Secure Software Development Lifecycle guidelines
+- ISO/IEC 27034: Application Security standards
+==================== END: .bmad-core/tasks/nist-ssdf-compliance.md ====================
+
+==================== START: .bmad-core/tasks/nist-ssdf-planning-assessment.md ====================
+# NIST SSDF Planning Phase Assessment (PO/PS Practices)
+
+## Objective
+Execute comprehensive NIST SSDF planning phase assessment focusing on PO (Prepare the Organization) and PS (Protect the Software) practices. This complements the VulnerabilityTech agent's PW/RV implementation-phase validation by ensuring organizational readiness and security planning requirements are met.
+
+## When to Use
+- During project planning and architecture phases
+- When establishing security requirements and organizational readiness
+- For pre-development security posture assessment
+- When defining security architecture and organizational controls
+
+## Prerequisites
+- Project Requirements Document (PRD) available
+- System architecture documentation started
+- Understanding of organizational security policies
+- Access to development team structure and processes
+
+## Integration with Framework Architecture
+
+### Coordination with VulnerabilityTech Agent
+This task focuses on **planning-phase** NIST SSDF practices (PO/PS), while the VulnerabilityTech agent handles **implementation-phase** practices (PW/RV):
+
+```yaml
+NIST SSDF Practice Distribution:
+  Security Agent (Planning Phase):
+    - PO.1-PO.5: Organizational preparedness
+    - PS.1-PS.3: Software protection planning
+    
+  VulnerabilityTech Agent (Implementation Phase):
+    - PW.1-PW.8: Secure development implementation
+    - RV.1-RV.3: Vulnerability response
+```
+
+### Integration Points
+- **Handoff**: Security requirements defined here feed into PW.1 validation
+- **Tool Specifications**: PO.3 tool requirements inform expansion pack configurations
+- **Compliance Continuity**: Planning compliance scores combine with implementation scores
+
+## Process
+
+### Phase 1: Prepare the Organization (PO Practices)
+
+#### Step 1: Define Security Requirements for Software Development (PO.1)
+
+**PO.1.1 - Development Infrastructure Security Requirements**
+
+Document and assess:
+- [ ] **Development Environment Security**
+  - Network segmentation for development environments
+  - Access controls for development systems
+  - Secure configuration of development tools
+  - Endpoint security for developer workstations
+
+- [ ] **CI/CD Pipeline Security**
+  - Pipeline access controls and authentication
+  - Secure artifact storage and signing
+  - Build environment isolation and security
+  - Automated security scanning integration
+
+- [ ] **Version Control Security**
+  - Repository access controls and permissions
+  - Code review requirements and approval workflows
+  - Branch protection and merge policies
+  - Audit logging and monitoring
+
+**Assessment Questions:**
+1. Are development environments properly isolated from production?
+2. What access controls govern development infrastructure?
+3. How are development tools secured and maintained?
+4. What security monitoring exists for development activities?
+
+**PO.1.2 - Software Security Requirements Definition**
+
+Define and document:
+- [ ] **Functional Security Requirements**
+  - Authentication mechanisms and requirements
+  - Authorization and access control models
+  - Data protection and encryption requirements
+  - Input validation and sanitization standards
+
+- [ ] **Non-Functional Security Requirements**
+  - Performance security requirements
+  - Availability and resilience requirements
+  - Scalability security considerations
+  - Interoperability security requirements
+
+- [ ] **Compliance Requirements**
+  - Regulatory compliance obligations (GDPR, HIPAA, PCI-DSS)
+  - Industry standards adherence (OWASP, NIST, ISO 27001)
+  - Organizational policy compliance
+  - Audit and reporting requirements
+
+**PO.1.3 - Third-Party Component Requirements Communication**
+
+Establish:
+- [ ] **Vendor Security Requirements**
+  - Security assessment criteria for third-party components
+  - Vendor security certification requirements
+  - Supply chain security requirements
+  - Vulnerability disclosure and response requirements
+
+#### Step 2: Implement Roles and Responsibilities (PO.2)
+
+**PO.2.1 - Security Roles Definition**
+
+Define and document:
+- [ ] **Security Architecture Role**
+  - Responsibilities for security design and architecture
+  - Authority for security decision-making
+  - Interaction with development teams
+  - Escalation procedures for security issues
+
+- [ ] **Security Engineering Role**
+  - Responsibilities for security implementation guidance
+  - Code review and security validation duties
+  - Security testing and assessment responsibilities
+  - Tool configuration and maintenance duties
+
+- [ ] **Developer Security Responsibilities**
+  - Secure coding practice requirements
+  - Security testing obligations
+  - Vulnerability response responsibilities
+  - Training and certification requirements
+
+**PO.2.2 - Role-Specific Training Programs**
+
+Establish:
+- [ ] **Security Training Curriculum**
+  - Secure coding training for developers
+  - Threat modeling training for architects
+  - Security testing training for QA teams
+  - Incident response training for operations
+
+- [ ] **Training Delivery and Tracking**
+  - Training schedule and delivery methods
+  - Competency assessment and certification
+  - Ongoing training and skill development
+  - Training effectiveness measurement
+
+**PO.2.3 - Management Commitment**
+
+Document:
+- [ ] **Executive Sponsorship**
+  - Security program executive sponsor identification
+  - Security budget and resource allocation
+  - Security policy endorsement and communication
+  - Security performance metrics and reporting
+
+#### Step 3: Implement Supporting Toolchains (PO.3)
+
+**PO.3.1 - Security Tool Requirements**
+
+Define integration with expansion pack architecture:
+- [ ] **Static Analysis Tools (SAST)**
+  - Language-specific SAST tool requirements
+  - Integration with expansion pack SAST configurations
+  - CI/CD pipeline integration requirements
+  - Report generation and tracking requirements
+
+- [ ] **Dynamic Analysis Tools (DAST)**
+  - Application security scanning tool requirements
+  - API security testing tool requirements
+  - Infrastructure scanning tool requirements
+  - Penetration testing tool requirements
+
+- [ ] **Dependency Analysis Tools**
+  - Software composition analysis (SCA) tool requirements
+  - License compliance scanning requirements
+  - Vulnerability database integration requirements
+  - Automated dependency update processes
+
+**Integration with Software Assurance Expansion Pack:**
+```yaml
+# Reference expansion pack tool configurations
+tool_requirements:
+  expansion_pack_integration:
+    - "expansion-packs/software-assurance/config.yaml"
+    - "expansion-packs/software-assurance/nist-ssdf-mapping.yaml"
+  
+  language_specific_tools:
+    python:
+      sast: ["bandit", "semgrep"]
+      dependency: ["safety", "pip-audit"]
+    javascript:
+      sast: ["eslint-security", "semgrep"]
+      dependency: ["npm-audit", "snyk"]
+```
+
+**PO.3.2 - Secure Tool Deployment**
+
+Establish:
+- [ ] **Tool Security Configuration**
+  - Secure installation and configuration procedures
+  - Access controls and authentication for security tools
+  - Network security for tool communications
+  - Data protection for scan results and reports
+
+**PO.3.3 - Security Artifact Generation**
+
+Configure:
+- [ ] **Artifact Requirements**
+  - Security scan report formats and content
+  - Vulnerability tracking and metrics
+  - Compliance reporting and documentation
+  - Security test evidence and documentation
+
+#### Step 4: Define Software Security Check Criteria (PO.4)
+
+**PO.4.1 - Security Gate Criteria**
+
+Define criteria aligned with implementation-phase validation:
+- [ ] **Development Phase Gates**
+  - Requirements phase security criteria
+  - Design phase security criteria
+  - Implementation phase security criteria
+  - Testing phase security criteria
+  - Deployment phase security criteria
+
+- [ ] **Vulnerability Severity Thresholds**
+  - Critical vulnerability acceptance criteria (typically 0)
+  - High vulnerability acceptance criteria
+  - Medium vulnerability acceptance criteria
+  - Low vulnerability management requirements
+
+- [ ] **Code Quality Security Criteria**
+  - Secure coding standard compliance requirements
+  - Code review coverage requirements
+  - Static analysis pass/fail criteria
+  - Dynamic testing pass/fail criteria
+
+**Integration with VulnerabilityTech Validation:**
+These criteria will be validated during implementation using:
+- `nist-ssdf-integrated-validation.md` for comprehensive assessment
+- Expansion pack technical validation for language-specific compliance
+- Combined scoring for overall NIST SSDF compliance
+
+**PO.4.2 - Security Information Safeguarding**
+
+Establish:
+- [ ] **Security Data Protection**
+  - Vulnerability information classification and handling
+  - Security assessment data protection
+  - Threat intelligence information security
+  - Incident response data protection
+
+#### Step 5: Implement Secure Development Environments (PO.5)
+
+**PO.5.1 - Environment Separation and Protection**
+
+Implement:
+- [ ] **Environment Risk Assessment**
+  - Development environment risk classification
+  - Staging environment risk classification
+  - Production environment risk classification
+  - Environment-specific security controls
+
+- [ ] **Network Segmentation**
+  - Development network isolation
+  - Inter-environment communication controls
+  - External access controls and VPNs
+  - Network monitoring and logging
+
+**PO.5.2 - Development Endpoint Security**
+
+Establish:
+- [ ] **Endpoint Security Controls**
+  - Developer workstation security baselines
+  - Endpoint detection and response (EDR) deployment
+  - Mobile device management for development devices
+  - Remote access security controls
+
+### Phase 2: Protect the Software (PS Practices)
+
+#### Step 6: Protect Code from Unauthorized Access (PS.1)
+
+**PS.1.1 - Code Access Controls**
+
+Implement:
+- [ ] **Repository Access Management**
+  - Role-based access controls for code repositories
+  - Multi-factor authentication for code access
+  - Regular access reviews and recertification
+  - Privileged access management for sensitive repositories
+
+- [ ] **Code Integrity Protection**
+  - Code signing requirements and processes
+  - Cryptographic verification of code integrity
+  - Tamper detection and response procedures
+  - Secure code storage and backup procedures
+
+#### Step 7: Software Release Integrity (PS.2)
+
+**PS.2.1 - Integrity Verification Mechanisms**
+
+Establish:
+- [ ] **Release Integrity Verification**
+  - Software signing and verification processes
+  - Release artifact integrity checksums
+  - Supply chain integrity verification
+  - Release authenticity verification procedures
+
+#### Step 8: Archive and Protect Software (PS.3)
+
+**PS.3.1 - Software Archival and Protection**
+
+Implement:
+- [ ] **Secure Software Archival**
+  - Long-term storage security requirements
+  - Archive access controls and monitoring
+  - Archive integrity verification procedures
+  - Archive retention and disposal policies
+
+## Deliverables
+
+### 1. NIST SSDF Planning Phase Compliance Report
+**Structure:**
+- Executive summary of organizational readiness
+- PO practice compliance assessment and scoring
+- PS practice compliance assessment and scoring
+- Gap analysis and remediation plan
+- Integration plan with implementation-phase validation
+
+### 2. Security Requirements Specification
+**Components:**
+- Comprehensive security requirements documentation
+- Compliance mapping and traceability
+- Third-party security requirements
+- Security acceptance criteria
+
+### 3. Secure Development Framework Implementation Plan
+**Deliverables:**
+- Security role definitions and responsibilities
+- Security tool implementation roadmap
+- Training and competency development plan
+- Security process integration procedures
+
+## Integration with Implementation Phase
+
+### Handoff to VulnerabilityTech Agent
+This planning assessment feeds into implementation-phase validation:
+
+```yaml
+planning_to_implementation_handoff:
+  security_requirements: 
+    source: "PO.1.2 security requirements"
+    destination: "PW.1 security requirements implementation validation"
+  
+  tool_specifications:
+    source: "PO.3 tool requirements"
+    destination: "Expansion pack tool configurations"
+  
+  acceptance_criteria:
+    source: "PO.4 security gate criteria"
+    destination: "PW/RV compliance scoring thresholds"
+```
+
+### Compliance Score Integration
+```yaml
+overall_nist_ssdf_compliance:
+  planning_phase: "PO/PS practices (Security Agent)"
+  implementation_phase: "PW/RV practices (VulnerabilityTech Agent)"
+  
+  combined_scoring:
+    weights:
+      planning_phase: 0.3    # Organizational readiness
+      implementation_phase: 0.7  # Technical implementation
+    
+    calculation: "weighted_average(planning_score, implementation_score)"
+```
+
+## Success Criteria
+
+### Planning Phase Success
+- [ ] All PO practices assessed and documented
+- [ ] All PS practices implemented in planning
+- [ ] Security requirements fully defined and traceable
+- [ ] Organizational readiness validated
+- [ ] Tool and process framework established
+
+### Integration Success
+- [ ] Clear handoff procedures to implementation phase
+- [ ] Security requirements feeding into PW.1 validation
+- [ ] Tool specifications aligned with expansion pack capabilities
+- [ ] Compliance scoring framework established
+
+### Framework Alignment
+- [ ] Seamless integration with VulnerabilityTech agent workflow
+- [ ] Consistent NIST SSDF practice coverage across agents
+- [ ] Unified compliance reporting and scoring
+- [ ] Clear separation of planning vs implementation concerns
+
+This planning assessment ensures organizational readiness for secure development while setting up the technical implementation validation that follows in the development phase.
+==================== END: .bmad-core/tasks/nist-ssdf-planning-assessment.md ====================
+
 ==================== START: .bmad-core/templates/threat-model-tmpl.yaml ====================
 template:
   id: threat-model-v2
@@ -12379,6 +13054,444 @@ sections:
     owner: security
     editors: [architect, pm]
 ==================== END: .bmad-core/templates/security-architecture-tmpl.yaml ====================
+
+==================== START: .bmad-core/templates/nist-ssdf-assessment-tmpl.yaml ====================
+template:
+  name: "NIST SSDF Compliance Assessment Report"
+  description: "Comprehensive assessment of NIST Secure Software Development Framework compliance"
+  version: "1.0"
+  author: "BMad Security Framework"
+  category: "Security Compliance"
+
+sections:
+  - id: executive_summary
+    title: "Executive Summary"
+    instruction: "Provide a high-level overview of NIST SSDF compliance status and key findings"
+    elicit: true
+    content: |
+      ## NIST SSDF Compliance Assessment Summary
+      
+      **Assessment Date**: {{assessment_date}}
+      **Project**: {{project_name}}
+      **Assessor**: {{assessor_name}}
+      **Overall Compliance Level**: {{compliance_percentage}}%
+      
+      ### Key Findings
+      - **Compliant Practices**: {{compliant_count}} out of {{total_practices}} practices
+      - **Critical Gaps**: {{critical_gaps_count}} practices require immediate attention
+      - **Moderate Gaps**: {{moderate_gaps_count}} practices need improvement
+      - **Estimated Remediation Time**: {{remediation_timeline}}
+      
+      ### Recommendations Summary
+      1. **Immediate Actions**: {{immediate_actions}}
+      2. **Short-term Goals**: {{short_term_goals}}
+      3. **Long-term Strategy**: {{long_term_strategy}}
+
+  - id: po_practices_assessment
+    title: "PO: Prepare the Organization - Assessment Results"
+    instruction: "Document compliance status for all PO (Prepare Organization) practices"
+    elicit: true
+    content: |
+      # Prepare the Organization (PO) Practices Assessment
+      
+      ## PO.1: Define Security Requirements for Software Development
+      
+      ### PO.1.1: Development Infrastructure Security Requirements
+      **Compliance Status**: {{po11_status}}
+      **Assessment**: {{po11_assessment}}
+      
+      **Current State**:
+      - Development environment security: {{dev_env_security_status}}
+      - CI/CD pipeline security: {{cicd_security_status}}
+      - Tool security configuration: {{tool_security_status}}
+      
+      **Gaps Identified**:
+      - {{po11_gap_1}}
+      - {{po11_gap_2}}
+      - {{po11_gap_3}}
+      
+      **Recommendations**:
+      - {{po11_rec_1}}
+      - {{po11_rec_2}}
+      - {{po11_rec_3}}
+      
+      ### PO.1.2: Software Security Requirements
+      **Compliance Status**: {{po12_status}}
+      **Assessment**: {{po12_assessment}}
+      
+      **Current State**:
+      - Security requirements documentation: {{sec_req_doc_status}}
+      - Compliance requirements: {{compliance_req_status}}
+      - Requirements traceability: {{req_traceability_status}}
+      
+      **Gaps Identified**:
+      - {{po12_gap_1}}
+      - {{po12_gap_2}}
+      
+      **Recommendations**:
+      - {{po12_rec_1}}
+      - {{po12_rec_2}}
+      
+      ### PO.1.3: Third-Party Component Requirements
+      **Compliance Status**: {{po13_status}}
+      **Assessment**: {{po13_assessment}}
+      
+      **Current State**:
+      - Vendor security assessment: {{vendor_assessment_status}}
+      - Component evaluation: {{component_eval_status}}
+      - Supply chain security: {{supply_chain_status}}
+      
+      ## PO.2: Implement Roles and Responsibilities
+      
+      ### PO.2.1: Security Roles Definition
+      **Compliance Status**: {{po21_status}}
+      **Assessment**: {{po21_assessment}}
+      
+      **Current State**:
+      - Security roles defined: {{security_roles_status}}
+      - Role responsibilities documented: {{role_resp_status}}
+      - SDLC coverage: {{sdlc_coverage_status}}
+      
+      ### PO.2.2: Security Training Requirements
+      **Compliance Status**: {{po22_status}}
+      **Assessment**: {{po22_assessment}}
+      
+      **Current State**:
+      - Secure coding training: {{secure_coding_training_status}}
+      - Security tool training: {{security_tool_training_status}}
+      - Role-specific training: {{role_specific_training_status}}
+      
+      ### PO.2.3: Management Commitment
+      **Compliance Status**: {{po23_status}}
+      **Assessment**: {{po23_assessment}}
+      
+      **Current State**:
+      - Executive sponsorship: {{executive_sponsor_status}}
+      - Resource allocation: {{resource_allocation_status}}
+      - Security prioritization: {{security_priority_status}}
+      
+      ## PO.3: Implement Supporting Toolchains
+      
+      ### PO.3.1: Tool Requirements Definition
+      **Compliance Status**: {{po31_status}}
+      **Assessment**: {{po31_assessment}}
+      
+      **Current State**:
+      - SAST tools: {{sast_tools_status}}
+      - DAST tools: {{dast_tools_status}}
+      - Dependency scanning: {{dependency_scan_status}}
+      - Container scanning: {{container_scan_status}}
+      
+      ### PO.3.2: Tool Security Practices
+      **Compliance Status**: {{po32_status}}
+      **Assessment**: {{po32_assessment}}
+      
+      **Current State**:
+      - Tool access controls: {{tool_access_status}}
+      - Tool configuration security: {{tool_config_status}}
+      - Tool maintenance: {{tool_maintenance_status}}
+      
+      ### PO.3.3: Security Artifact Generation
+      **Compliance Status**: {{po33_status}}
+      **Assessment**: {{po33_assessment}}
+      
+      **Current State**:
+      - Security reports: {{security_reports_status}}
+      - Vulnerability tracking: {{vuln_tracking_status}}
+      - Compliance evidence: {{compliance_evidence_status}}
+      
+      ## PO.4: Define and Use Criteria for Software Security Checks
+      
+      ### PO.4.1: Security Criteria Definition
+      **Compliance Status**: {{po41_status}}
+      **Assessment**: {{po41_assessment}}
+      
+      **Current State**:
+      - Security gates defined: {{security_gates_status}}
+      - Pass/fail criteria: {{pass_fail_criteria_status}}
+      - Vulnerability thresholds: {{vuln_thresholds_status}}
+      
+      ### PO.4.2: Information Gathering Processes
+      **Compliance Status**: {{po42_status}}
+      **Assessment**: {{po42_assessment}}
+      
+      **Current State**:
+      - Security metrics collection: {{metrics_collection_status}}
+      - Audit trail maintenance: {{audit_trail_status}}
+      - Compliance tracking: {{compliance_tracking_status}}
+      
+      ## PO.5: Implement and Maintain Secure Development Environments
+      
+      ### PO.5.1: Environment Separation and Protection
+      **Compliance Status**: {{po51_status}}
+      **Assessment**: {{po51_assessment}}
+      
+      **Current State**:
+      - Environment isolation: {{env_isolation_status}}
+      - Access controls: {{env_access_status}}
+      - Risk-based protection: {{risk_based_protection_status}}
+      
+      ### PO.5.2: Development Endpoint Security
+      **Compliance Status**: {{po52_status}}
+      **Assessment**: {{po52_assessment}}
+      
+      **Current State**:
+      - Endpoint hardening: {{endpoint_hardening_status}}
+      - Network security: {{network_security_status}}
+      - Monitoring: {{endpoint_monitoring_status}}
+
+  - id: ps_practices_assessment
+    title: "PS: Protect the Software - Assessment Results"
+    instruction: "Document compliance status for all PS (Protect Software) practices"
+    elicit: true
+    content: |
+      # Protect the Software (PS) Practices Assessment
+      
+      ## PS.1: Protect All Forms of Code from Unauthorized Access and Tampering
+      
+      ### PS.1.1: Code Access Protection
+      **Compliance Status**: {{ps11_status}}
+      **Assessment**: {{ps11_assessment}}
+      
+      **Current State**:
+      - Source code access controls: {{source_access_status}}
+      - Repository security: {{repo_security_status}}
+      - Configuration protection: {{config_protection_status}}
+      - Secrets management: {{secrets_mgmt_status}}
+      
+      **Gaps Identified**:
+      - {{ps11_gap_1}}
+      - {{ps11_gap_2}}
+      
+      **Recommendations**:
+      - {{ps11_rec_1}}
+      - {{ps11_rec_2}}
+      
+      ## PS.2: Provide a Mechanism for Verifying Software Release Integrity
+      
+      ### PS.2.1: Software Integrity Verification
+      **Compliance Status**: {{ps21_status}}
+      **Assessment**: {{ps21_assessment}}
+      
+      **Current State**:
+      - Code signing implementation: {{code_signing_status}}
+      - Checksum generation: {{checksum_status}}
+      - Digital signatures: {{digital_sig_status}}
+      - SBOM generation: {{sbom_status}}
+      
+      **Gaps Identified**:
+      - {{ps21_gap_1}}
+      - {{ps21_gap_2}}
+      
+      **Recommendations**:
+      - {{ps21_rec_1}}
+      - {{ps21_rec_2}}
+      
+      ## PS.3: Archive and Protect Each Software Release
+      
+      ### PS.3.1: Secure Release Archival
+      **Compliance Status**: {{ps31_status}}
+      **Assessment**: {{ps31_assessment}}
+      
+      **Current State**:
+      - Release archival process: {{release_archival_status}}
+      - Artifact retention: {{artifact_retention_status}}
+      - Backup and recovery: {{backup_recovery_status}}
+      
+      ### PS.3.2: Provenance Data Collection
+      **Compliance Status**: {{ps32_status}}
+      **Assessment**: {{ps32_assessment}}
+      
+      **Current State**:
+      - Component provenance: {{component_provenance_status}}
+      - Dependency tracking: {{dependency_tracking_status}}
+      - License compliance: {{license_compliance_status}}
+
+  - id: gap_analysis
+    title: "Gap Analysis and Risk Assessment"
+    instruction: "Analyze compliance gaps and assess associated risks"
+    elicit: true
+    content: |
+      # Gap Analysis and Risk Assessment
+      
+      ## Critical Gaps (High Risk)
+      | Practice | Gap Description | Risk Level | Business Impact | Remediation Priority |
+      |----------|----------------|------------|-----------------|---------------------|
+      | {{critical_gap_1_practice}} | {{critical_gap_1_desc}} | High | {{critical_gap_1_impact}} | Immediate |
+      | {{critical_gap_2_practice}} | {{critical_gap_2_desc}} | High | {{critical_gap_2_impact}} | Immediate |
+      | {{critical_gap_3_practice}} | {{critical_gap_3_desc}} | High | {{critical_gap_3_impact}} | Immediate |
+      
+      ## Moderate Gaps (Medium Risk)
+      | Practice | Gap Description | Risk Level | Business Impact | Remediation Priority |
+      |----------|----------------|------------|-----------------|---------------------|
+      | {{moderate_gap_1_practice}} | {{moderate_gap_1_desc}} | Medium | {{moderate_gap_1_impact}} | Short-term |
+      | {{moderate_gap_2_practice}} | {{moderate_gap_2_desc}} | Medium | {{moderate_gap_2_impact}} | Short-term |
+      
+      ## Minor Gaps (Low Risk)
+      | Practice | Gap Description | Risk Level | Business Impact | Remediation Priority |
+      |----------|----------------|------------|-----------------|---------------------|
+      | {{minor_gap_1_practice}} | {{minor_gap_1_desc}} | Low | {{minor_gap_1_impact}} | Long-term |
+      | {{minor_gap_2_practice}} | {{minor_gap_2_desc}} | Low | {{minor_gap_2_impact}} | Long-term |
+      
+      ## Risk Matrix
+      
+      ### Security Risks
+      - **High**: {{high_security_risks}}
+      - **Medium**: {{medium_security_risks}}
+      - **Low**: {{low_security_risks}}
+      
+      ### Compliance Risks
+      - **Regulatory**: {{regulatory_risks}}
+      - **Audit**: {{audit_risks}}
+      - **Contractual**: {{contractual_risks}}
+      
+      ### Business Risks
+      - **Reputation**: {{reputation_risks}}
+      - **Financial**: {{financial_risks}}
+      - **Operational**: {{operational_risks}}
+
+  - id: implementation_roadmap
+    title: "Implementation Roadmap"
+    instruction: "Provide a prioritized roadmap for achieving NIST SSDF compliance"
+    elicit: true
+    content: |
+      # NIST SSDF Compliance Implementation Roadmap
+      
+      ## Phase 1: Immediate Actions (0-30 days)
+      **Priority**: Critical gaps that pose immediate security risks
+      
+      ### Week 1-2
+      - [ ] {{phase1_week1_task1}}
+      - [ ] {{phase1_week1_task2}}
+      - [ ] {{phase1_week1_task3}}
+      
+      ### Week 3-4
+      - [ ] {{phase1_week3_task1}}
+      - [ ] {{phase1_week3_task2}}
+      - [ ] {{phase1_week3_task3}}
+      
+      **Resources Required**:
+      - Personnel: {{phase1_personnel}}
+      - Budget: {{phase1_budget}}
+      - Tools: {{phase1_tools}}
+      
+      ## Phase 2: Short-term Implementation (1-3 months)
+      **Priority**: Moderate gaps and foundational improvements
+      
+      ### Month 1
+      - [ ] {{phase2_month1_task1}}
+      - [ ] {{phase2_month1_task2}}
+      - [ ] {{phase2_month1_task3}}
+      
+      ### Month 2
+      - [ ] {{phase2_month2_task1}}
+      - [ ] {{phase2_month2_task2}}
+      
+      ### Month 3
+      - [ ] {{phase2_month3_task1}}
+      - [ ] {{phase2_month3_task2}}
+      
+      **Resources Required**:
+      - Personnel: {{phase2_personnel}}
+      - Budget: {{phase2_budget}}
+      - Training: {{phase2_training}}
+      
+      ## Phase 3: Long-term Optimization (3-6 months)
+      **Priority**: Process improvements and advanced capabilities
+      
+      ### Quarter 1
+      - [ ] {{phase3_q1_task1}}
+      - [ ] {{phase3_q1_task2}}
+      
+      ### Quarter 2
+      - [ ] {{phase3_q2_task1}}
+      - [ ] {{phase3_q2_task2}}
+      
+      **Resources Required**:
+      - Personnel: {{phase3_personnel}}
+      - Budget: {{phase3_budget}}
+      - Technology: {{phase3_technology}}
+      
+      ## Success Metrics
+      
+      ### Compliance Metrics
+      - **Target Compliance Level**: {{target_compliance_level}}%
+      - **Current Baseline**: {{current_compliance_level}}%
+      - **Quarterly Milestones**: {{compliance_milestones}}
+      
+      ### Security Metrics
+      - **Vulnerability Detection**: {{vuln_detection_target}}
+      - **Remediation Time**: {{remediation_time_target}}
+      - **Security Incidents**: {{incident_reduction_target}}
+      
+      ### Business Metrics
+      - **Cost Savings**: {{cost_savings_target}}
+      - **Risk Reduction**: {{risk_reduction_target}}
+      - **Audit Readiness**: {{audit_readiness_target}}
+
+  - id: monitoring_validation
+    title: "Ongoing Monitoring and Validation"
+    instruction: "Define processes for continuous compliance monitoring and validation"
+    elicit: true
+    content: |
+      # Ongoing Monitoring and Validation
+      
+      ## Compliance Monitoring Framework
+      
+      ### Automated Monitoring
+      - **Tool-based checks**: {{automated_monitoring_tools}}
+      - **Compliance dashboards**: {{compliance_dashboards}}
+      - **Alerting mechanisms**: {{alerting_mechanisms}}
+      - **Reporting frequency**: {{reporting_frequency}}
+      
+      ### Manual Reviews
+      - **Quarterly assessments**: {{quarterly_assessment_scope}}
+      - **Annual deep-dive review**: {{annual_review_scope}}
+      - **Audit preparation**: {{audit_prep_process}}
+      - **Third-party validation**: {{third_party_validation}}
+      
+      ## Key Performance Indicators (KPIs)
+      
+      ### Compliance KPIs
+      - Practice compliance percentage: {{compliance_percentage_target}}%
+      - Gap closure rate: {{gap_closure_rate}}
+      - Time to remediation: {{time_to_remediation}}
+      - Compliance audit score: {{audit_score_target}}
+      
+      ### Security KPIs
+      - Vulnerability density: {{vuln_density_target}}
+      - Mean time to detection: {{mttd_target}}
+      - Mean time to remediation: {{mttr_target}}
+      - Security incident frequency: {{incident_frequency_target}}
+      
+      ## Continuous Improvement Process
+      
+      ### Regular Reviews
+      - Monthly compliance check-ins
+      - Quarterly gap analysis updates
+      - Semi-annual process improvements
+      - Annual SSDF practice updates
+      
+      ### Feedback Loops
+      - Development team feedback on security practices
+      - Security team feedback on process effectiveness
+      - Management feedback on business alignment
+      - Customer feedback on security posture
+      
+      ## Documentation Maintenance
+      
+      ### Living Documents
+      - SSDF compliance status (updated monthly)
+      - Security requirements (updated per project)
+      - Tool configurations (updated as needed)
+      - Training materials (updated annually)
+      
+      ### Version Control
+      - Document versioning strategy
+      - Change approval process
+      - Distribution and communication plan
+      - Archive and retention policy
+==================== END: .bmad-core/templates/nist-ssdf-assessment-tmpl.yaml ====================
 
 ==================== START: .bmad-core/checklists/security-architecture-checklist.md ====================
 # Security Architecture Validation Checklist
@@ -13936,6 +15049,319 @@ This document provides comprehensive threat intelligence reference material for 
 This threat intelligence reference enables evidence-based security decision making and threat-informed defensive strategies across all security assessment and implementation activities.
 ==================== END: .bmad-core/data/threat-intelligence.md ====================
 
+==================== START: .bmad-core/data/nist-ssdf-practices.md ====================
+# NIST Secure Software Development Framework (SSDF) Practices
+
+## Overview
+
+The NIST SSDF (SP 800-218) provides a set of fundamental, sound, and secure software development practices organized into four main practice groups. This document serves as a reference for implementing NIST SSDF practices within the BMad Method security framework.
+
+## PO: Prepare the Organization
+
+Organizations should ensure that their people, processes, and technology are prepared to perform secure software development.
+
+### PO.1: Define Security Requirements for Software Development
+**Purpose**: Identify and document security requirements for both development infrastructure and the software being developed.
+
+**Tasks**:
+- **PO.1.1**: Identify and document security requirements for software development infrastructures and processes, and maintain the requirements over time
+- **PO.1.2**: Identify and document security requirements for organization-developed software, and maintain the requirements over time  
+- **PO.1.3**: Communicate requirements to third parties providing commercial software components
+
+**Implementation Guidance**:
+- Document security requirements in architecture specifications
+- Maintain requirements traceability throughout development
+- Establish security baselines for development environments
+- Define compliance requirements (OWASP, NIST, ISO 27001)
+
+### PO.2: Implement Roles and Responsibilities
+**Purpose**: Ensure that everyone knows what they're responsible for and how to do it throughout the SDLC.
+
+**Tasks**:
+- **PO.2.1**: Create new roles and alter responsibilities for existing roles as needed to encompass all parts of the SSDF
+- **PO.2.2**: Provide role-specific training for all personnel with responsibilities that contribute to secure development
+- **PO.2.3**: Obtain management commitment to secure development
+
+**Implementation Guidance**:
+- Define Security Architect, Security Engineer, and Security Analyst roles
+- Provide secure coding training for developers
+- Establish security review responsibilities for each role
+- Obtain executive sponsorship for security initiatives
+
+### PO.3: Implement Supporting Toolchains
+**Purpose**: Use tools and processes that support secure software development practices.
+
+**Tasks**:
+- **PO.3.1**: Specify which tools or tool types must or should be included in each toolchain and how the tools should be integrated
+- **PO.3.2**: Follow recommended security practices when deploying and maintaining tools
+- **PO.3.3**: Configure tools to generate artifacts that support secure software development
+
+**Implementation Guidance**:
+- Implement SAST/DAST scanning tools
+- Deploy dependency scanning tools
+- Configure CI/CD pipelines with security gates
+- Maintain secure tool configurations
+
+### PO.4: Define and Use Criteria for Software Security Checks
+**Purpose**: Establish criteria for determining whether software security checks have been completed successfully.
+
+**Tasks**:
+- **PO.4.1**: Define criteria for software security checks throughout the SDLC
+- **PO.4.2**: Implement processes to gather and safeguard the necessary information in support of the criteria
+
+**Implementation Guidance**:
+- Define security gate criteria for each SDLC phase
+- Establish vulnerability severity thresholds
+- Create security testing acceptance criteria
+- Document security compliance requirements
+
+### PO.5: Implement and Maintain Secure Development Environments
+**Purpose**: Ensure that all development environments are secured and maintained.
+
+**Tasks**:
+- **PO.5.1**: Separate and protect each development environment based on risk
+- **PO.5.2**: Secure development endpoints using a risk-based approach
+
+**Implementation Guidance**:
+- Implement network segmentation for development environments
+- Use privileged access management for development systems
+- Apply security hardening to development endpoints
+- Monitor development environment access and activities
+
+## PS: Protect the Software
+
+Organizations should protect all components of their software from tampering and unauthorized access.
+
+### PS.1: Protect All Forms of Code from Unauthorized Access and Tampering
+**Purpose**: Help prevent unauthorized changes to code, both inadvertent and intentional.
+
+**Tasks**:
+- **PS.1.1**: Store all forms of code (including source code, executable code, and configuration-as-code) based on the principle of least privilege so that only authorized personnel have access
+
+**Implementation Guidance**:
+- Implement role-based access controls for code repositories
+- Use code signing for executable artifacts
+- Protect configuration files with appropriate access controls
+- Audit code access and modifications
+
+### PS.2: Provide a Mechanism for Verifying Software Release Integrity
+**Purpose**: Help software acquirers ensure that the software they acquire is legitimate and has not been modified through supply chain attacks.
+
+**Tasks**:
+- **PS.2.1**: Make software integrity verification information available to software acquirers
+
+**Implementation Guidance**:
+- Generate cryptographic hashes for software releases
+- Implement code signing certificates
+- Provide Software Bill of Materials (SBOM)
+- Document supply chain security measures
+
+### PS.3: Archive and Protect Each Software Release
+**Purpose**: Preserve software releases in order to help identify, analyze, and eliminate vulnerabilities discovered in the future.
+
+**Tasks**:
+- **PS.3.1**: Securely archive the necessary files and supporting data to be retained for each software release
+- **PS.3.2**: Collect, safeguard, and share provenance data for all components of each software release
+
+**Implementation Guidance**:
+- Maintain secure release archives with version control
+- Document component provenance and dependencies
+- Implement backup and disaster recovery for archives
+- Track third-party component licenses and vulnerabilities
+
+## PW: Produce Well-Secured Software
+
+Organizations should produce well-secured software with minimal security vulnerabilities in its releases.
+
+### PW.1: Design Software to Meet Security Requirements and Mitigate Security Risks
+**Purpose**: Translate security requirements into secure software design decisions and risk mitigation strategies.
+
+**Tasks**:
+- **PW.1.1**: Design software to meet security requirements and mitigate security risks
+
+**Implementation Guidance**:
+- Implement security requirements from planning phase
+- Apply threat modeling results to design decisions
+- Design security controls and defensive mechanisms
+- Validate design against security architecture
+
+### PW.2: Review the Software Design to Verify Compliance with Security Requirements and Risk Information
+**Purpose**: Ensure that software design properly addresses security requirements and identified risks.
+
+**Tasks**:
+- **PW.2.1**: Review the software design to verify compliance with security requirements and risk information
+
+**Implementation Guidance**:
+- Conduct security design reviews
+- Verify security control implementation in design
+- Validate threat mitigation strategies
+- Document design security decisions
+
+### PW.3: Reuse Existing, Well-Secured Software When Feasible Instead of Duplicating Functionality
+**Purpose**: Leverage existing secure software components to reduce security risks and development effort.
+
+**Tasks**:
+- **PW.3.1**: Reuse existing, well-secured software when feasible instead of duplicating functionality
+
+**Implementation Guidance**:
+- Evaluate security of third-party components
+- Assess component security track records
+- Validate component security configurations
+- Monitor components for security updates
+
+### PW.4: Create Source Code Adhering to Secure Coding Practices
+**Purpose**: Implement software using secure coding practices to prevent common vulnerabilities.
+
+**Tasks**:
+- **PW.4.1**: Create source code adhering to secure coding practices
+
+**Implementation Guidance**:
+- Follow secure coding standards (OWASP, CERT)
+- Implement input validation and output encoding
+- Use secure authentication and session management
+- Apply proper error handling and logging
+- Implement cryptographic controls correctly
+
+### PW.5: Configure the Compilation, Interpreter, and Build Processes to Improve Executable Security
+**Purpose**: Use build-time security enhancements to improve the security of the executable software.
+
+**Tasks**:
+- **PW.5.1**: Configure the compilation, interpreter, and build processes to improve executable security
+
+**Implementation Guidance**:
+- Enable compiler security flags
+- Configure build process security controls
+- Implement build-time security scanning
+- Secure build environment and processes
+
+### PW.6: Review and/or Analyze Human-Readable Code to Identify Vulnerabilities
+**Purpose**: Systematically examine code to identify security vulnerabilities and weaknesses.
+
+**Tasks**:
+- **PW.6.1**: Review and/or analyze human-readable code to identify vulnerabilities and verify compliance with security requirements
+
+**Implementation Guidance**:
+- Conduct manual code reviews with security focus
+- Use static application security testing (SAST) tools
+- Implement automated code analysis
+- Document and track identified vulnerabilities
+
+### PW.7: Test Executable Code to Identify Vulnerabilities and Verify Compliance with Security Requirements
+**Purpose**: Execute software in controlled environments to identify runtime security vulnerabilities.
+
+**Tasks**:
+- **PW.7.1**: Test executable code to identify vulnerabilities and verify compliance with security requirements
+
+**Implementation Guidance**:
+- Perform dynamic application security testing (DAST)
+- Execute security-specific test cases
+- Conduct penetration testing
+- Validate security control effectiveness
+
+### PW.8: Configure Software to Have Secure Settings by Default
+**Purpose**: Ensure that software installations have secure configurations that don't require additional security setup.
+
+**Tasks**:
+- **PW.8.1**: Configure software to have secure settings by default
+
+**Implementation Guidance**:
+- Implement secure default configurations
+- Disable unnecessary features and services
+- Configure security headers and settings
+- Provide secure installation documentation
+
+## RV: Respond to Vulnerabilities
+
+Organizations should identify residual vulnerabilities in software releases and respond appropriately to address those vulnerabilities.
+
+### RV.1: Identify and Confirm Vulnerabilities on an Ongoing Basis
+**Purpose**: Continuously discover and validate security vulnerabilities in software.
+
+**Tasks**:
+- **RV.1.1**: Gather information from software acquirers, users, and public sources on potential vulnerabilities
+- **RV.1.2**: Review, analyze, and/or test software to identify vulnerabilities
+- **RV.1.3**: Determine the exploitability, potential impact, and other characteristics of each vulnerability
+
+**Implementation Guidance**:
+- Implement vulnerability disclosure processes
+- Monitor public vulnerability databases
+- Perform regular security assessments
+- Validate vulnerability reports and findings
+
+### RV.2: Assess, Prioritize, and Remediate Vulnerabilities
+**Purpose**: Systematically address identified vulnerabilities based on risk and impact.
+
+**Tasks**:
+- **RV.2.1**: Analyze each vulnerability to gather sufficient information for remediation
+- **RV.2.2**: Plan and implement risk-based responses to vulnerabilities
+- **RV.2.3**: Analyze vulnerabilities to identify their root causes
+
+**Implementation Guidance**:
+- Implement CVSS scoring for vulnerability assessment
+- Establish risk-based remediation priorities
+- Develop remediation timelines and processes
+- Track remediation progress and validation
+
+### RV.3: Analyze Vulnerabilities to Identify Their Root Causes
+**Purpose**: Understand why vulnerabilities occurred to prevent similar issues in the future.
+
+**Tasks**:
+- **RV.3.1**: Analyze vulnerabilities to identify their root causes
+- **RV.3.2**: Analyze the root causes over time to identify patterns
+- **RV.3.3**: Review the software for similar vulnerabilities
+
+**Implementation Guidance**:
+- Conduct systematic root cause analysis
+- Identify process and training improvements
+- Update secure development practices
+- Implement preventive controls and measures
+
+## Integration with BMad Security Framework
+
+### Security Agent (Planning Phase)
+The Security agent should implement PO and PS practices during the planning and architecture phases:
+- **PO.1**: Define security requirements in architecture documents
+- **PO.2**: Establish security roles and training requirements  
+- **PO.3**: Specify security toolchain requirements
+- **PO.4**: Define security check criteria for the project
+- **PO.5**: Design secure development environment requirements
+- **PS.1**: Plan code access controls and protection measures
+- **PS.2**: Plan software integrity mechanisms
+- **PS.3**: Plan archival and provenance tracking
+
+### VulnerabilityTech Agent (Implementation Phase)
+The VulnerabilityTech agent should validate PW and RV practices during code review:
+- **PW.1**: Validate security requirements implementation
+- **PW.2**: Verify software design compliance
+- **PW.3**: Assess third-party component security
+- **PW.4**: Review secure coding practice implementation
+- **PW.5**: Validate build process security
+- **PW.6**: Conduct code review and analysis
+- **PW.7**: Perform security testing validation
+- **PW.8**: Verify secure default configurations
+- **RV.1**: Validate vulnerability identification processes
+- **RV.2**: Assess vulnerability response procedures
+- **RV.3**: Conduct root cause analysis
+
+## Compliance Mapping
+
+### Story-Level Implementation
+Each story should consider applicable NIST SSDF practices:
+- Security requirements (PO.1) → Story Security Requirements section
+- Role responsibilities (PO.2) → Story task assignments  
+- Tool usage (PO.3) → Story testing requirements
+- Security criteria (PO.4) → Story acceptance criteria
+- Environment security (PO.5) → Story deployment requirements
+- Code protection (PS.1) → Story access control requirements
+- Integrity verification (PS.2) → Story release requirements
+- Archival (PS.3) → Story documentation requirements
+
+## References
+
+- NIST SP 800-218: Secure Software Development Framework (SSDF) Version 1.1
+- NIST SP 800-218A: Secure Software Development Practices for Generative AI and Dual-Use Foundation Models
+==================== END: .bmad-core/data/nist-ssdf-practices.md ====================
+
 ==================== START: .bmad-core/utils/security-analysis.md ====================
 # Security Analysis Utilities
 
@@ -14631,6 +16057,23 @@ sections:
     owner: scrum-master
     editors: [scrum-master]
     
+  - id: security-requirements
+    title: Security Requirements
+    type: numbered-list
+    instruction: |
+      Define security-specific requirements for this story based on threat analysis and security controls needed.
+      Include authentication, authorization, input validation, data protection, and compliance requirements.
+    template: |
+      1. Authentication: [Specify auth requirements]
+      2. Authorization: [Define access controls needed]
+      3. Input Validation: [Required input sanitization]
+      4. Data Protection: [Encryption, masking requirements]
+      5. Compliance: [Regulatory/standard requirements]
+    elicit: true
+    owner: scrum-master
+    editors: [scrum-master, security-agent]
+    optional: false
+    
   - id: tasks-subtasks
     title: Tasks / Subtasks
     type: bullet-list
@@ -14640,10 +16083,19 @@ sections:
     template: |
       - [ ] Task 1 (AC: # if applicable)
         - [ ] Subtask1.1...
+        - [ ] Security validation for Task 1 (if security requirements apply)
       - [ ] Task 2 (AC: # if applicable)
         - [ ] Subtask 2.1...
+        - [ ] Security validation for Task 2 (if security requirements apply)
       - [ ] Task 3 (AC: # if applicable)
         - [ ] Subtask 3.1...
+        - [ ] Security validation for Task 3 (if security requirements apply)
+      - [ ] Security Requirements Implementation (if applicable)
+        - [ ] Implement authentication controls
+        - [ ] Implement authorization controls
+        - [ ] Implement input validation
+        - [ ] Implement data protection
+        - [ ] Verify compliance requirements
     elicit: true
     owner: scrum-master
     editors: [scrum-master, dev-agent]
@@ -14656,10 +16108,37 @@ sections:
       - If known add Relevant Source Tree info that relates to this story
       - If there were important notes from previous story that are relevant to this one, include them here
       - Put enough information in this section so that the dev agent should NEVER need to read the architecture documents, these notes along with the tasks and subtasks must give the Dev Agent the complete context it needs to comprehend with the least amount of overhead the information to complete the story, meeting all AC and completing all tasks+subtasks
+      - Include security considerations and threat context relevant to this story implementation
     elicit: true
     owner: scrum-master
     editors: [scrum-master]
     sections:
+      - id: threat-considerations
+        title: Threat Considerations
+        instruction: |
+          Document security threats and attack vectors relevant to this story:
+          - Potential attack surfaces introduced
+          - Threat actors and attack scenarios
+          - Security controls that must be implemented
+          - Risk mitigation strategies
+          - Security architecture constraints
+        template: |
+          **Attack Surfaces**:
+          - [List new attack surfaces this story introduces]
+          
+          **Threat Scenarios**:
+          - [Describe potential attack scenarios]
+          
+          **Required Security Controls**:
+          - [List security controls that must be implemented]
+          
+          **Risk Mitigation**:
+          - [Describe how risks will be mitigated]
+        elicit: true
+        owner: scrum-master
+        editors: [scrum-master, security-agent]
+        optional: conditional
+        condition: story_has_security_implications
       - id: testing-standards
         title: Testing
         instruction: |
@@ -14671,6 +16150,28 @@ sections:
         elicit: true
         owner: scrum-master
         editors: [scrum-master]
+        sections:
+          - id: security-testing
+            title: Security Testing Requirements
+            instruction: |
+              Define security testing requirements for this story:
+              - Security unit tests needed
+              - Integration security tests
+              - Penetration testing requirements
+              - Vulnerability scanning needs
+              - Security compliance validation
+            template: |
+              - [ ] Input validation tests for all user inputs
+              - [ ] Authentication/authorization tests
+              - [ ] SQL injection prevention tests
+              - [ ] XSS prevention tests
+              - [ ] Data encryption validation
+              - [ ] Security header verification
+            elicit: true
+            owner: scrum-master
+            editors: [scrum-master, security-agent]
+            optional: conditional
+            condition: story_has_security_requirements
         
   - id: change-log
     title: Change Log
@@ -14716,6 +16217,35 @@ sections:
     instruction: Results from QA Agent QA review of the completed story implementation
     owner: qa-agent
     editors: [qa-agent]
+    
+  - id: security-review-results
+    title: Security Review Results
+    instruction: Results from VulnerabilityTech Agent security code review of the completed story implementation
+    owner: vulnerabilityTech-agent
+    editors: [vulnerabilityTech-agent]
+    optional: true
+    sections:
+      - id: vulnerability-findings
+        title: Vulnerability Findings
+        instruction: Document any security vulnerabilities identified during code review
+        owner: vulnerabilityTech-agent
+        editors: [vulnerabilityTech-agent]
+        
+      - id: security-compliance
+        title: Security Compliance Status
+        instruction: |
+          Document compliance with security requirements and standards:
+          - NIST SSDF practice compliance
+          - Security requirement validation
+          - Threat mitigation verification
+        owner: vulnerabilityTech-agent
+        editors: [vulnerabilityTech-agent]
+        
+      - id: remediation-recommendations
+        title: Remediation Recommendations
+        instruction: Provide specific recommendations for addressing any security issues found
+        owner: vulnerabilityTech-agent
+        editors: [vulnerabilityTech-agent]
 ==================== END: .bmad-core/templates/story-tmpl.yaml ====================
 
 ==================== START: .bmad-core/checklists/po-master-checklist.md ====================

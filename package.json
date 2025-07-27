@@ -30,7 +30,15 @@
     "version:expansion:all:patch": "node tools/bump-all-versions.js patch",
     "release": "semantic-release",
     "release:test": "semantic-release --dry-run --no-ci || echo 'Config test complete - authentication errors are expected locally'",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:agent": "node tools/testing/run_agent_test.js",
+    "test:workflow": "node tools/testing/run_workflow_test.js", 
+    "test:integration": "node tools/testing/run_integration_test.js",
+    "test:vulnerabilitytech": "npm run test:agent -- vulnerabilityTech",
+    "test:security": "npm run test:agent -- security",
+    "test:subagents": "npm run test:agent -- vulnerabilityTech --command=\"*specialized-security-review\"",
+    "test:all": "npm run test:agent && npm run test:workflow && npm run test:integration",
+    "test:setup": "node tools/testing/setup_test_environment.js"
   },
   "dependencies": {
     "@kayvan/markdown-tree-parser": "^1.5.0",

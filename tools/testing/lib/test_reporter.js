@@ -81,6 +81,10 @@ class TestReporter {
         const filepath = path.join(this.options.outputDirectory, filename);
         
         await fs.writeFile(filepath, JSON.stringify(reportData, null, 2));
+        
+        // Create latest symlink for easy identification
+        await this._createLatestSymlink(filepath, 'test-report-latest.json');
+        
         return filepath;
     }
 
@@ -93,6 +97,10 @@ class TestReporter {
         
         const markdown = this._formatMarkdownReport(reportData);
         await fs.writeFile(filepath, markdown);
+        
+        // Create latest symlink for easy identification
+        await this._createLatestSymlink(filepath, 'test-report-latest.md');
+        
         return filepath;
     }
 
@@ -124,6 +132,16 @@ class TestReporter {
 - **Duration**: ${this._formatDuration(summary.totalDuration)}
 - **Total Tests**: ${summary.totalTests}
 - **Success Rate**: ${summary.successRate}%
+
+## Execution Details
+
+### Primary Agent Execution
+${results.map(result => this._formatExecutionDetailsMarkdown(result)).join('\n\n')}
+
+### Performance Summary
+- **Fastest Test**: ${performance.fastestExecution ? `${performance.fastestExecution.agent} (${this._formatDuration(performance.fastestExecution.duration)})` : 'N/A'}
+- **Slowest Test**: ${performance.slowestExecution ? `${performance.slowestExecution.agent} (${this._formatDuration(performance.slowestExecution.duration)})` : 'N/A'}
+- **Average Response Time**: ${this._formatDuration(performance.averageResponseTime)}
 
 ## Overall Results
 
@@ -184,6 +202,23 @@ class TestReporter {
 `;
 
         return markdown;
+    }
+
+    /**
+     * Format execution details for Markdown
+     */
+    _formatExecutionDetailsMarkdown(result) {
+        const status = result.success ? '✅' : '❌';
+        const startTime = new Date(result.startTime).toISOString();
+        const endTime = new Date(result.endTime).toISOString();
+        
+        return `**${status} ${result.agentName} Agent**
+- **Command**: \`${result.command}\`
+- **Start Time**: ${startTime}
+- **End Time**: ${endTime}
+- **Duration**: ${this._formatDuration(result.duration)}
+- **Success**: ${result.success ? 'Yes' : 'No'}
+- **Exit Code**: ${result.exitCode}${result.error ? `\n- **Error**: ${result.error}` : ''}`;
     }
 
     /**
@@ -505,10 +540,15 @@ class TestReporter {
     }
 
     /**
-     * Generate unique report ID
+     * Generate unique report ID with clear latest file identification
      */
     _generateReportId() {
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0];
+        const now = new Date();
+        // Create timestamp with better granularity for ordering: YYYY-MM-DD-HHMM-SS
+        const timestamp = now.toISOString()
+            .replace(/T/, '-')
+            .replace(/:/g, '')
+            .slice(0, 15); // YYYY-MM-DD-HHMMSS
         const random = Math.random().toString(36).substr(2, 8);
         return `${timestamp}-${random}`;
     }
@@ -525,6 +565,29 @@ class TestReporter {
      */
     clearReports() {
         this.reports = [];
+    }
+
+    /**
+     * Create symlink to latest report for easy identification
+     */
+    async _createLatestSymlink(targetPath, linkName) {
+        try {
+            const linkPath = path.join(this.options.outputDirectory, linkName);
+            const targetFilename = path.basename(targetPath);
+            
+            // Remove existing symlink if it exists
+            try {
+                await fs.unlink(linkPath);
+            } catch (error) {
+                // Ignore if symlink doesn't exist
+            }
+            
+            // Create new symlink (relative path for portability)
+            await fs.symlink(targetFilename, linkPath);
+        } catch (error) {
+            // Log error but don't fail the report generation
+            console.warn(`Failed to create latest symlink: ${error.message}`);
+        }
     }
 }
 

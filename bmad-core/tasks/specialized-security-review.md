@@ -54,52 +54,220 @@ Orchestrates comprehensive security analysis using specialized Claude Code sub-a
   - Assess test coverage for security requirements
   - Evaluate NIST SSDF PW.7 practice compliance
 
-### 3. Findings Integration and Analysis
+### 3. Findings Integration and Analysis (DETAILED CONSOLIDATION WORKFLOW)
 
-**Consolidate Sub-Agent Findings**:
-- Collect and review all sub-agent analysis results
-- Identify overlapping findings and cross-validate results
-- Prioritize findings based on combined risk assessment
-- Resolve conflicts or inconsistencies between sub-agent findings
+**Step 3.1: Sub-Agent Results Collection**
+1. **Gather All Sub-Agent Outputs**: Collect the complete analysis results from each sub-agent execution:
+   - Security-Reviewer results (SAST findings + LLM business logic analysis)
+   - Dependency-Scanner results (vulnerability databases + CVE mappings)
+   - Pattern-Analyzer results (secure coding pattern violations)
+   - Test-Validator results (security testing coverage gaps)
 
-**Risk Assessment and Prioritization**:
-- Calculate overall security risk score from combined findings
-- Prioritize vulnerabilities based on exploitability and business impact
-- Assess cumulative security posture across all analysis dimensions
-- Identify systemic security issues and architectural concerns
+2. **Document Execution Status**: For each sub-agent, record:
+   - Execution completion status (success/partial/failed)
+   - Analysis scope covered (files, components, dependencies analyzed)
+   - Duration and performance metrics
+   - Any limitations or errors encountered
 
-**Gap Analysis**:
-- Identify security coverage gaps not addressed by sub-agents
-- Assess completeness of security analysis across all components
-- Determine need for additional manual security testing
-- Validate coverage of all applicable security standards
+**Step 3.2: Vulnerability Normalization Process**
+Transform each sub-agent's findings into this standardized vulnerability format:
 
-### 4. Comprehensive Security Report Generation
+```yaml
+vulnerability:
+  id: "[Generate unique identifier: SAST-001, BIZ-002, DEP-003, PATTERN-004, TEST-005]"
+  type: "[sql-injection, auth-bypass, vulnerable-dependency, insecure-pattern, test-gap]"
+  severity: "[critical/high/medium/low - use CVSS for dependencies, business impact for logic flaws]"
+  source: "[semgrep-sast, llm-analysis, dependency-scan, pattern-analysis, test-analysis]"
+  source_sub_agent: "[Security-Reviewer, Dependency-Scanner, Pattern-Analyzer, Test-Validator]"
+  location: "[file:line for code issues, package==version for dependencies]"
+  description: "[Clear, actionable vulnerability description in business terms]"
+  technical_details: "[Technical specifics: attack vectors, prerequisites, exploitation methods]"
+  cve: "[CVE number if from dependency scan, null for code/logic vulnerabilities]"
+  cvss_score: "[CVSS score if available, or calculated business impact score]"
+  business_impact: "[Specific business consequences if exploited]"
+  attack_vector: "[How this vulnerability can be exploited]"
+  remediation: "[Specific, actionable fix guidance with code examples if applicable]"
+  remediation_timeline: "[immediate/short-term/medium-term based on severity and complexity]"
+  responsible_team: "[development/security/devops team responsible for fix]"
+```
 
-**Executive Summary**:
-- Overall security posture assessment with risk scoring
-- Critical findings requiring immediate attention
-- Strategic security recommendations for long-term improvement
-- Compliance status across applicable security standards
+**Step 3.3: Cross-Validation and De-duplication**
+1. **Identify Related Findings**: For each normalized vulnerability, check if similar issues were found by other sub-agents:
+   - Same vulnerability type in same file/location
+   - Related security patterns across different sub-agents
+   - Dependency vulnerabilities affecting same components
 
-**Detailed Findings by Category**:
-- **Code Vulnerabilities**: Security-reviewer findings with remediation guidance
-- **Dependency Risks**: Dependency-scanner findings with update recommendations
-- **Pattern Issues**: Pattern-analyzer findings with secure alternatives
-- **Test Gaps**: Test-validator findings with testing recommendations
+2. **Cross-Validation Scoring**: Apply confidence levels based on sub-agent agreement:
+   - **High Confidence**: Same/similar finding detected by 2+ sub-agents
+   - **Medium Confidence**: Single sub-agent detection but critical severity OR multiple sub-agents detect related issues
+   - **Low Confidence**: Single sub-agent detection with low/medium severity (candidate for filtering)
 
-**Integrated Recommendations**:
-- Prioritized remediation roadmap based on combined analysis
-- Architectural security improvements from cross-cutting findings
-- Process improvements for preventing similar issues
-- Tool and automation recommendations for continuous security
+3. **Merge Duplicate Findings**: When multiple sub-agents identify the same issue:
+   - Combine descriptions to provide comprehensive context
+   - Use highest severity rating among sub-agents
+   - Merge remediation guidance from all sources
+   - Update source field to reflect multiple sub-agents
 
-**NIST SSDF Compliance Assessment**:
-- PW.3 (Third-party components) compliance validation
-- PW.4 (Secure coding) compliance assessment
-- PW.6 (Code review) process effectiveness
-- PW.7 (Security testing) coverage and quality
-- RV.1 (Vulnerability detection) process validation
+**Step 3.4: Risk Assessment and Prioritization Calculation**
+1. **Calculate Overall Risk Score**: Use this weighted scoring methodology:
+   - Critical vulnerabilities: 4 points each
+   - High vulnerabilities: 3 points each
+   - Medium vulnerabilities: 2 points each
+   - Low vulnerabilities: 1 point each
+   - Cross-validated findings: +1 bonus point each
+   - Business logic vulnerabilities: +1 bonus point each (higher business risk)
+   - Public CVE vulnerabilities: +0.5 bonus point each (known attack methods)
+
+2. **Business Impact Prioritization**: Rank vulnerabilities considering:
+   - **Financial Risk**: Payment, billing, financial data exposure
+   - **Data Protection**: PII, PHI, sensitive customer data
+   - **Operational Risk**: System availability, performance impact
+   - **Compliance Risk**: Regulatory violations, audit failures
+   - **Reputation Risk**: Public disclosure, customer trust impact
+
+3. **Exploit Likelihood Assessment**: Evaluate exploitability factors:
+   - **Attack Complexity**: Simple/Complex (affects timeline priority)
+   - **Access Requirements**: No auth/User auth/Admin auth required
+   - **Public Exploits Available**: Known exploitation techniques or tools
+   - **Environmental Factors**: Network accessibility, system exposure
+
+**Step 3.5: Gap Analysis and Coverage Assessment**
+1. **Security Coverage Mapping**: Identify areas analyzed by each sub-agent:
+   - Code security coverage (files, functions, modules analyzed)
+   - Dependency coverage (package ecosystems, direct vs transitive)
+   - Pattern coverage (frameworks, security controls validated)
+   - Test coverage (security test types, coverage percentage)
+
+2. **Identify Analysis Gaps**: Look for components not covered by any sub-agent:
+   - Infrastructure configuration (if not covered by pattern analysis)
+   - Third-party integrations and APIs
+   - Data flow and business process security
+   - Runtime and deployment security
+
+3. **Coverage Quality Assessment**: Evaluate completeness and depth:
+   - Are all critical code paths analyzed?
+   - Are all major dependencies included in scans?
+   - Do patterns cover the specific frameworks and libraries used?
+   - Are security tests comprehensive for the identified vulnerabilities?
+
+### 4. Comprehensive Security Report Generation (TEMPLATE-DRIVEN WORKFLOW)
+
+**Step 4.1: Prepare Consolidated Report Data**
+Using the normalized vulnerability data from Step 3, prepare the template variables for the consolidated security report:
+
+1. **Execution Metadata Variables** (essential for tracking and audit):
+   - `command`: The command executed (e.g., "*specialized-security-review")
+   - `start_time`: Execution start timestamp (Unix epoch milliseconds)
+   - `end_time`: Execution end timestamp (Unix epoch milliseconds) 
+   - `start_time_formatted`: Human-readable start time (ISO 8601)
+   - `end_time_formatted`: Human-readable end time (ISO 8601)
+   - `duration_ms`: Total execution duration in milliseconds
+   - `duration_formatted`: Human-readable duration (e.g., "28.1s", "2m 30s")
+   - `success`: Boolean indicating successful completion
+   - `session_id`: Unique session identifier for tracking
+   - `sub_agents_count`: Number of sub-agents executed
+   - `total_tool_executions`: Total tool operations performed
+   - `error_count`: Number of errors encountered
+
+2. **Calculate Summary Statistics**:
+   - `total_findings`: Total count of consolidated vulnerabilities
+   - `critical_count`, `high_count`, `medium_count`, `low_count`: Count by severity
+   - `cross_validated_count`: Vulnerabilities confirmed by multiple sub-agents
+   - `false_positives_filtered`: Low-confidence findings excluded
+   - `overall_risk_score`: Weighted risk score (0-100 scale)
+
+3. **Sub-Agent Contribution Metrics**:
+   - `code_vulnerabilities_count`: From Security-Reviewer (SAST + LLM)
+   - `business_logic_count`: From LLM business logic analysis
+   - `dependency_vulnerabilities_count`: From Dependency-Scanner
+   - `pattern_issues_count`: From Pattern-Analyzer
+   - `test_gaps_count**: From Test-Validator
+
+4. **Cross-Validation Analysis Data**:
+   - `cross_validated_findings`: Array of high-confidence vulnerabilities
+   - `confidence_level`: High/Medium/Low for each finding
+   - `validating_sources`: List of sub-agents that found each issue
+   - `agreement_percentage`: Consensus level across sub-agents
+
+**Step 4.2: Generate Consolidated Report Using Template**
+Execute the `create-doc` task with the `security-consolidated-report-tmpl.yaml` template:
+
+1. **Template Invocation**:
+   ```
+   *create-doc security-consolidated-report-tmpl
+   ```
+
+2. **Template Variable Population**: Fill in the template placeholders with your consolidated data:
+   - Executive summary metrics (total findings, risk scores, sub-agent contributions)
+   - Individual vulnerability details organized by severity
+   - Cross-validation analysis results
+   - Remediation roadmap with prioritized timelines
+   - NIST SSDF compliance assessment based on sub-agent findings
+
+**Step 4.3: Executive Summary Generation Guidelines**
+When filling the executive summary section, ensure you:
+
+1. **Business Impact Focus**: Translate technical vulnerabilities into business terms:
+   - "SQL injection in login system" → "Critical authentication bypass risk affecting customer accounts"
+   - "Vulnerable Flask dependency" → "Web framework security issue requiring immediate update"
+   - "Missing security tests" → "Insufficient validation of security controls increases deployment risk"
+
+2. **Strategic Recommendations**: Provide actionable guidance:
+   - **Immediate (0-7 days)**: Critical vulnerabilities requiring hotfixes
+   - **Short-term (1-4 weeks)**: High-priority remediation with development cycles
+   - **Medium-term (1-3 months)**: Process improvements and architectural changes
+   - **Resource Requirements**: Realistic estimates for development, security, and testing effort
+
+**Step 4.4: Detailed Vulnerability Breakdown Guidelines**
+For each vulnerability in the detailed findings section:
+
+1. **Vulnerability Card Format**: Use the standardized format from Step 3.2
+2. **Technical Context**: Include sufficient detail for developers to understand and fix
+3. **Business Context**: Explain why this vulnerability matters to the organization
+4. **Cross-Validation Indicators**: Show confidence level and which sub-agents confirmed
+5. **Remediation Specificity**: Provide actionable fixes, not generic advice
+
+**Step 4.5: Cross-Validation Analysis Documentation**
+Document the consolidation process for transparency:
+
+1. **High-Confidence Findings**: List vulnerabilities confirmed by multiple sub-agents
+2. **Methodology Documentation**: Explain how cross-validation was performed
+3. **False Positive Analysis**: Document findings filtered out and reasoning
+4. **Sub-Agent Agreement Levels**: Show consensus percentages for validation
+
+**Step 4.6: Remediation Roadmap Development**
+Create actionable remediation plans:
+
+1. **Priority-Based Grouping**:
+   - **Immediate Actions**: Critical vulnerabilities, especially cross-validated ones
+   - **Short-term Improvements**: High-priority issues and systemic problems
+   - **Medium-term Enhancements**: Remaining vulnerabilities and process improvements
+
+2. **Resource Planning**:
+   - Development effort estimates (hours/days per vulnerability)
+   - Security team oversight requirements
+   - Testing and validation effort needed
+   - Dependencies between fixes (order of implementation)
+
+3. **Success Metrics**:
+   - Target vulnerability reduction percentages
+   - Risk score improvement goals
+   - Timeline milestones for remediation progress
+
+**Step 4.7: NIST SSDF Compliance Assessment Integration**
+Map consolidated findings to NIST SSDF practices:
+
+1. **Practice-by-Practice Assessment**: For each relevant practice (PW.3, PW.4, PW.6, PW.7, RV.1):
+   - Current compliance status based on sub-agent findings
+   - Specific gaps identified through multi-agent analysis
+   - Recommendations for achieving compliance
+
+2. **Sub-Agent Insights Integration**:
+   - Dependency-Scanner findings → PW.3 (Third-party components)
+   - Pattern-Analyzer results → PW.4 (Secure coding practices)
+   - Security-Reviewer coverage → PW.6 (Code review effectiveness)
+   - Test-Validator assessment → PW.7 (Security testing)
+   - Overall detection capability → RV.1 (Vulnerability detection)
 
 ## Sub-Agent Integration Guidelines
 
@@ -145,54 +313,74 @@ Orchestrates comprehensive security analysis using specialized Claude Code sub-a
 
 ## Output Format
 
-### Comprehensive Security Analysis Report
+### Consolidated Security Analysis Report
 
-```markdown
-## Specialized Security Analysis Report
+The specialized security review generates a comprehensive consolidated report using the `security-consolidated-report-tmpl.yaml` template. This report integrates findings from all sub-agents into a unified, actionable security assessment.
 
-### Executive Summary
-- **Overall Security Score**: [0-100 composite score from all sub-agents]
-- **Critical Issues**: [Count and summary of critical findings]
-- **Sub-Agent Analysis Coverage**: [Coverage across security dimensions]
-- **Recommended Priority Actions**: [Top 3-5 immediate actions needed]
+**Template Reference**: `bmad-core/templates/security-consolidated-report-tmpl.yaml`
 
-### Sub-Agent Analysis Results
+**Report Generation Command**:
+```
+*create-doc security-consolidated-report-tmpl
+```
 
-#### Code Security Analysis (Security-Reviewer)
-- **Vulnerabilities Found**: [Count by severity]
-- **Key Findings**: [Top critical issues]
-- **OWASP Top 10 Coverage**: [Compliance assessment]
-- **Detailed Report Reference**: [Link to detailed findings]
+### Report Structure Overview
 
-#### Dependency Security Assessment (Dependency-Scanner)
-- **Vulnerable Dependencies**: [Count and severity]
-- **Supply Chain Risks**: [High-level risk assessment]
-- **License Compliance**: [Compliance status]
-- **Detailed Report Reference**: [Link to detailed findings]
+The consolidated report includes the following key sections:
 
-#### Secure Coding Patterns (Pattern-Analyzer)
-- **Pattern Compliance**: [Secure pattern percentage]
-- **Anti-Patterns Found**: [Count and categories]
-- **Framework Security**: [Framework-specific compliance]
-- **Detailed Report Reference**: [Link to detailed findings]
+#### 1. Executive Summary
+- **📊 Consolidated Security Analysis Results**: Aggregated metrics from all sub-agents
+- **Sub-Agent Contributions**: Individual sub-agent analysis summaries
+- **Business Impact Assessment**: Risk exposure and strategic recommendations
+- **Priority Actions**: Time-based remediation priorities (immediate/short/medium-term)
 
-#### Security Testing Assessment (Test-Validator)
-- **Test Coverage Score**: [Security test coverage percentage]
-- **Test Quality Assessment**: [Quality metrics]
-- **Testing Gaps**: [Missing test scenarios]
-- **Detailed Report Reference**: [Link to detailed findings]
+#### 2. Sub-Agent Analysis Summary  
+- **Security-Reviewer Analysis**: SAST + LLM findings with OWASP coverage
+- **Dependency-Scanner Analysis**: Vulnerable dependencies with CVE mappings
+- **Pattern-Analyzer Analysis**: Secure coding pattern compliance assessment
+- **Test-Validator Analysis**: Security testing coverage and effectiveness
 
-### Integrated Findings Analysis
-- **Cross-Cutting Issues**: [Issues identified by multiple sub-agents]
-- **Systemic Vulnerabilities**: [Architectural or process-level issues]
-- **Compliance Gaps**: [Standards compliance deficiencies]
-- **Security Architecture Assessment**: [High-level architecture review]
+#### 3. Detailed Vulnerability Breakdown
+- **🚨 Critical Severity**: High-priority vulnerabilities requiring immediate action
+- **🔴 High Severity**: Important security issues for short-term remediation
+- **🟡 Medium Severity**: Moderate risk vulnerabilities for planned fixes
+- **🔵 Low Severity**: Minor issues for long-term improvement
 
-### Prioritized Remediation Plan
-1. **Immediate Actions (0-7 days)**
-2. **Short-term Improvements (1-4 weeks)**
-3. **Medium-term Enhancements (1-3 months)**
-4. **Long-term Strategic Initiatives (3-12 months)**
+Each vulnerability includes:
+- Unique ID (SAST-001, BIZ-002, DEP-003, etc.)
+- Source sub-agent and confidence level
+- Location, CVE references, and business impact
+- Specific remediation guidance and timelines
+
+#### 4. Cross-Validation Analysis
+- **🔄 High-Confidence Findings**: Vulnerabilities confirmed by multiple sub-agents
+- **False Positive Analysis**: Low-confidence findings filtered out
+- **Confidence Scoring Methodology**: Validation approach and criteria
+
+#### 5. Prioritized Remediation Roadmap
+- **⚡ Immediate Actions (0-7 days)**: Critical vulnerabilities and security hotfixes
+- **🔧 Short-term Improvements (1-4 weeks)**: High-priority remediation within development cycles
+- **📈 Medium-term Enhancements (1-3 months)**: Process improvements and architectural changes
+- **Resource Planning**: Development effort estimates and team assignments
+
+#### 6. NIST SSDF Compliance Assessment
+- **Practice-by-Practice Compliance**: PW.3, PW.4, PW.6, PW.7, RV.1 assessments
+- **Sub-Agent Integration**: Mapping findings to specific SSDF practices
+- **Compliance Gap Analysis**: Recommendations for achieving full compliance
+
+#### 7. Appendices
+- **Sub-Agent Raw Outputs**: Original analysis results for reference
+- **Consolidation Methodology**: Cross-validation and risk scoring details
+- **Tool Configurations**: Sub-agent settings and parameters used
+- **References and Standards**: OWASP, CWE, CVE, and NIST references
+
+### Quality Indicators
+
+The consolidated report provides several quality indicators:
+- **📊 Overall Risk Score**: 0-100 weighted risk assessment
+- **🎯 Cross-Validation Rate**: Percentage of findings confirmed by multiple sub-agents
+- **📈 Coverage Metrics**: Analysis completeness across code, dependencies, patterns, and tests
+- **⚡ Confidence Levels**: High/Medium/Low confidence for each vulnerability
 
 ### NIST SSDF Compliance Summary
 - **PW.3**: [Third-party component security compliance]

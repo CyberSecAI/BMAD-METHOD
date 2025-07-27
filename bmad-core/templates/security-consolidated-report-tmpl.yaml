@@ -1,0 +1,354 @@
+template:
+  name: "Consolidated Security Analysis Report"
+  description: "Comprehensive consolidated security report template that aggregates findings from multiple Claude Code sub-agents for enhanced vulnerability detection and security validation"
+  version: "1.0"
+  author: "VulnerabilityTech Agent"
+  category: "Security Assessment"
+
+sections:
+  - id: execution_summary
+    title: "Execution Summary" 
+    instruction: "Provide execution metadata and analysis metrics from the VulnerabilityTech agent session, including timing, sub-agent coordination, and success metrics."
+    elicit: false
+    content: |
+      ## ⚡ Execution Summary
+      
+      ### Analysis Session Details
+      - **Command Executed**: {{command}}
+      - **Start Time**: {{start_time}} ({{start_time_formatted}})
+      - **End Time**: {{end_time}} ({{end_time_formatted}})
+      - **Total Duration**: {{duration_ms}}ms ({{duration_formatted}})
+      - **Execution Status**: {{#if success}}✅ Successful{{else}}❌ Failed{{/if}}
+      - **Session ID**: {{session_id}}
+
+      ### Sub-Agent Coordination Metrics
+      - **Sub-Agents Executed**: {{sub_agents_count}} total
+      - **Coordination Time**: {{coordination_time_ms}}ms
+      - **Tool Executions**: {{total_tool_executions}} total operations
+      - **Error Count**: {{error_count}} errors encountered
+      - **Success Rate**: {{success_rate}}% ({{successful_agents}}/{{total_agents}})
+
+      ### Performance Metrics
+      - **Analysis Speed**: {{vulnerabilities_per_second}} findings/second
+      - **Coverage Rate**: {{coverage_percentage}}% of target scope
+      - **Efficiency Score**: {{efficiency_score}}/100
+      - **Resource Utilization**: {{resource_utilization}}% peak usage
+
+  - id: executive_summary
+    title: "Executive Summary"
+    instruction: "Provide a consolidated executive summary that synthesizes findings from all sub-agents (Security-Reviewer, Dependency-Scanner, Pattern-Analyzer, Test-Validator) into a cohesive business-focused assessment."
+    elicit: true
+    content: |
+      ## 📊 Consolidated Security Analysis Results
+      
+      ### Analysis Overview
+      - **Assessment Scope**: [Define the systems, applications, and components analyzed]
+      - **Sub-Agents Coordinated**: [List all sub-agents executed: Security-Reviewer, Dependency-Scanner, etc.]
+      - **Analysis Duration**: {{duration_formatted}} total analysis time
+      - **Coverage Achieved**: [Percentage of codebase/components analyzed]
+
+      ### Key Findings Summary
+      - **Total Vulnerabilities**: {{total_findings}} consolidated findings
+      - **Critical**: {{critical_count}} issues | **High**: {{high_count}} issues | **Medium**: {{medium_count}} issues | **Low**: {{low_count}} issues
+      - **Cross-Validated Findings**: {{cross_validated_count}} vulnerabilities confirmed by multiple sub-agents
+      - **False Positives Filtered**: {{false_positives_filtered}} low-confidence findings removed
+      - **Overall Risk Score**: {{overall_risk_score}}/100 (based on weighted severity analysis)
+
+      ### Sub-Agent Contributions
+      - **Code Security Analysis**: {{code_vulnerabilities_count}} vulnerabilities from SAST + LLM analysis
+      - **Business Logic Assessment**: {{business_logic_count}} flaws from custom analysis
+      - **Dependency Security**: {{dependency_vulnerabilities_count}} vulnerable dependencies identified
+      - **Pattern Validation**: {{pattern_issues_count}} secure coding pattern violations
+      - **Test Coverage**: {{test_gaps_count}} security testing gaps identified
+
+      ### Business Impact Assessment
+      - **Immediate Critical Risks**: [List top 3 critical vulnerabilities requiring immediate attention]
+      - **Financial Risk Exposure**: [Estimate potential business impact of unmitigated vulnerabilities]
+      - **Compliance Implications**: [Note regulatory or compliance concerns identified]
+      - **Operational Impact**: [Describe potential operational disruptions from vulnerabilities]
+
+      ### Strategic Recommendations
+      - **Priority 1 (0-7 days)**: [Immediate actions for critical vulnerabilities]
+      - **Priority 2 (1-4 weeks)**: [Short-term remediation for high-priority issues]
+      - **Priority 3 (1-3 months)**: [Medium-term improvements and process enhancements]
+      - **Resource Requirements**: [Estimated development and security team effort needed]
+
+  - id: sub_agent_analysis_summary
+    title: "Sub-Agent Analysis Summary"
+    instruction: "Summarize the analysis results from each sub-agent, highlighting their specific contributions and expertise areas."
+    elicit: true
+    content: |
+      ## 🤖 Sub-Agent Coordination Results
+
+      ### Security-Reviewer Analysis (Level 2 Orchestrator)
+      - **Execution Status**: [Completed/Failed/Partial]
+      - **Analysis Coverage**: [Scope of security review performed]
+      - **Vulnerabilities Found**: {{security_reviewer_findings}} total findings
+      - **Key Contributions**: 
+        - SAST Analysis: {{sast_findings}} code vulnerabilities detected
+        - LLM Business Logic: {{llm_findings}} business logic flaws identified
+        - OWASP Top 10 Coverage: {{owasp_coverage}}% coverage achieved
+      - **Critical Issues Identified**: [List top 3 critical findings from this sub-agent]
+
+      ### Dependency-Scanner Analysis (Supply Chain Security)  
+      - **Execution Status**: [Completed/Failed/Partial]
+      - **Dependencies Scanned**: {{dependencies_scanned_count}} packages analyzed
+      - **Vulnerabilities Found**: {{dependency_findings}} vulnerable dependencies
+      - **Key Contributions**:
+        - Safety Analysis: {{safety_findings}} Python dependency vulnerabilities
+        - pip-audit Results: {{pip_audit_findings}} additional CVE matches
+        - Supply Chain Risk: {{supply_chain_risk_level}} risk level assessed
+      - **High-Risk Dependencies**: [List packages requiring immediate updates]
+
+      ### Pattern-Analyzer Analysis (Secure Coding Validation)
+      - **Execution Status**: [Completed/Failed/Partial] 
+      - **Patterns Analyzed**: {{patterns_analyzed_count}} secure coding patterns checked
+      - **Violations Found**: {{pattern_violations}} pattern violations identified
+      - **Key Contributions**:
+        - Framework Security: {{framework_security_score}}% compliance
+        - Anti-Pattern Detection: {{anti_patterns_found}} problematic patterns
+        - Best Practice Alignment: {{best_practices_score}}% adherence
+      - **Critical Pattern Issues**: [List top security pattern violations]
+
+      ### Test-Validator Analysis (Security Testing Assessment)
+      - **Execution Status**: [Completed/Failed/Partial]
+      - **Test Coverage**: {{security_test_coverage}}% security test coverage
+      - **Testing Gaps**: {{testing_gaps}} areas lacking security tests
+      - **Key Contributions**:
+        - Test Quality Score: {{test_quality_score}}/100
+        - Security Test Types: [List types of security tests present/missing]
+        - Effectiveness Rating: {{test_effectiveness}}% effectiveness score
+      - **Testing Recommendations**: [Top 3 security testing improvements needed]
+
+  - id: detailed_vulnerability_breakdown
+    title: "Detailed Vulnerability Breakdown"
+    instruction: "Provide a comprehensive breakdown of all consolidated vulnerabilities, organized by severity with detailed information for each finding including source sub-agent, remediation guidance, and business context."
+    elicit: true
+    content: |
+      ## 🔍 Detailed Vulnerability Report
+      ══════════════════════════════════════════════════
+
+      ### 🚨 CRITICAL SEVERITY ({{critical_count}} issues):
+
+      {{#each critical_vulnerabilities}}
+      #### {{@index}}. [{{id}}] {{description}}
+      - **📍 Location**: {{location}}
+      - **🛠️ Source**: {{source}} ({{source_sub_agent}})
+      - **⚠️ CVSS Score**: {{cvss_score}} ({{cvss_vector}})
+      {{#if cve}}- **🔗 CVE**: {{cve}}{{/if}}
+      - **🎯 Attack Vector**: {{attack_vector}}
+      - **💥 Business Impact**: {{business_impact}}
+      - **🔄 Cross-Validation**: {{#if cross_validated}}✅ Confirmed by {{validation_sources}}{{else}}❌ Single source{{/if}}
+      - **💡 Remediation**: {{remediation}}
+      - **⏱️ Timeline**: {{remediation_timeline}}
+      - **👥 Owner**: {{responsible_team}}
+
+      {{/each}}
+
+      ### 🔴 HIGH SEVERITY ({{high_count}} issues):
+
+      {{#each high_vulnerabilities}}
+      #### {{@index}}. [{{id}}] {{description}}
+      - **📍 Location**: {{location}}
+      - **🛠️ Source**: {{source}} ({{source_sub_agent}})
+      {{#if cve}}- **🔗 CVE**: {{cve}}{{/if}}
+      - **💥 Business Impact**: {{business_impact}}
+      - **🔄 Cross-Validation**: {{#if cross_validated}}✅ Confirmed{{else}}❌ Single source{{/if}}
+      - **💡 Remediation**: {{remediation}}
+      - **⏱️ Timeline**: {{remediation_timeline}}
+
+      {{/each}}
+
+      ### 🟡 MEDIUM SEVERITY ({{medium_count}} issues):
+
+      {{#each medium_vulnerabilities}}
+      #### {{@index}}. [{{id}}] {{description}}
+      - **📍 Location**: {{location}}
+      - **🛠️ Source**: {{source}} ({{source_sub_agent}})
+      {{#if cve}}- **🔗 CVE**: {{cve}}{{/if}}
+      - **💡 Remediation**: {{remediation}}
+      - **⏱️ Timeline**: {{remediation_timeline}}
+
+      {{/each}}
+
+      ### 🔵 LOW SEVERITY ({{low_count}} issues):
+
+      {{#each low_vulnerabilities}}
+      #### {{@index}}. [{{id}}] {{description}}  
+      - **📍 Location**: {{location}}
+      - **🛠️ Source**: {{source}}
+      - **💡 Remediation**: {{remediation}}
+
+      {{/each}}
+
+  - id: cross_validation_analysis
+    title: "Cross-Validation Analysis"
+    instruction: "Analyze findings that were identified by multiple sub-agents to provide confidence scoring and enhanced context for high-priority vulnerabilities."
+    elicit: true
+    content: |
+      ## 🔄 Cross-Validation Analysis
+
+      ### High-Confidence Findings (Multiple Sub-Agent Agreement)
+      {{#each cross_validated_findings}}
+      #### [{{id}}] {{vulnerability_type}} - {{confidence_level}} Confidence
+      - **Sources**: {{#each validating_sources}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+      - **Agreement Level**: {{agreement_percentage}}% consensus
+      - **Enhanced Context**: {{enhanced_analysis}}
+      - **Validation Details**: 
+        {{#each validation_details}}
+        - **{{source}}**: {{finding_description}}
+        {{/each}}
+
+      {{/each}}
+
+      ### False Positive Analysis
+      - **Potential False Positives Identified**: {{false_positives_count}}
+      - **Filtering Criteria Applied**: [List criteria used to identify low-confidence findings]
+      - **Filtered Findings**: [Brief summary of findings filtered out and why]
+
+      ### Confidence Scoring Methodology
+      - **High Confidence**: Multiple sub-agents + critical severity
+      - **Medium Confidence**: Single sub-agent but critical severity OR multiple sub-agents
+      - **Low Confidence**: Single sub-agent + low severity (candidate for filtering)
+
+  - id: remediation_roadmap
+    title: "Prioritized Remediation Roadmap"
+    instruction: "Create a comprehensive remediation plan that prioritizes vulnerabilities based on consolidated risk assessment, provides realistic timelines, and accounts for sub-agent insights."
+    elicit: true
+    content: |
+      ## 🛣️ Consolidated Remediation Roadmap
+
+      ### Immediate Actions (0-7 days) - Critical Priority
+      **Focus**: Address critical vulnerabilities confirmed by multiple sub-agents
+
+      | ID | Vulnerability | Source | Impact | Effort | Owner | Status |
+      |----|---------------|---------|---------|---------|--------|---------|
+      {{#each immediate_actions}}
+      | {{id}} | {{description}} | {{source}} | {{impact}} | {{effort}} | {{owner}} | {{status}} |
+      {{/each}}
+
+      **Resource Requirements**:
+      - Development effort: {{immediate_dev_hours}} hours
+      - Security team oversight: {{immediate_security_hours}} hours
+      - Testing and validation: {{immediate_test_hours}} hours
+
+      ### Short-term Improvements (1-4 weeks) - High Priority
+      **Focus**: Address high-priority vulnerabilities and systemic issues identified by sub-agents
+
+      | ID | Vulnerability | Source | Dependencies | Effort | Owner |
+      |----|---------------|---------|---------------|---------|--------|
+      {{#each short_term_actions}}
+      | {{id}} | {{description}} | {{source}} | {{dependencies}} | {{effort}} | {{owner}} |
+      {{/each}}
+
+      **Integration Considerations**:
+      - Cross-cutting fixes addressing multiple sub-agent findings
+      - Architectural changes based on pattern analysis
+      - Enhanced security testing based on test-validator recommendations
+
+      ### Medium-term Enhancements (1-3 months) - Medium Priority
+      **Focus**: Address remaining vulnerabilities and implement strategic improvements
+
+      | Category | Actions | Sub-Agent Source | Timeline |
+      |----------|---------|------------------|----------|
+      | Dependency Updates | {{dependency_updates}} | Dependency-Scanner | {{dep_timeline}} |
+      | Pattern Improvements | {{pattern_improvements}} | Pattern-Analyzer | {{pattern_timeline}} |
+      | Test Coverage | {{test_improvements}} | Test-Validator | {{test_timeline}} |
+      | Code Refactoring | {{code_improvements}} | Security-Reviewer | {{code_timeline}} |
+
+      ### Success Metrics and Validation
+      - **Vulnerability Reduction Target**: {{reduction_target}}% reduction in total findings
+      - **Risk Score Improvement**: Target risk score of {{target_risk_score}}/100
+      - **Sub-Agent Revalidation**: Plan for re-running analysis post-remediation
+      - **Continuous Monitoring**: Integration of sub-agent analysis into CI/CD pipeline
+
+  - id: nist_ssdf_compliance
+    title: "NIST SSDF Compliance Assessment"
+    instruction: "Assess compliance with NIST Secure Software Development Framework practices based on consolidated sub-agent findings and provide compliance-focused recommendations."
+    elicit: true
+    content: |
+      ## 🏛️ NIST SSDF Compliance Assessment
+
+      ### Prepare (PO) Practices - Based on Sub-Agent Analysis
+      - **PO.1 (Identity Management)**: {{po1_compliance_status}}
+        - Sub-agent insights: {{po1_findings}}
+        - Compliance gaps: {{po1_gaps}}
+      - **PO.3 (Third-party Risk)**: {{po3_compliance_status}} 
+        - Dependency-Scanner findings: {{dependency_compliance_issues}}
+        - Supply chain risks identified: {{supply_chain_risks}}
+
+      ### Protect (PS/PW) Practices - Based on Sub-Agent Analysis  
+      - **PW.3 (Third-party Components)**: {{pw3_compliance_status}}
+        - Vulnerable dependencies: {{vulnerable_deps_count}}
+        - License compliance: {{license_compliance_status}}
+      - **PW.4 (Secure Coding)**: {{pw4_compliance_status}}
+        - Pattern-Analyzer assessment: {{secure_coding_score}}%
+        - Code vulnerabilities: {{code_vuln_count}}
+      - **PW.6 (Code Review)**: {{pw6_compliance_status}}
+        - Security-Reviewer coverage: {{code_review_coverage}}%
+        - Review effectiveness: {{review_effectiveness_score}}
+      - **PW.7 (Security Testing)**: {{pw7_compliance_status}}
+        - Test-Validator assessment: {{security_test_coverage}}%
+        - Testing gaps identified: {{testing_gaps_count}}
+
+      ### Respond (RV) Practices - Based on Sub-Agent Analysis
+      - **RV.1 (Vulnerability Detection)**: {{rv1_compliance_status}}
+        - Detection capability: {{detection_capability_score}}%
+        - Sub-agent coordination effectiveness: {{coordination_score}}%
+
+      ### Compliance Recommendations
+      - **Priority 1**: {{compliance_priority_1}}
+      - **Priority 2**: {{compliance_priority_2}}  
+      - **Priority 3**: {{compliance_priority_3}}
+
+  - id: appendices
+    title: "Appendices"
+    instruction: "Include supporting documentation, sub-agent raw outputs, technical evidence, and detailed reference materials."
+    elicit: false
+    content: |
+      ## Appendix A: Sub-Agent Raw Outputs
+
+      ### Security-Reviewer Sub-Agent Output
+      ```
+      [Include relevant portions of Security-Reviewer analysis output]
+      ```
+
+      ### Dependency-Scanner Sub-Agent Output  
+      ```
+      [Include key dependency scan results and CVE details]
+      ```
+
+      ### Pattern-Analyzer Sub-Agent Output
+      ```
+      [Include secure coding pattern analysis results]
+      ```
+
+      ### Test-Validator Sub-Agent Output
+      ```
+      [Include security testing assessment results]
+      ```
+
+      ## Appendix B: Consolidation Methodology
+
+      ### Cross-Validation Algorithm
+      - Duplicate detection criteria used
+      - Confidence scoring methodology  
+      - Risk prioritization framework applied
+
+      ### Risk Scoring Calculation
+      - CVSS scoring approach for code vulnerabilities
+      - Business impact assessment methodology
+      - Sub-agent weighting factors applied
+
+      ## Appendix C: Tool Configurations
+
+      ### Sub-Agent Configurations Used
+      - Security tool configurations (Semgrep, Safety, etc.)
+      - LLM analysis parameters and prompts
+      - Integration settings and coordination protocols
+
+      ## Appendix D: References and Standards
+      - OWASP Top 10 mappings for identified vulnerabilities
+      - CWE classifications and references
+      - NIST SSDF practice references
+      - CVE database links for dependency vulnerabilities

@@ -107,7 +107,7 @@ class SubAgentLogger {
         // Add to sub-agent specific logs
         if (subAgentLog) {
             subAgentLog.toolOutputs.push(toolLog);
-            if (error) {
+            if (error && exitCode !== 0) {
                 subAgentLog.errors.push({
                     timestamp: toolLog.timestamp,
                     tool: toolName,
@@ -120,7 +120,7 @@ class SubAgentLogger {
         // Write to main log
         await this._writeLog({
             timestamp: toolLog.timestamp,
-            level: error ? 'error' : 'info',
+            level: (error && exitCode !== 0) ? 'error' : 'info',
             type: 'tool_execution',
             subAgent: subAgentName,
             tool: toolName,

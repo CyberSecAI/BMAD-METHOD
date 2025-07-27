@@ -1,0 +1,281 @@
+# Python Security Tools Configuration
+# Configuration for Python-specific security analysis tools and sub-agents
+
+python:
+  # Language detection patterns
+  detection:
+    files: ["*.py", "requirements*.txt", "setup.py", "pyproject.toml", "Pipfile"]
+    frameworks:
+      django:
+        indicators: ["django", "manage.py", "settings.py", "urls.py"]
+        patterns: ["from django", "import django", "Django"]
+      flask:
+        indicators: ["flask", "app.py", "run.py"]
+        patterns: ["from flask", "Flask(__name__)", "app = Flask"]
+      fastapi:
+        indicators: ["fastapi", "main.py"]
+        patterns: ["from fastapi", "FastAPI()", "app = FastAPI"]
+
+  # Static Analysis Tools Configuration
+  static_analysis:
+    primary_tool: semgrep
+    tools:
+      semgrep:
+        enabled: true
+        configs:
+          base: ["python", "security-audit", "owasp-top-ten"]
+          django: ["django", "django-security"]
+          flask: ["flask", "flask-security"]
+          fastapi: ["fastapi", "fastapi-security"]
+        severity_levels: ["ERROR", "WARNING"]
+        output_format: "json"
+        exclusions:
+          - "venv/"
+          - ".venv/"
+          - "node_modules/"
+          - "__pycache__/"
+          - "*.pyc"
+        custom_rules_path: ".claude/config/custom-semgrep-rules/"
+      
+      ruff:
+        enabled: true
+        security_rules: ["S", "B", "A"]  # Security, Bugbear, flake8-builtins
+        output_format: "json"
+        config_file: ".claude/config/ruff-security.toml"
+
+  # Dependency Scanning Tools
+  dependency_scanning:
+    primary_tools: ["safety", "pip-audit"]
+    tools:
+      safety:
+        enabled: true
+        commands:
+          basic_check: ["safety", "check", "--json"]
+          full_report: ["safety", "check", "--full-report", "--json"]
+          requirements_check: ["safety", "check", "-r", "requirements.txt", "--json"]
+        database_updates: true
+        ignore_ids: []  # List of vulnerability IDs to ignore
+        
+      pip_audit:
+        enabled: true
+        commands:
+          installed_packages: ["pip-audit", "--format=json"]
+          requirements_file: ["pip-audit", "--requirement", "requirements.txt", "--format=json"]
+          with_descriptions: ["pip-audit", "--desc", "--format=json"]
+          with_fixes: ["pip-audit", "--fix-version", "--format=json"]
+        vulnerability_databases: ["osv", "pypi"]
+        
+      pip_outdated:
+        enabled: true
+        commands:
+          list_outdated: ["pip", "list", "--outdated", "--format=json"]
+        check_security_updates: true
+
+  # Framework-Specific Configurations
+  frameworks:
+    django:
+      security_focus_areas:
+        - "ORM security and SQL injection prevention"
+        - "Authentication and permission decorators"
+        - "CSRF middleware and protection"
+        - "Template security and XSS prevention"
+        - "Admin interface security"
+        - "Settings.py security configuration"
+      
+      critical_files:
+        - "**/models.py"
+        - "**/views.py"
+        - "**/urls.py"
+        - "**/settings.py"
+        - "**/admin.py"
+        - "**/forms.py"
+      
+      security_patterns:
+        secure:
+          - "User.objects.filter()"
+          - "@login_required"
+          - "@permission_required"
+          - "csrf_protect"
+          - "{{ variable|escape }}"
+        insecure:
+          - "User.objects.raw()"
+          - "{{ variable|safe }}"
+          - "eval()"
+          - "exec()"
+          - "os.system()"
+
+    flask:
+      security_focus_areas:
+        - "Route authentication and authorization"
+        - "Session security and configuration"
+        - "Jinja2 template security"
+        - "Flask-WTF and CSRF protection"
+        - "SQLAlchemy ORM security"
+        - "Blueprint security patterns"
+      
+      critical_files:
+        - "**/app.py"
+        - "**/routes.py"
+        - "**/models.py"
+        - "**/config.py"
+        - "**/templates/**/*.html"
+      
+      security_patterns:
+        secure:
+          - "@login_required"
+          - "session.regenerate_id()"
+          - "CSRFProtect(app)"
+          - "{{ variable|e }}"
+        insecure:
+          - "session.permanent = True"
+          - "{{ variable|safe }}"
+          - "render_template_string()"
+
+    fastapi:
+      security_focus_areas:
+        - "Dependency injection security"
+        - "OAuth2 and JWT implementation"
+        - "Pydantic model validation"
+        - "Async operation security"
+        - "API authentication and authorization"
+        - "CORS configuration"
+      
+      critical_files:
+        - "**/main.py"
+        - "**/routers/**/*.py"
+        - "**/models/**/*.py"
+        - "**/auth/**/*.py"
+        - "**/dependencies.py"
+      
+      security_patterns:
+        secure:
+          - "Depends(get_current_user)"
+          - "HTTPBearer()"
+          - "OAuth2PasswordBearer"
+          - "BaseModel"
+        insecure:
+          - "eval()"
+          - "exec()"
+          - "allow_origins=['*']"
+
+  # Analysis Workflow Configuration
+  analysis_workflow:
+    phase_1_llm_analysis:
+      enabled: true
+      max_file_size: 50000  # bytes
+      focus_areas:
+        - "business_logic_security"
+        - "authentication_authorization"
+        - "data_validation_flows"
+        - "framework_security_usage"
+        - "custom_security_implementations"
+      
+    phase_2_sast_validation:
+      enabled: true
+      correlation_threshold: 0.7
+      confidence_boost_for_matches: 0.3
+      
+    phase_3_intelligent_correlation:
+      enabled: true
+      false_positive_reduction: true
+      business_context_enhancement: true
+      remediation_prioritization: true
+
+  # Sub-Agent Configuration
+  sub_agents:
+    semgrep_enhanced:
+      enabled: true
+      hybrid_analysis: true
+      llm_first_approach: true
+      sast_validation: true
+      intelligent_correlation: true
+      
+    custom_analysis:
+      enabled: true
+      business_logic_focus: true
+      framework_specific_analysis: true
+      complex_vulnerability_detection: true
+      
+    safety_scanner:
+      enabled: true
+      multi_tool_scanning: true
+      supply_chain_analysis: true
+      license_compliance_check: true
+
+  # Security Standards and Compliance
+  compliance:
+    nist_ssdf:
+      practices: ["PW.3", "PW.4", "PW.6", "PW.7", "RV.1"]
+      compliance_scoring: true
+      
+    owasp:
+      standards: ["ASVS", "Top 10", "SAMM"]
+      categories: ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10"]
+      
+    cwe:
+      focus_categories: [
+        "CWE-89",   # SQL Injection
+        "CWE-79",   # Cross-site Scripting
+        "CWE-78",   # Command Injection
+        "CWE-502",  # Deserialization of Untrusted Data
+        "CWE-327",  # Use of a Broken or Risky Cryptographic Algorithm
+        "CWE-330",  # Use of Insufficiently Random Values
+        "CWE-22",   # Path Traversal
+        "CWE-434",  # Unrestricted Upload of File with Dangerous Type
+        "CWE-352",  # Cross-Site Request Forgery
+        "CWE-611"   # XML External Entity Reference
+      ]
+
+  # Output and Reporting Configuration
+  reporting:
+    formats: ["json", "markdown", "html"]
+    include_code_snippets: true
+    include_remediation_examples: true
+    include_business_context: true
+    
+    # Severity scoring by analysis type
+    severity_scoring:
+      sast_findings: "high_medium_low"  # Semgrep/Ruff findings
+      dependency_vulnerabilities: "cvss_v3"  # Safety/pip-audit CVE findings
+      business_logic: "custom_risk_scale"  # LLM analysis findings
+    
+    confidence_scoring: true
+    
+    executive_summary:
+      include_risk_score: true
+      include_compliance_status: true
+      include_remediation_timeline: true
+      
+    detailed_findings:
+      include_attack_scenarios: true
+      include_business_impact: true
+      include_technical_details: true
+      include_framework_context: true
+
+# Tool Installation and Setup
+setup:
+  required_tools:
+    - name: "semgrep"
+      install_command: "pip install semgrep"
+      version_check: "semgrep --version"
+      
+    - name: "safety"
+      install_command: "pip install safety"
+      version_check: "safety --version"
+      
+    - name: "pip-audit"
+      install_command: "pip install pip-audit"
+      version_check: "pip-audit --version"
+      
+    - name: "ruff"
+      install_command: "pip install ruff"
+      version_check: "ruff --version"
+
+  setup_commands:
+    - "semgrep --config=auto --download-rules"  # Download latest Semgrep rules
+    - "safety check --db-update"  # Update Safety vulnerability database
+
+  environment_setup:
+    python_path_requirements: true
+    virtual_environment_detection: true
+    dependency_file_validation: true

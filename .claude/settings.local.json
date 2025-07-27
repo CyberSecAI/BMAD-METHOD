@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(find:*)",
+      "Bash(rm:*)",
+      "Bash(grep:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:teams:*)",
+      "Bash(git log:*)",
+      "Bash(ls:*)",
+      "Bash(git checkout:*)",
+      "Bash(mkdir:*)",
+      "WebFetch(domain:nvlpubs.nist.gov)",
+      "WebFetch(domain:checkmarx.com)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(npm run test:*)",
+      "Bash(semgrep:*)",
+      "Bash(safety:*)",
+      "Bash(pip-audit:*)",
+      "Bash(ruff:*)",
+      "Bash(npm run validate:*)",
+      "Bash(npm run build:*)",
+      "Bash(node:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": []
+  }
+}

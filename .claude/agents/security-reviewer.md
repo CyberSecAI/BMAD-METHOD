@@ -3,10 +3,12 @@ name: security-reviewer
 description: "Level 2 orchestrator sub-agent for comprehensive security analysis coordination using specialized tool sub-agents"
 tools: Read, Grep, Glob, Bash, Task
 dependencies:
+  - .claude/agents/tools/semgrep-triage.md
   - .claude/agents/tools/semgrep-enhanced.md
   - .claude/agents/tools/custom-analysis.md
   - .claude/agents/tools/safety-scanner.md
   - .claude/config/python-security-tools.yaml
+  - bmad-core/tasks/individual-semgrep-triage.md
 ---
 
 # Security Code Reviewer
@@ -75,15 +77,24 @@ def coordinate_python_security_analysis(project_context):
     
     analysis_results = {}
     
-    # 1. Hybrid SAST + LLM Analysis
+    # 1. Individual Semgrep Finding Triage
+    semgrep_triage_results = execute_sub_agent(
+        agent="individual-semgrep-triage",
+        context=project_context,
+        focus="individual_finding_validation"
+    )
+    analysis_results["semgrep_triage"] = semgrep_triage_results
+    
+    # 2. Hybrid SAST + LLM Analysis with Triage Integration
     semgrep_enhanced_results = execute_sub_agent(
         agent="semgrep-enhanced",
         context=project_context,
-        focus="hybrid_sast_llm_analysis"
+        focus="hybrid_sast_llm_analysis",
+        triage_results=semgrep_triage_results
     )
     analysis_results["code_analysis"] = semgrep_enhanced_results
     
-    # 2. Business Logic Security Analysis
+    # 3. Business Logic Security Analysis
     custom_analysis_results = execute_sub_agent(
         agent="custom-analysis", 
         context=project_context,
@@ -91,7 +102,7 @@ def coordinate_python_security_analysis(project_context):
     )
     analysis_results["business_logic"] = custom_analysis_results
     
-    # 3. Dependency Security Analysis
+    # 4. Dependency Security Analysis
     dependency_results = execute_sub_agent(
         agent="safety-scanner",
         context=project_context,
@@ -102,13 +113,19 @@ def coordinate_python_security_analysis(project_context):
     return analysis_results
 ```
 
-### **Phase 2: Intelligent Finding Correlation**
+### **Phase 2: Enhanced Finding Correlation with Individual Triage**
 
-#### **Multi-Source Validation**
-- **High Confidence**: Findings detected by both LLM and SAST tools
-- **Medium Confidence**: LLM-specific findings with business context validation
-- **SAST Validation**: Tool-specific findings enhanced with LLM context analysis
-- **False Positive Reduction**: Contextual analysis to eliminate false positives
+#### **Multi-Layer Validation Process**
+- **Individual Triage Validation**: Each Semgrep finding receives dedicated LLM analysis
+- **Cross-Agent Confirmation**: Findings validated across multiple specialized sub-agents
+- **Business Context Integration**: LLM analysis considers real-world exploitability
+- **Precision False Positive Elimination**: Individual finding review eliminates pattern-matching errors
+
+#### **Enhanced Confidence Scoring**
+- **High Confidence**: Findings confirmed by individual triage + cross-agent validation
+- **Medium Confidence**: Single-agent detection with strong business context or individual triage confirmation
+- **Triage-Enhanced Accuracy**: Individual Semgrep finding analysis significantly reduces false positive rates
+- **Context-Aware Classification**: Framework-specific knowledge applied to each finding
 
 #### **Risk Assessment and Prioritization**
 - **Business Impact Analysis**: Understanding real-world exploitation scenarios

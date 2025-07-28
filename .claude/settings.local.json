@@ -29,7 +29,8 @@
       "Bash(jq:*)",
       "Bash(git init:*)",
       "Bash(npm run:*)",
-      "Bash(npx bmad-method:*)"
+      "Bash(npx bmad-method:*)",
+      "Bash(git rm:*)"
     ],
     "deny": []
   }

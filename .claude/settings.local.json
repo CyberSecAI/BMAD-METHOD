@@ -25,7 +25,11 @@
       "Bash(git commit:*)",
       "Bash(npm test)",
       "Bash(npm test:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(jq:*)",
+      "Bash(git init:*)",
+      "Bash(npm run:*)",
+      "Bash(npx bmad-method:*)"
     ],
     "deny": []
   }

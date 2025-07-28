@@ -1,10 +1,13 @@
 # Node modules
 node_modules/
 
+
 # Logs
 logs
 *.log
 npm-debug.log*
+tests/agents/vulnerabilityTech/fixtures/python/vulnerable_app/logs
+tests/agents/dev/python-security-integration/vulnerable_app/logs
 
 # Build output
 build/*.txt

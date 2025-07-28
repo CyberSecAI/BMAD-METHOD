@@ -5,15 +5,18 @@
 **LLMs frequently generate broken Mermaid diagrams due to syntax violations. Follow these rules strictly:**
 
 ### ❌ FORBIDDEN CHARACTERS IN NODE LABELS
+
 - **NO double quotes (`"`)** in any node labels
-- **NO parentheses (`()`)** in any node labels  
+- **NO parentheses (`()`)** in any node labels
 - **NO single quotes (`'`)** in node labels
 - **NO special characters** like `@#$%^&*+=<>?/\|`
 - **NO colons (`:`)** in node labels (conflicts with Mermaid syntax)
+- **NO numbered lists (1. 2. 3.)** in node labels - these break Mermaid parsing
 
 ### ✅ CORRECT NODE LABEL SYNTAX
 
 **Use square brackets `[]` for labels with spaces:**
+
 ```mermaid
 graph TD
     nodeId[Node Label With Spaces]
@@ -22,6 +25,7 @@ graph TD
 ```
 
 **Use simple identifiers without spaces for short labels:**
+
 ```mermaid
 graph TD
     start --> process --> end
@@ -30,33 +34,43 @@ graph TD
 ### 📋 LABEL FORMATTING GUIDELINES
 
 **Replace problematic characters:**
+
 - `Authentication (OAuth)` → `Authentication - OAuth`
 - `"Admin" Access` → `Admin Access`
-- `User: Login Flow` → `User Login Flow` 
+- `User: Login Flow` → `User Login Flow`
 - `DB (PostgreSQL)` → `DB - PostgreSQL`
 - `API Gateway (Rate Limited)` → `API Gateway - Rate Limited`
+- `1. Discover API endpoint` → `Discover API endpoint`
+- `2. Send tampered request` → `Send tampered request`
 
 ### 🔧 COMMON FIXES
 
 **WRONG:**
+
 ```mermaid
 graph TD
     root["Compromise Application (Critical)"]
     auth["Gain "Admin" Access"]
     db["Database: PostgreSQL (Port 5432)"]
+    step1["1. Discover endpoint"]
+    step2["2. Send request"]
 ```
 
 **CORRECT:**
+
 ```mermaid
 graph TD
     root[Compromise Application - Critical]
     auth[Gain Admin Access]
     db[Database PostgreSQL Port 5432]
+    step1[Discover endpoint]
+    step2[Send request]
 ```
 
 ### 📊 DIAGRAM TYPES AND SYNTAX
 
 **Flowchart/Graph:**
+
 ```mermaid
 graph TD
     A[Start] --> B[Process]
@@ -66,12 +80,13 @@ graph TD
 ```
 
 **Sequence Diagram:**
+
 ```mermaid
 sequenceDiagram
     participant User
     participant App
     participant DB
-    
+
     User->>App: Login Request
     App->>DB: Validate User
     DB-->>App: User Valid
@@ -81,6 +96,7 @@ sequenceDiagram
 ### ⚠️ VALIDATION CHECKLIST
 
 Before generating any Mermaid diagram, verify:
+
 - [ ] No double quotes in node labels
 - [ ] No parentheses in node labels
 - [ ] No colons in node labels (except for diagram syntax)
@@ -91,31 +107,38 @@ Before generating any Mermaid diagram, verify:
 ### 🛠️ ERROR DETECTION PATTERNS
 
 **Common broken patterns to avoid:**
-- `node["Label with "quotes""]` 
+
+- `node["Label with "quotes""]`
 - `node["Label (with parentheses)"]`
 - `node["Label: with colon"]`
 - `node['Label with single quotes']`
+- `node["1. First step"]`
+- `node["2. Second step"]`
 
 **Safe replacement patterns:**
+
 - `node[Label with quotes removed]`
 - `node[Label - with dashes instead]`
 - `node[Label with colon removed]`
 - `node[Label without quotes]`
+- `node[First step]`
+- `node[Second step]`
 
 ### 📖 EXAMPLES BY SECURITY CONTEXT
 
 **Threat Modeling Attack Tree:**
+
 ```mermaid
 graph TD
     root[Compromise System]
     auth[Bypass Authentication]
     root --> auth
-    
+
     token[Token Manipulation]
     brute[Brute Force Attack]
     auth --> token
     auth --> brute
-    
+
     jwt[JWT Forgery]
     session[Session Hijacking]
     token --> jwt
@@ -123,6 +146,7 @@ graph TD
 ```
 
 **Data Flow Diagram:**
+
 ```mermaid
 graph LR
     user[User] --> web[Web App]
@@ -133,6 +157,7 @@ graph LR
 ```
 
 **Security Architecture:**
+
 ```mermaid
 graph TD
     internet[Internet] --> waf[Web Application Firewall]

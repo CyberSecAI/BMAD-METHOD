@@ -156,11 +156,56 @@ sections:
       Create a visual representation of the attack tree using Mermaid diagram syntax.
       This provides a clear graphical view of attack paths and relationships.
       
-      Use Mermaid flowchart syntax to represent the tree structure:
-      - Rectangles for attack goals/sub-goals
-      - Diamonds for decision points (AND/OR gates)
-      - Different colors for difficulty levels
-      - Arrows showing attack flow
+      **IMPORTANT**: Use `graph LR` (left-to-right) layout for better readability of attack trees.
+      
+      Use this structure pattern:
+      - Rectangles `[text]` for attack goals and techniques
+      - Diamonds `{OR}` or `{AND}` for decision points/gates
+      - Subgraphs to group related attack paths and techniques
+      - Clean labels without numbered lists (avoid "1.", "2.", etc.)
+      
+      **Example Format:**
+      ```mermaid
+      graph LR
+          A[Gain Unauthorized Admin Access] --> B{OR};
+          B --> C[Path A: Exploit Application Vulnerabilities];
+          B --> D[Path B: Compromise Admin Credentials];
+          B --> E[Path C: Exploit Infrastructure];
+
+          subgraph Path A
+              C --> C1{OR};
+              C1 --> C2[Elevate Privilege via API Tampering - E-1];
+              C1 --> C3[Abuse LLM Function-Calling - E-2];
+          end
+
+          subgraph Path B
+              D --> D1{OR};
+              D1 --> D2[Hijack Active Admin Session - S-1];
+              D1 --> D3[Intercept Admin Login via OAuth - S-2];
+          end
+
+          subgraph Path C
+              E --> E1{OR};
+              E1 --> E2[Compromise Cloud Run Container - E-3];
+              E1 --> E3[Compromise GCP Project Credentials];
+          end
+
+          subgraph Techniques for A
+              C2 --> C2a[Discover user config API endpoint];
+              C2a --> C2b[Send tampered request with admin role];
+              C3 --> C3a[Discover LLM uses internal tools];
+              C3a --> C3b[Craft prompt injection to call admin tool];
+          end
+
+          subgraph Techniques for B
+              D2 --> D2a[Discover XSS vulnerability];
+              D2a --> D2b[Steal admin session cookie];
+              D3 --> D3a[Exploit OAuth redirect URI misconfiguration];
+              D3a --> D3b[Intercept authorization code];
+          end
+      ```
+      
+      Remember: No numbered lists, parentheses, quotes, or colons in node labels.
     type: mermaid
     elicit: true
     owner: security

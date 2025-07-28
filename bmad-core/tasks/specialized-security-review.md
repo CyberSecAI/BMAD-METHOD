@@ -26,12 +26,13 @@ Orchestrates comprehensive security analysis using specialized Claude Code sub-a
 
 ### 2. Multi-Agent Security Analysis Execution
 
-**Phase 1: Code-Level Security Analysis**
+**Phase 1: Enhanced Code-Level Security Analysis with Individual Triage**
 - **Delegate to Security-Reviewer Sub-Agent**:
-  - Request comprehensive vulnerability detection analysis
+  - **NEW**: Execute individual Semgrep finding triage for precise false positive reduction
+  - Request comprehensive vulnerability detection analysis with triage-enhanced accuracy
   - Focus on OWASP Top 10 and language-specific vulnerabilities
-  - Analyze authentication, authorization, and input validation
-  - Generate detailed vulnerability findings with CVSS scoring
+  - Analyze authentication, authorization, and input validation with contextual LLM review
+  - Generate detailed vulnerability findings with CVSS scoring and individual finding validation
 
 **Phase 2: Dependency Security Assessment**
 - **Delegate to Dependency-Scanner Sub-Agent**:
@@ -91,16 +92,18 @@ vulnerability:
   responsible_team: "[development/security/devops team responsible for fix]"
 ```
 
-**Step 3.3: Cross-Validation and De-duplication**
+**Step 3.3: Enhanced Cross-Validation with Individual Triage Integration**
 1. **Identify Related Findings**: For each normalized vulnerability, check if similar issues were found by other sub-agents:
    - Same vulnerability type in same file/location
    - Related security patterns across different sub-agents
    - Dependency vulnerabilities affecting same components
+   - **NEW**: Individual Semgrep triage classification (TRUE_POSITIVE/FALSE_POSITIVE)
 
-2. **Cross-Validation Scoring**: Apply confidence levels based on sub-agent agreement:
-   - **High Confidence**: Same/similar finding detected by 2+ sub-agents
-   - **Medium Confidence**: Single sub-agent detection but critical severity OR multiple sub-agents detect related issues
-   - **Low Confidence**: Single sub-agent detection with low/medium severity (candidate for filtering)
+2. **Enhanced Confidence Scoring**: Apply confidence levels based on sub-agent agreement and individual triage:
+   - **High Confidence**: Same/similar finding detected by 2+ sub-agents AND confirmed by individual triage
+   - **Medium Confidence**: Single sub-agent detection but critical severity OR individual triage TRUE_POSITIVE confirmation
+   - **Low Confidence**: Single sub-agent detection with low/medium severity AND no triage confirmation (candidate for filtering)
+   - **Triage-Validated**: Individual LLM analysis confirms Semgrep finding as true positive (elevated confidence)
 
 3. **Merge Duplicate Findings**: When multiple sub-agents identify the same issue:
    - Combine descriptions to provide comprehensive context
@@ -109,13 +112,14 @@ vulnerability:
    - Update source field to reflect multiple sub-agents
 
 **Step 3.4: Risk Assessment and Prioritization Calculation**
-1. **Calculate Overall Risk Score**: Use this weighted scoring methodology:
+1. **Calculate Overall Risk Score**: Use this enhanced weighted scoring methodology:
    - Critical vulnerabilities: 4 points each
    - High vulnerabilities: 3 points each
    - Medium vulnerabilities: 2 points each
    - Low vulnerabilities: 1 point each
    - Cross-validated findings: +1 bonus point each
    - Business logic vulnerabilities: +1 bonus point each (higher business risk)
+   - **NEW**: Individual triage TRUE_POSITIVE confirmation: +0.5 bonus point each (LLM-validated accuracy)
    - Public CVE vulnerabilities: +0.5 bonus point each (known attack methods)
 
 2. **Business Impact Prioritization**: Rank vulnerabilities considering:
@@ -410,4 +414,67 @@ The consolidated report provides several quality indicators:
 - Update integration methodologies for improved analysis quality
 - Enhance sub-agent coordination for better coverage and efficiency
 
-This specialized security review leverages the focused expertise of Claude Code sub-agents while maintaining the comprehensive oversight and integration capabilities of the VulnerabilityTech agent within the BMad Method framework.
+## Execution Instructions
+
+### Step 1: Execute Individual Semgrep Triage (NEW)
+Execute the individual triage task as the first phase for enhanced accuracy:
+
+```
+*Task("Execute individual Semgrep triage analysis", 
+      "Perform individual LLM-based triage of each Semgrep finding with 15 lines of code context, framework-specific knowledge, and business impact assessment. Generate triage classifications, false positive filtering, and detailed reasoning for each finding.",
+      "semgrep-triage")
+```
+
+Store triage results for integration with subsequent analysis phases.
+
+### Step 2: Execute Multi-Agent Security Analysis
+Coordinate specialized sub-agents with triage-enhanced workflow:
+
+```
+*Task("Execute Security-Reviewer with triage integration", 
+      "Coordinate comprehensive security analysis using Security-Reviewer sub-agent with individual triage results integration. Focus on OWASP Top 10, language-specific vulnerabilities, and triage-validated findings correlation.",
+      "security-reviewer")
+```
+
+```
+*Task("Execute dependency security assessment", 
+      "Perform third-party component security analysis using Dependency-Scanner sub-agent for supply chain security and license compliance validation.",
+      "dependency-scanner")
+```
+
+```
+*Task("Execute secure coding pattern validation", 
+      "Validate secure coding patterns using Pattern-Analyzer sub-agent for framework-specific security implementations and anti-pattern detection.",
+      "pattern-analyzer")
+```
+
+```
+*Task("Execute security test assessment", 
+      "Assess security test coverage and effectiveness using Test-Validator sub-agent for security testing quality validation.",
+      "test-validator")
+```
+
+### Step 3: Integrate and Correlate Results
+Combine all sub-agent results with triage data:
+
+1. Collect results from all sub-agents and individual triage
+2. Apply enhanced cross-validation with triage confidence data
+3. Generate consolidated vulnerability assessment
+4. Calculate risk scores with triage accuracy bonuses
+
+### Step 4: Generate Enhanced Consolidated Report
+Create the final security report with triage integration:
+
+```
+*create-doc security-consolidated-report-tmpl
+```
+
+Populate template variables with:
+- `triage_executed`: true
+- `triage_findings_analyzed`: [count from triage results]
+- `true_positive_count`: [TRUE_POSITIVE findings]
+- `false_positive_count`: [FALSE_POSITIVE findings]
+- `false_positive_reduction_rate`: [percentage reduction]
+- Triage examples and detailed metrics
+
+This specialized security review leverages the focused expertise of Claude Code sub-agents while maintaining the comprehensive oversight and integration capabilities of the VulnerabilityTech agent within the BMad Method framework, enhanced with individual Semgrep triage for maximum accuracy.

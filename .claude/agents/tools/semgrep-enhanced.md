@@ -1,7 +1,10 @@
 ---
 name: semgrep-enhanced
-description: "Hybrid LLM + Semgrep analysis for comprehensive Python security assessment with intelligent correlation"
+description: "Hybrid LLM + Semgrep analysis with individual finding triage for comprehensive Python security assessment and precise false positive reduction"
 tools: Bash, Read, Grep, Glob
+dependencies:
+  - .claude/agents/tools/semgrep-triage.md
+  - bmad-core/tasks/individual-semgrep-triage.md
 ---
 
 # Semgrep Enhanced Analyzer
@@ -189,27 +192,32 @@ def execute_semgrep_analysis(framework, focus_areas):
     return parse_semgrep_results(result.stdout)
 ```
 
-### **Step 4: Intelligent Finding Correlation**
+### **Step 4: Enhanced Finding Correlation with Individual Triage Integration**
 
 ```python
-def correlate_findings(llm_findings, semgrep_results):
-    """Correlate LLM analysis with Semgrep results"""
+def correlate_findings_with_triage(llm_findings, semgrep_results, triage_results):
+    """Correlate LLM analysis with Semgrep results enhanced by individual triage"""
     
     correlated_findings = []
     
+    # Filter Semgrep results based on individual triage classifications
+    validated_semgrep = filter_by_triage_classification(semgrep_results, triage_results, "TRUE_POSITIVE")
+    false_positives = filter_by_triage_classification(semgrep_results, triage_results, "FALSE_POSITIVE")
+    
     for file_path, llm_vulns in llm_findings.items():
-        file_semgrep = filter_semgrep_by_file(semgrep_results, file_path)
+        file_semgrep = filter_semgrep_by_file(validated_semgrep, file_path)
         
         for llm_vuln in llm_vulns:
-            # Find matching Semgrep results
+            # Find matching Semgrep results (now pre-filtered by triage)
             matching_semgrep = find_matching_semgrep_finding(llm_vuln, file_semgrep)
             
             if matching_semgrep:
-                # High confidence - both tools agree
-                enhanced_finding = enhance_finding_with_context(
+                # Very high confidence - both LLM and triage-validated Semgrep agree
+                enhanced_finding = enhance_finding_with_triage_context(
                     llm_finding=llm_vuln,
                     semgrep_finding=matching_semgrep,
-                    confidence="high"
+                    triage_result=get_triage_for_finding(matching_semgrep, triage_results),
+                    confidence="very_high"
                 )
                 correlated_findings.append(enhanced_finding)
             else:
@@ -221,16 +229,21 @@ def correlate_findings(llm_findings, semgrep_results):
                     )
                     correlated_findings.append(enhanced_finding)
     
-    # Add Semgrep-only findings
-    uncorrelated_semgrep = find_uncorrelated_semgrep(semgrep_results, llm_findings)
+    # Add triage-validated Semgrep-only findings
+    uncorrelated_semgrep = find_uncorrelated_semgrep(validated_semgrep, llm_findings)
     for semgrep_finding in uncorrelated_semgrep:
-        enhanced_finding = create_semgrep_finding(
+        triage_data = get_triage_for_finding(semgrep_finding, triage_results)
+        enhanced_finding = create_triage_validated_finding(
             semgrep_finding=semgrep_finding,
-            confidence="medium"
+            triage_result=triage_data,
+            confidence="high"  # Individual triage validation provides high confidence
         )
         correlated_findings.append(enhanced_finding)
     
-    return prioritize_findings(correlated_findings)
+    # Log false positives eliminated by triage
+    log_triage_elimination_stats(false_positives, triage_results)
+    
+    return prioritize_findings_with_triage(correlated_findings)
 ```
 
 ## Framework-Specific Analysis Examples
@@ -395,27 +408,38 @@ def generate_enhanced_report(correlated_findings, framework, project_context):
 ## Integration with Security-Reviewer
 
 ```python
-def enhanced_python_security_analysis():
-    """Main entry point for enhanced Python security analysis"""
+def enhanced_python_security_analysis_with_triage():
+    """Main entry point for triage-enhanced Python security analysis"""
     
     # 1. Project analysis and context building
     project_context = analyze_python_project()
     
-    # 2. LLM-first security analysis
+    # 2. Individual Semgrep Finding Triage (NEW)
+    triage_results = execute_individual_semgrep_triage(
+        project_context=project_context,
+        comprehensive_analysis=True
+    )
+    
+    # 3. LLM-first security analysis
     llm_findings = perform_llm_analysis(project_context)
     
-    # 3. Targeted Semgrep validation
+    # 4. Targeted Semgrep validation (now with triage pre-filtering)
     semgrep_results = execute_semgrep_analysis(
         framework=project_context["framework"],
         focus_areas=project_context["security_focus"]
     )
     
-    # 4. Intelligent correlation
-    correlated_findings = correlate_findings(llm_findings, semgrep_results)
+    # 5. Enhanced correlation with triage integration
+    correlated_findings = correlate_findings_with_triage(
+        llm_findings=llm_findings, 
+        semgrep_results=semgrep_results,
+        triage_results=triage_results
+    )
     
-    # 5. Enhanced reporting
-    final_report = generate_enhanced_report(
+    # 6. Enhanced reporting with triage metrics
+    final_report = generate_triage_enhanced_report(
         correlated_findings=correlated_findings,
+        triage_results=triage_results,
         framework=project_context["framework"],
         project_context=project_context
     )

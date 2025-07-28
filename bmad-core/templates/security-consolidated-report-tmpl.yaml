@@ -73,6 +73,55 @@ sections:
       - **Priority 3 (1-3 months)**: [Medium-term improvements and process enhancements]
       - **Resource Requirements**: [Estimated development and security team effort needed]
 
+  - id: individual_triage_analysis
+    title: "Individual Semgrep Triage Analysis"
+    instruction: "Detail the results of individual LLM-based triage of Semgrep findings, including false positive reduction metrics and triage classification breakdown."
+    elicit: true
+    content: |
+      ## 🎯 Individual Semgrep Triage Results
+
+      ### Triage Execution Summary
+      {{#if triage_executed}}
+      - **Findings Analyzed**: {{triage_findings_analyzed}} individual Semgrep findings reviewed
+      - **Analysis Method**: Individual LLM review with 15 lines of code context per finding
+      - **Framework Knowledge**: {{framework_knowledge_applied}} security patterns applied
+      - **Execution Duration**: {{triage_duration_formatted}} for individual analysis
+      {{else}}
+      - **Triage Status**: Individual triage not executed in this analysis
+      - **Fallback Method**: Standard correlation-based analysis used
+      {{/if}}
+
+      ### Triage Classification Breakdown
+      {{#if triage_executed}}
+      - **🟢 TRUE_POSITIVE**: {{true_positive_count}} findings ({{true_positive_percentage}}%) - Confirmed vulnerabilities requiring remediation
+      - **🔴 FALSE_POSITIVE**: {{false_positive_count}} findings ({{false_positive_percentage}}%) - Benign code incorrectly flagged
+      - **🟡 NEEDS_VERIFICATION**: {{needs_verification_count}} findings ({{needs_verification_percentage}}%) - Complex cases requiring manual review
+      - **🔵 MITIGATED**: {{mitigated_count}} findings ({{mitigated_percentage}}%) - Vulnerabilities with existing controls
+
+      ### False Positive Reduction Impact
+      - **Original Semgrep Findings**: {{original_semgrep_count}} total alerts
+      - **False Positives Eliminated**: {{false_positive_count}} findings filtered out
+      - **False Positive Reduction Rate**: {{false_positive_reduction_rate}}%
+      - **High-Confidence Results**: {{true_positive_count}} validated vulnerabilities
+      - **Analysis Accuracy**: {{triage_accuracy_percentage}}% (validated through spot-checking)
+
+      ### Representative Triage Examples
+
+      #### ✅ True Positive Example
+      - **Finding**: {{tp_example_rule}} at {{tp_example_location}}
+      - **Classification**: TRUE_POSITIVE ({{tp_example_confidence}} confidence)
+      - **Reasoning**: {{tp_example_reasoning}}
+      - **Business Impact**: {{tp_example_impact}}
+
+      #### ❌ False Positive Example  
+      - **Finding**: {{fp_example_rule}} at {{fp_example_location}}
+      - **Classification**: FALSE_POSITIVE ({{fp_example_confidence}} confidence)
+      - **Reasoning**: {{fp_example_reasoning}}
+      - **Protective Mechanism**: {{fp_example_protection}}
+      {{else}}
+      *Individual triage analysis was not performed in this security review. Consider enabling individual triage for enhanced accuracy and false positive reduction.*
+      {{/if}}
+
   - id: sub_agent_analysis_summary
     title: "Sub-Agent Analysis Summary"
     instruction: "Summarize the analysis results from each sub-agent, highlighting their specific contributions and expertise areas."
@@ -139,6 +188,7 @@ sections:
       - **🎯 Attack Vector**: {{attack_vector}}
       - **💥 Business Impact**: {{business_impact}}
       - **🔄 Cross-Validation**: {{#if cross_validated}}✅ Confirmed by {{validation_sources}}{{else}}❌ Single source{{/if}}
+      {{#if triage_classification}}- **🎯 Triage Result**: {{triage_classification}} ({{triage_confidence}} confidence) - {{triage_reasoning}}{{/if}}
       - **💡 Remediation**: {{remediation}}
       - **⏱️ Timeline**: {{remediation_timeline}}
       - **👥 Owner**: {{responsible_team}}
@@ -154,6 +204,7 @@ sections:
       {{#if cve}}- **🔗 CVE**: {{cve}}{{/if}}
       - **💥 Business Impact**: {{business_impact}}
       - **🔄 Cross-Validation**: {{#if cross_validated}}✅ Confirmed{{else}}❌ Single source{{/if}}
+      {{#if triage_classification}}- **🎯 Triage Result**: {{triage_classification}} ({{triage_confidence}} confidence) - {{triage_reasoning}}{{/if}}
       - **💡 Remediation**: {{remediation}}
       - **⏱️ Timeline**: {{remediation_timeline}}
 
@@ -186,13 +237,27 @@ sections:
     instruction: "Analyze findings that were identified by multiple sub-agents to provide confidence scoring and enhanced context for high-priority vulnerabilities."
     elicit: true
     content: |
-      ## 🔄 Cross-Validation Analysis
+      ## 🔄 Enhanced Cross-Validation with Triage Integration
+
+      ### Very High Confidence Findings (LLM + Triage + Cross-Agent Agreement)
+      {{#each very_high_confidence_findings}}
+      #### [{{id}}] {{vulnerability_type}} - VERY HIGH Confidence
+      - **Sources**: {{#each validating_sources}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+      - **Triage Classification**: {{triage_classification}} ({{triage_confidence}} confidence)
+      - **LLM Analysis**: {{llm_validation_reasoning}}
+      - **Cross-Agent Agreement**: {{agreement_percentage}}% consensus
+      - **Individual Triage Reasoning**: {{individual_triage_reasoning}}
+
+      {{/each}}
 
       ### High-Confidence Findings (Multiple Sub-Agent Agreement)
       {{#each cross_validated_findings}}
       #### [{{id}}] {{vulnerability_type}} - {{confidence_level}} Confidence
       - **Sources**: {{#each validating_sources}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
       - **Agreement Level**: {{agreement_percentage}}% consensus
+      {{#if triage_classification}}
+      - **Triage Classification**: {{triage_classification}} (enhances confidence)
+      {{/if}}
       - **Enhanced Context**: {{enhanced_analysis}}
       - **Validation Details**: 
         {{#each validation_details}}
@@ -201,14 +266,27 @@ sections:
 
       {{/each}}
 
-      ### False Positive Analysis
+      ### Enhanced False Positive Analysis with Individual Triage
+      {{#if triage_executed}}
+      - **False Positives Identified by Triage**: {{triage_false_positives_count}} findings
+      - **Triage-Enhanced Filtering**: {{triage_filtering_description}}
+      - **Individual Analysis Examples**:
+        {{#each false_positive_examples}}
+        - **{{rule_id}}** at {{location}}: {{reasoning}} ({{protection_mechanism}})
+        {{/each}}
+      - **Pre-Triage False Positive Rate**: {{pre_triage_fp_rate}}%
+      - **Post-Triage False Positive Rate**: {{post_triage_fp_rate}}%
+      {{else}}
       - **Potential False Positives Identified**: {{false_positives_count}}
       - **Filtering Criteria Applied**: [List criteria used to identify low-confidence findings]
       - **Filtered Findings**: [Brief summary of findings filtered out and why]
+      {{/if}}
 
-      ### Confidence Scoring Methodology
-      - **High Confidence**: Multiple sub-agents + critical severity
-      - **Medium Confidence**: Single sub-agent but critical severity OR multiple sub-agents
+      ### Enhanced Confidence Scoring Methodology
+      - **Very High Confidence**: LLM analysis + Individual triage TRUE_POSITIVE + Cross-agent validation
+      - **High Confidence**: Multiple sub-agents + critical severity {{#if triage_executed}}+ Triage confirmation{{/if}}
+      - **Medium Confidence**: Single sub-agent + {{#if triage_executed}}Triage TRUE_POSITIVE OR {{/if}}business context validation
+      - **Triage-Enhanced**: Individual LLM review provides contextual accuracy beyond pattern matching
       - **Low Confidence**: Single sub-agent + low severity (candidate for filtering)
 
   - id: remediation_roadmap

@@ -1,0 +1,292 @@
+{
+  "session": {
+    "name": "code-quality-checker Agent Test Session",
+    "agentName": "code-quality-checker",
+    "startTime": "2025-07-29T20:55:55.412Z",
+    "results": [
+      {
+        "id": "exec_1753822555413_oz87sueru",
+        "agentName": "code-quality-checker",
+        "command": "*help",
+        "startTime": 1753822555413,
+        "endTime": 1753822555516,
+        "duration": 103,
+        "success": true,
+        "output": "Task completed: Execute Code Quality Analysis\n\n## Code Quality Analysis Report\n\n### Executive Summary\n- **Overall Quality Score**: 25/100 (Grade F)\n- **Production Readiness**: NOT READY - Critical blockers found\n- **Files Analyzed**: 4 Python source files\n- **Total Issues**: 4 findings with precise locations\n\n### Structured Findings (Machine-Readable)\n\n#### Critical Issues (Production Blockers)\n```json\n[\n  {\n    \"id\": \"TODO-001\",\n    \"rule\": \"production-blocker-todo\",\n    \"severity\": \"critical\",\n    \"file\": \"main.py\",\n    \"line\": 21,\n    \"column\": 1,\n    \"message\": \"TODO comment found in production code\",\n    \"description\": \"TODO: Implement proper user validation\",\n    \"category\": \"production_blocker\",\n    \"fixSuggestion\": \"Complete the user validation implementation and remove TODO comment\",\n    \"codeSnippet\": \"    # TODO: Implement proper user validation\\n    if username:\",\n    \"autoFixable\": false\n  },\n  {\n    \"id\": \"DEBUG-001\",\n    \"rule\": \"production-blocker-debug\", \n    \"severity\": \"critical\",\n    \"file\": \"main.py\",\n    \"line\": 28,\n    \"column\": 5,\n    \"message\": \"Debug print statement found\",\n    \"description\": \"print(f'Debug: processing user {user_id}')\",\n    \"category\": \"production_blocker\", \n    \"fixSuggestion\": \"Remove debug print or replace with proper logging\",\n    \"codeSnippet\": \"    print(f'Debug: processing user {user_id}')\\n    return process_user(user_id)\",\n    \"autoFixable\": true,\n    \"autoFix\": \"    logging.debug(f'Processing user: {user_id}')\\n    return process_user(user_id)\"\n  }\n]\n```\n\n#### High Priority Issues (Code Structure)  \n```json\n[\n  {\n    \"id\": \"FUNC-001\",\n    \"rule\": \"function-length-exceeded\",\n    \"severity\": \"high\",\n    \"file\": \"main.py\",\n    \"line\": 45,\n    \"column\": 1,\n    \"message\": \"Function exceeds 50 line limit\",\n    \"description\": \"Function 'init_database' is 78 lines (28 lines over limit)\",\n    \"category\": \"code_structure\",\n    \"fixSuggestion\": \"Break function into smaller functions: separate connection setup, schema creation, and data seeding\", \n    \"codeSnippet\": \"def init_database(config):\\n    # 78 lines of code here...\",\n    \"autoFixable\": false,\n    \"refactoringPlan\": [\n      \"Extract connection setup to init_connection()\",\n      \"Extract schema creation to create_schema()\",\n      \"Extract data seeding to seed_initial_data()\"\n    ]\n  }\n]\n```\n\n#### Medium Priority (Python via Ruff-Validator)\n```json\n[\n  {\n    \"id\": \"RUFF-F401-001\",\n    \"rule\": \"F401\",\n    \"severity\": \"medium\",\n    \"file\": \"main.py\",\n    \"line\": 3,\n    \"column\": 1,\n    \"message\": \"'os' imported but unused\",\n    \"description\": \"import os\",\n    \"category\": \"ruff_validator\",\n    \"tool\": \"ruff\",\n    \"fixSuggestion\": \"Remove unused import\",\n    \"codeSnippet\": \"import os\\nimport sys\",\n    \"autoFixable\": true,\n    \"autoFix\": \"import sys\",\n    \"ruffCommand\": \"ruff check --fix main.py\"\n  }\n]\n```\n\n### Action Plan with Precise Locations\n\n#### 🚨 Immediate Fixes Required\n1. **main.py:21** - Remove TODO comment and complete user validation\n2. **main.py:28** - Replace debug print with logging.debug()\n3. **main.py:3** - Remove unused 'os' import [Auto-fixable]\n\n#### ⚠️ Short-term Refactoring  \n1. **main.py:45** - Break init_database() into smaller functions\n\n#### 🤖 Auto-fix Commands\n- `ruff check --fix main.py` - Fixes unused import automatically\n- `ruff format main.py` - Formats code consistently\n\n**Production Ready**: NO - Must fix critical blockers at main.py:21 and main.py:28\n",
+        "error": null,
+        "exitCode": 0,
+        "metadata": {
+          "testProject": "/home/chris/work/CyberSecAI/BMAD-METHOD/tests/agents/code-quality-checker/fixtures/python/quality_issues_app",
+          "filesAnalyzed": 0,
+          "qualityScore": 0,
+          "qualityGrade": "F",
+          "findings": {
+            "critical": [
+              {
+                "id": "TODO-001",
+                "rule": "production-blocker-todo",
+                "severity": "critical",
+                "file": "main.py",
+                "line": 21,
+                "column": 1,
+                "message": "TODO comment found in production code",
+                "description": "TODO: Implement proper user validation",
+                "category": "production_blocker",
+                "fixSuggestion": "Complete the user validation implementation and remove TODO comment",
+                "codeSnippet": "    # TODO: Implement proper user validation\n    if username:",
+                "autoFixable": false
+              },
+              {
+                "id": "DEBUG-001",
+                "rule": "production-blocker-debug",
+                "severity": "critical",
+                "file": "main.py",
+                "line": 28,
+                "column": 5,
+                "message": "Debug print statement found",
+                "description": "print(f'Debug: processing user {user_id}')",
+                "category": "production_blocker",
+                "fixSuggestion": "Remove debug print or replace with proper logging",
+                "codeSnippet": "    print(f'Debug: processing user {user_id}')\n    return process_user(user_id)",
+                "autoFixable": true,
+                "autoFix": "    logging.debug(f'Processing user: {user_id}')\n    return process_user(user_id)"
+              }
+            ],
+            "high": [
+              {
+                "id": "FUNC-001",
+                "rule": "function-length-exceeded",
+                "severity": "high",
+                "file": "main.py",
+                "line": 45,
+                "column": 1,
+                "message": "Function exceeds 50 line limit",
+                "description": "Function 'init_database' is 78 lines (28 lines over limit)",
+                "category": "code_structure",
+                "fixSuggestion": "Break function into smaller functions: separate connection setup, schema creation, and data seeding",
+                "codeSnippet": "def init_database(config):\n    # 78 lines of code here...",
+                "autoFixable": false,
+                "refactoringPlan": [
+                  "Extract connection setup to init_connection()",
+                  "Extract schema creation to create_schema()",
+                  "Extract data seeding to seed_initial_data()"
+                ]
+              }
+            ],
+            "medium": [
+              {
+                "id": "RUFF-F401-001",
+                "rule": "F401",
+                "severity": "medium",
+                "file": "main.py",
+                "line": 3,
+                "column": 1,
+                "message": "'os' imported but unused",
+                "description": "import os",
+                "category": "ruff_validator",
+                "tool": "ruff",
+                "fixSuggestion": "Remove unused import",
+                "codeSnippet": "import os\nimport sys",
+                "autoFixable": true,
+                "autoFix": "import sys",
+                "ruffCommand": "ruff check --fix main.py"
+              }
+            ],
+            "low": []
+          },
+          "summary": {
+            "critical": 2,
+            "high": 1,
+            "medium": 1,
+            "low": 0,
+            "total": 4,
+            "autoFixable": 2
+          },
+          "productionReady": false,
+          "executionTime": 102,
+          "agentType": "code-quality-checker"
+        }
+      }
+    ],
+    "validations": [
+      {
+        "agentName": "code-quality-checker",
+        "command": "*help",
+        "timestamp": "2025-07-29T20:55:55.516Z",
+        "validations": [
+          {
+            "test": "execution_success",
+            "passed": true,
+            "message": "Execution completed"
+          }
+        ],
+        "overallPassed": true,
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "passRate": 100
+        }
+      }
+    ],
+    "endTime": "2025-07-29T20:55:55.516Z"
+  },
+  "metadata": {
+    "generatedAt": "2025-07-29T20:55:55.516Z",
+    "testFrameworkVersion": "0.1.0",
+    "reportId": "code-quality-checker-help"
+  },
+  "summary": {
+    "totalTests": 1,
+    "successfulExecutions": 1,
+    "failedExecutions": 0,
+    "totalDuration": 103,
+    "averageDuration": 103,
+    "successRate": 100,
+    "totalValidations": 1,
+    "passedValidations": 1,
+    "failedValidations": 0,
+    "validationPassRate": 100
+  },
+  "results": [
+    {
+      "id": "exec_1753822555413_oz87sueru",
+      "agentName": "code-quality-checker",
+      "command": "*help",
+      "startTime": 1753822555413,
+      "endTime": 1753822555516,
+      "duration": 103,
+      "success": true,
+      "output": "Task completed: Execute Code Quality Analysis\n\n## Code Quality Analysis Report\n\n### Executive Summary\n- **Overall Quality Score**: 25/100 (Grade F)\n- **Production Readiness**: NOT READY - Critical blockers found\n- **Files Analyzed**: 4 Python source files\n- **Total Issues**: 4 findings with precise locations\n\n### Structured Findings (Machine-Readable)\n\n#### Critical Issues (Production Blockers)\n```json\n[\n  {\n    \"id\": \"TODO-001\",\n    \"rule\": \"production-blocker-todo\",\n    \"severity\": \"critical\",\n    \"file\": \"main.py\",\n    \"line\": 21,\n    \"column\": 1,\n    \"message\": \"TODO comment found in production code\",\n    \"description\": \"TODO: Implement proper user validation\",\n    \"category\": \"production_blocker\",\n    \"fixSuggestion\": \"Complete the user validation implementation and remove TODO comment\",\n    \"codeSnippet\": \"    # TODO: Implement proper user validation\\n    if username:\",\n    \"autoFixable\": false\n  },\n  {\n    \"id\": \"DEBUG-001\",\n    \"rule\": \"production-blocker-debug\", \n    \"severity\": \"critical\",\n    \"file\": \"main.py\",\n    \"line\": 28,\n    \"column\": 5,\n    \"message\": \"Debug print statement found\",\n    \"description\": \"print(f'Debug: processing user {user_id}')\",\n    \"category\": \"production_blocker\", \n    \"fixSuggestion\": \"Remove debug print or replace with proper logging\",\n    \"codeSnippet\": \"    print(f'Debug: processing user {user_id}')\\n    return process_user(user_id)\",\n    \"autoFixable\": true,\n    \"autoFix\": \"    logging.debug(f'Processing user: {user_id}')\\n    return process_user(user_id)\"\n  }\n]\n```\n\n#### High Priority Issues (Code Structure)  \n```json\n[\n  {\n    \"id\": \"FUNC-001\",\n    \"rule\": \"function-length-exceeded\",\n    \"severity\": \"high\",\n    \"file\": \"main.py\",\n    \"line\": 45,\n    \"column\": 1,\n    \"message\": \"Function exceeds 50 line limit\",\n    \"description\": \"Function 'init_database' is 78 lines (28 lines over limit)\",\n    \"category\": \"code_structure\",\n    \"fixSuggestion\": \"Break function into smaller functions: separate connection setup, schema creation, and data seeding\", \n    \"codeSnippet\": \"def init_database(config):\\n    # 78 lines of code here...\",\n    \"autoFixable\": false,\n    \"refactoringPlan\": [\n      \"Extract connection setup to init_connection()\",\n      \"Extract schema creation to create_schema()\",\n      \"Extract data seeding to seed_initial_data()\"\n    ]\n  }\n]\n```\n\n#### Medium Priority (Python via Ruff-Validator)\n```json\n[\n  {\n    \"id\": \"RUFF-F401-001\",\n    \"rule\": \"F401\",\n    \"severity\": \"medium\",\n    \"file\": \"main.py\",\n    \"line\": 3,\n    \"column\": 1,\n    \"message\": \"'os' imported but unused\",\n    \"description\": \"import os\",\n    \"category\": \"ruff_validator\",\n    \"tool\": \"ruff\",\n    \"fixSuggestion\": \"Remove unused import\",\n    \"codeSnippet\": \"import os\\nimport sys\",\n    \"autoFixable\": true,\n    \"autoFix\": \"import sys\",\n    \"ruffCommand\": \"ruff check --fix main.py\"\n  }\n]\n```\n\n### Action Plan with Precise Locations\n\n#### 🚨 Immediate Fixes Required\n1. **main.py:21** - Remove TODO comment and complete user validation\n2. **main.py:28** - Replace debug print with logging.debug()\n3. **main.py:3** - Remove unused 'os' import [Auto-fixable]\n\n#### ⚠️ Short-term Refactoring  \n1. **main.py:45** - Break init_database() into smaller functions\n\n#### 🤖 Auto-fix Commands\n- `ruff check --fix main.py` - Fixes unused import automatically\n- `ruff format main.py` - Formats code consistently\n\n**Production Ready**: NO - Must fix critical blockers at main.py:21 and main.py:28\n",
+      "error": null,
+      "exitCode": 0,
+      "metadata": {
+        "testProject": "/home/chris/work/CyberSecAI/BMAD-METHOD/tests/agents/code-quality-checker/fixtures/python/quality_issues_app",
+        "filesAnalyzed": 0,
+        "qualityScore": 0,
+        "qualityGrade": "F",
+        "findings": {
+          "critical": [
+            {
+              "id": "TODO-001",
+              "rule": "production-blocker-todo",
+              "severity": "critical",
+              "file": "main.py",
+              "line": 21,
+              "column": 1,
+              "message": "TODO comment found in production code",
+              "description": "TODO: Implement proper user validation",
+              "category": "production_blocker",
+              "fixSuggestion": "Complete the user validation implementation and remove TODO comment",
+              "codeSnippet": "    # TODO: Implement proper user validation\n    if username:",
+              "autoFixable": false
+            },
+            {
+              "id": "DEBUG-001",
+              "rule": "production-blocker-debug",
+              "severity": "critical",
+              "file": "main.py",
+              "line": 28,
+              "column": 5,
+              "message": "Debug print statement found",
+              "description": "print(f'Debug: processing user {user_id}')",
+              "category": "production_blocker",
+              "fixSuggestion": "Remove debug print or replace with proper logging",
+              "codeSnippet": "    print(f'Debug: processing user {user_id}')\n    return process_user(user_id)",
+              "autoFixable": true,
+              "autoFix": "    logging.debug(f'Processing user: {user_id}')\n    return process_user(user_id)"
+            }
+          ],
+          "high": [
+            {
+              "id": "FUNC-001",
+              "rule": "function-length-exceeded",
+              "severity": "high",
+              "file": "main.py",
+              "line": 45,
+              "column": 1,
+              "message": "Function exceeds 50 line limit",
+              "description": "Function 'init_database' is 78 lines (28 lines over limit)",
+              "category": "code_structure",
+              "fixSuggestion": "Break function into smaller functions: separate connection setup, schema creation, and data seeding",
+              "codeSnippet": "def init_database(config):\n    # 78 lines of code here...",
+              "autoFixable": false,
+              "refactoringPlan": [
+                "Extract connection setup to init_connection()",
+                "Extract schema creation to create_schema()",
+                "Extract data seeding to seed_initial_data()"
+              ]
+            }
+          ],
+          "medium": [
+            {
+              "id": "RUFF-F401-001",
+              "rule": "F401",
+              "severity": "medium",
+              "file": "main.py",
+              "line": 3,
+              "column": 1,
+              "message": "'os' imported but unused",
+              "description": "import os",
+              "category": "ruff_validator",
+              "tool": "ruff",
+              "fixSuggestion": "Remove unused import",
+              "codeSnippet": "import os\nimport sys",
+              "autoFixable": true,
+              "autoFix": "import sys",
+              "ruffCommand": "ruff check --fix main.py"
+            }
+          ],
+          "low": []
+        },
+        "summary": {
+          "critical": 2,
+          "high": 1,
+          "medium": 1,
+          "low": 0,
+          "total": 4,
+          "autoFixable": 2
+        },
+        "productionReady": false,
+        "executionTime": 102,
+        "agentType": "code-quality-checker"
+      }
+    }
+  ],
+  "validations": [
+    {
+      "agentName": "code-quality-checker",
+      "command": "*help",
+      "timestamp": "2025-07-29T20:55:55.516Z",
+      "validations": [
+        {
+          "test": "execution_success",
+          "passed": true,
+          "message": "Execution completed"
+        }
+      ],
+      "overallPassed": true,
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "passRate": 100
+      }
+    }
+  ],
+  "performance": {
+    "totalExecutionTime": 103,
+    "averageResponseTime": 103,
+    "fastestExecution": {
+      "agent": "code-quality-checker",
+      "command": "*help",
+      "duration": 103
+    },
+    "slowestExecution": {
+      "agent": "code-quality-checker",
+      "command": "*help",
+      "duration": 103
+    }
+  },
+  "recommendations": []
+}

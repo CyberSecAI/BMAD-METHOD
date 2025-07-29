@@ -31,14 +31,20 @@ npm run test:all
 ### Run Agent-Specific Tests
 
 ```bash
-# Test VulnerabilityTech agent
-npm run test:agent -- vulnerabilityTech
+# Test VulnerabilityTech agent (comprehensive security analysis)
+npm run test:vulnerabilitytech
+
+# Test VulnerabilityTech sub-agent coordination
+npm run test:subagents
+
+# Test individual Semgrep triage analysis
+npm run test:triage
 
 # Test Code Quality Checker agent
-npm run test:agent -- code-quality-checker
+npm run test:code-quality
 
 # Test Security agent
-npm run test:agent -- security
+npm run test:security
 ```
 
 ### Run Integration Tests
@@ -121,10 +127,11 @@ Cross-component testing:
 ### ✅ VulnerabilityTech Agent
 
 - **Sub-agent coordination testing**: Validates Level 2 → Level 3 orchestration
-- **Python security analysis**: Uses intentionally vulnerable Flask application
+- **Vulnerable test application**: Uses intentionally insecure Flask app with multiple CVEs
 - **SAST + LLM hybrid analysis**: Tests Semgrep-Enhanced sub-agent integration
 - **Business logic analysis**: Tests Custom-Analysis sub-agent capabilities
 - **Dependency scanning**: Tests Safety-Scanner sub-agent functionality
+- **Individual triage analysis**: Tests Semgrep-Triage sub-agent for false positive reduction
 - **Intelligent correlation**: Validates cross-sub-agent finding correlation
 - **Performance validation**: Tests execution time and resource usage
 
@@ -164,11 +171,11 @@ npm run test:setup
 ### 2. Run Your First Test
 
 ```bash
-# Test VulnerabilityTech agent
+# Test VulnerabilityTech agent with vulnerable Flask app
 npm run test:vulnerabilitytech
 
 # Test Code Quality Checker agent
-npm run test:code-quality-checker
+npm run test:code-quality
 ```
 
 ### 3. View Generated Reports
@@ -225,9 +232,65 @@ Test reports contain detailed findings in the `metadata.findings` section:
 3. **Command Integration**: `ruffCommand` provides executable fix commands for Python issues
 4. **Categorized Severity**: Critical/High/Medium/Low helps agents prioritize fixes
 
+## Vulnerable Test Application
+
+The VulnerabilityTech agent tests use an intentionally vulnerable Flask application located at:
+`tests/agents/vulnerabilityTech/fixtures/python/vulnerable_app/`
+
+### Security Vulnerabilities Included
+
+The test application contains multiple intentional security flaws:
+
+#### **Code-Level Vulnerabilities**
+
+- **SQL Injection**: Direct string concatenation in database queries (main.py:81)
+- **Command Injection**: Unsanitized user input passed to subprocess (main.py:67)
+- **Cross-Site Scripting (XSS)**: Unsafe template rendering (main.py:123-128)
+- **Hardcoded Secrets**: Secret keys embedded in source code (main.py:20)
+- **Path Traversal**: Unvalidated file path operations (main.py:156)
+- **Insecure Cryptographic Storage**: Weak hashing algorithms (auth.py:23)
+- **Authentication Bypass**: Session fixation vulnerabilities (auth.py:45)
+
+#### **dependency Vulnerabilities**
+
+The `requirements.txt` includes outdated packages with known CVEs:
+
+- **Flask 1.0.2**: CVE-2019-1010083 (Improper Input Validation)
+- **Jinja2 2.10.1**: CVE-2019-10906 (Sandbox escape)
+- **Werkzeug 0.15.3**: CVE-2019-14806 (Insufficient validation)
+- **requests 2.19.1**: CVE-2018-18074 (HTTP header injection)
+- **PyYAML 3.13**: CVE-2017-18342 (Arbitrary code execution)
+- **Pillow 5.2.0**: Multiple buffer overflow CVEs
+- **cryptography 2.3.1**: CVE-2018-10903 (GCM tag forgery)
+- **urllib3 1.23**: CVE-2019-11324 (Certificate verification bypass)
+
+### Test Commands for Vulnerable App
+
+```bash
+# Comprehensive security analysis (tests both code and dependencies)
+npm run test:vulnerabilitytech
+
+# Sub-agent coordination testing
+npm run test:subagents
+
+# Individual Semgrep triage analysis
+npm run test:triage
+```
+
+### Expected Test Results
+
+The vulnerable app typically generates:
+
+- **Critical findings**: 15+ security vulnerabilities
+- **Total findings**: 120+ issues (including dependencies)
+- **Sub-agent coordination**: 5 sub-agents (Security-Reviewer, Semgrep-Enhanced, Custom-Analysis, Safety-Scanner, Semgrep-Triage)
+- **Execution time**: 25-30 seconds for comprehensive analysis
+
+**⚠️ Important**: This application is intentionally insecure and should NEVER be deployed or used in production environments.
+
 ## Test Results Example
 
-When you run `npm run test:vulnerabilitytech` or `npm run test:code-quality-checker`, you'll see output like:
+When you run `npm run test:vulnerabilitytech` or `npm run test:code-quality`, you'll see output like:
 
 ```
 🚀 Starting tests for vulnerabilityTech agent...
@@ -244,24 +307,31 @@ When you run `npm run test:vulnerabilitytech` or `npm run test:code-quality-chec
   │  │  └─ Intelligent correlation: 15 high-confidence findings
   │  └─ Security-Reviewer complete: 23 total vulnerabilities identified
   ├─ Activating Safety-Scanner sub-agent...
-  │  └─ Safety-Scanner complete: 12 dependency vulnerabilities
+  │  └─ Safety-Scanner complete: 83 dependency vulnerabilities
   └─ Correlating findings across sub-agents...
 
 📊 Specialized Security Review Complete
-   • Critical: 8 issues
-   • High: 12 issues
-   • Medium: 10 issues
+   • Critical: 15 issues (SQL injection, command injection, XSS)
+   • High: 0 issues (filtered by triage analysis)
+   • Medium: 112 issues (dependencies + configuration)
 
-  ✅ Execution: *specialized-security-review (2850ms)
-  ✅ Validation: 100% passed
+  ✅ Execution: *specialized-security-review (28.0s)
+  ❌ Validation: 80% passed (security_findings_count outside expected range)
 
 📊 Test Summary for vulnerabilityTech Agent
 ════════════════════════════════════════
-Tests Executed: 1
-Successful Executions: 1/1 (100%)
-Passed Validations: 1/1 (100%)
+Tests Executed: 2 (*specialized-security-review, *dependency-security-scan)
+Successful Executions: 2/2 (100%)
+Passed Validations: 1/2 (50%)
+Total Duration: 42.6s
 
-🎉 All tests passed!
+📄 Reports Generated:
+  • Consolidated Security Report: tests/reports/consolidated-security-report.md
+  • JSON Report: tests/reports/test-report-latest.json
+  • HTML Report: tests/reports/test-report-*.html
+
+⚠️ Some validation tests failed - this is expected with the vulnerable test app
+   which generates more findings than the baseline expectations.
 ```
 
 ### Code Quality Checker Test Example
@@ -307,13 +377,35 @@ Structured Findings: 4 with precise locations
 
 ### Report Files Generated
 
-Each test run creates multiple report formats:
+Each test run creates multiple report formats with consistent, agent-based naming:
 
-- **JSON Report** (`tests/reports/test-report-latest.json`): Complete structured data including findings with file:line:column
-- **Markdown Report** (`tests/reports/test-report-latest.md`): Human-readable summary
-- **HTML Report** (`tests/reports/test-report-*.html`): Interactive web view
+#### **Naming Convention**
 
-The JSON report contains the structured findings in `metadata.findings` that agents can directly use to make code fixes.
+- **Single Command**: `test-report-{agent-name}-{command-name}.{format}`
+- **Multiple Commands**: `test-report-{agent-name}-comprehensive.{format}`
+
+#### **Report Formats**
+
+- **JSON Report**: Complete structured data including findings with file:line:column locations
+- **Markdown Report**: Human-readable summary for documentation
+- **HTML Report**: Interactive web view for browser viewing
+
+#### **Example Filenames**
+
+```
+# Single command tests
+test-report-code-quality-checker-help.json
+test-report-vulnerabilitytech-individual-semgrep-triage.md
+
+# Multi-command comprehensive tests
+test-report-vulnerabilitytech-comprehensive.html
+
+# Latest symlinks (always point to most recent)
+test-report-latest.json
+test-report-latest.md
+```
+
+The JSON reports contain structured findings in `metadata.findings` that agents can directly use to make code fixes. These consistent filenames make it easy to save reports in version control and track testing history.
 
 ## Contributing
 

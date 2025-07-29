@@ -31,7 +31,7 @@ class TestReporter {
             metadata: {
                 generatedAt: new Date().toISOString(),
                 testFrameworkVersion: '0.1.0',
-                reportId: this._generateReportId()
+                reportId: this._generateReportId(testSession)
             },
             summary: this._generateSessionSummary(testSession),
             results: testSession.results || [],
@@ -540,17 +540,32 @@ ${results.map(result => this._formatExecutionDetailsMarkdown(result)).join('\n\n
     }
 
     /**
-     * Generate unique report ID with clear latest file identification
+     * Generate agent-based report ID for consistent naming
      */
-    _generateReportId() {
-        const now = new Date();
-        // Create timestamp with better granularity for ordering: YYYY-MM-DD-HHMM-SS
-        const timestamp = now.toISOString()
-            .replace(/T/, '-')
-            .replace(/:/g, '')
-            .slice(0, 15); // YYYY-MM-DD-HHMMSS
-        const random = Math.random().toString(36).substr(2, 8);
-        return `${timestamp}-${random}`;
+    _generateReportId(testSession) {
+        // Extract primary agent name from the session
+        const agentName = testSession.agentName || 
+                         (testSession.results && testSession.results[0] && testSession.results[0].agentName) ||
+                         'unknown-agent';
+        
+        // Clean agent name for filename use
+        const cleanAgentName = agentName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        
+        // Check if multiple commands were tested
+        const commands = testSession.results ? 
+            [...new Set(testSession.results.map(r => r.command))].filter(Boolean) : [];
+        
+        if (commands.length > 1) {
+            // Multiple commands - use comprehensive naming
+            return `${cleanAgentName}-comprehensive`;
+        } else if (commands.length === 1) {
+            // Single command - include command name
+            const command = commands[0].replace(/^\*/, '').replace(/[^a-z0-9]/gi, '-').toLowerCase();
+            return `${cleanAgentName}-${command}`;
+        } else {
+            // Fallback to agent name only
+            return cleanAgentName;
+        }
     }
 
     /**

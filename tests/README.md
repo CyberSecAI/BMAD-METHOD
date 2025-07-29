@@ -10,6 +10,7 @@ Comprehensive test framework for validating BMAD Method agents, workflows, and i
 tests/
 ├── agents/                     # Agent-specific tests
 │   ├── vulnerabilityTech/      # VulnerabilityTech agent tests
+│   ├── code-quality-checker/   # Code Quality Checker agent tests
 │   ├── security/               # Security agent tests
 │   ├── dev/qa/sm/architect/    # Other agent tests
 ├── workflows/                  # Workflow-specific tests
@@ -32,6 +33,9 @@ npm run test:all
 ```bash
 # Test VulnerabilityTech agent
 npm run test:agent -- vulnerabilityTech
+
+# Test Code Quality Checker agent
+npm run test:agent -- code-quality-checker
 
 # Test Security agent
 npm run test:agent -- security
@@ -124,6 +128,19 @@ Cross-component testing:
 - **Intelligent correlation**: Validates cross-sub-agent finding correlation
 - **Performance validation**: Tests execution time and resource usage
 
+### ✅ Code Quality Checker Agent
+
+- **Production readiness assessment**: Validates code quality for deployment
+- **Multi-language support**: Tests Python, JavaScript quality analysis
+- **Quality scoring system**: 0-100 scale with letter grades (A-F)
+- **Categorized findings**: Critical (production blockers), High (structure), Medium (language-specific), Low (maintainability)
+- **Structured findings with precise locations**: Reports include file:line:column details for agents to make fixes
+- **Auto-fix capabilities**: Identifies which issues can be automatically resolved
+- **Machine-readable JSON output**: Structured findings for agent-to-agent communication
+- **Performance validation**: Sub-second execution for typical codebases
+- **Comprehensive test fixtures**: Realistic code with intentional quality issues
+- **Integration testing**: Works within BMAD Method Software Assurance Framework
+
 ### 🚧 In Development
 
 - Security agent planning phase testing
@@ -147,7 +164,11 @@ npm run test:setup
 ### 2. Run Your First Test
 
 ```bash
+# Test VulnerabilityTech agent
 npm run test:vulnerabilitytech
+
+# Test Code Quality Checker agent
+npm run test:code-quality-checker
 ```
 
 ### 3. View Generated Reports
@@ -157,9 +178,56 @@ npm run test:vulnerabilitytech
 # Open the HTML report in your browser for interactive viewing
 ```
 
+## Test Results and Structured Findings
+
+The code quality checker now generates structured JSON findings with precise file:line:column locations that agents can use to make fixes. The test reports include both human-readable summaries and machine-readable structured data.
+
+### Accessing Structured Findings
+
+Test reports contain detailed findings in the `metadata.findings` section:
+
+```json
+{
+  "findings": {
+    "critical": [
+      {
+        "id": "TODO-001",
+        "rule": "production-blocker-todo",
+        "severity": "critical",
+        "file": "main.py",
+        "line": 21,
+        "column": 1,
+        "message": "TODO comment found in production code",
+        "autoFixable": false,
+        "fixSuggestion": "Complete the user validation implementation"
+      }
+    ],
+    "medium": [
+      {
+        "id": "RUFF-F401-001",
+        "rule": "F401",
+        "file": "main.py",
+        "line": 3,
+        "column": 1,
+        "autoFixable": true,
+        "autoFix": "import sys",
+        "ruffCommand": "ruff check --fix main.py"
+      }
+    ]
+  }
+}
+```
+
+### How Agents Use Structured Findings
+
+1. **Precise Location**: `file:line:column` allows agents to navigate to exact issue locations
+2. **Auto-fix Information**: `autoFixable` and `autoFix` fields provide ready-to-apply solutions
+3. **Command Integration**: `ruffCommand` provides executable fix commands for Python issues
+4. **Categorized Severity**: Critical/High/Medium/Low helps agents prioritize fixes
+
 ## Test Results Example
 
-When you run `npm run test:vulnerabilitytech`, you'll see output like:
+When you run `npm run test:vulnerabilitytech` or `npm run test:code-quality-checker`, you'll see output like:
 
 ```
 🚀 Starting tests for vulnerabilityTech agent...
@@ -195,6 +263,57 @@ Passed Validations: 1/1 (100%)
 
 🎉 All tests passed!
 ```
+
+### Code Quality Checker Test Example
+
+```
+🚀 Starting tests for code-quality-checker agent...
+
+📋 Testing command: *help
+
+🔍 Code Quality Checker Agent Activated
+📋 Analyzing codebase for production readiness...
+
+🤖 Quality Analysis Results:
+- Files analyzed: 4 Python source files
+- Overall quality score: 25/100 (Grade F)
+- Production readiness: NOT READY - Critical blockers found
+- Total issues: 4 findings with precise locations
+
+Structured Findings Generated:
+✓ Found 4 structured findings with file:line:column locations
+✓ 2 auto-fixable issues identified with remediation commands
+✓ JSON output ready for agent consumption
+
+Production Blockers (with precise locations):
+1. **main.py:21** - TODO comment found in production code [Manual fix required]
+2. **main.py:28** - Debug print statement [Auto-fixable: replace with logging.debug()]
+3. **main.py:3** - Unused 'os' import [Auto-fixable: ruff check --fix main.py]
+4. **main.py:45** - Function exceeds 50 line limit [Refactoring required]
+
+  ✅ Execution: *help (102ms)
+  ✅ Validation: 100% passed
+  ✓ Structured findings extracted and stored in metadata
+
+📊 Test Summary for code-quality-checker Agent
+════════════════════════════════════════
+Tests Executed: 1
+Successful Executions: 1/1 (100%)
+Passed Validations: 1/1 (100%)
+Structured Findings: 4 with precise locations
+
+🎉 All tests passed with actionable findings!
+```
+
+### Report Files Generated
+
+Each test run creates multiple report formats:
+
+- **JSON Report** (`tests/reports/test-report-latest.json`): Complete structured data including findings with file:line:column
+- **Markdown Report** (`tests/reports/test-report-latest.md`): Human-readable summary
+- **HTML Report** (`tests/reports/test-report-*.html`): Interactive web view
+
+The JSON report contains the structured findings in `metadata.findings` that agents can directly use to make code fixes.
 
 ## Contributing
 

@@ -156,6 +156,8 @@ class AgentRunner {
                 return await this._executeVulnerabilityTechReal(command, options);
             } else if (agentName === 'security') {
                 return await this._executeSecurityAgentReal(command, options);
+            } else if (agentName === 'code-quality-checker') {
+                return await this._executeCodeQualityChecker(command, options);
             } else {
                 // Generic agent execution
                 return await this._executeGenericAgent(agentName, command, options);
@@ -2246,6 +2248,265 @@ The ${correlatedResults.mediumFindings || 112} medium severity issues consist of
      */
     getSubAgentLogs(subAgentName) {
         return this.logger.getSubAgentLogs(subAgentName);
+    }
+
+    /**
+     * Execute Code Quality Checker sub-agent
+     */
+    async _executeCodeQualityChecker(command, options = {}) {
+        const startTime = Date.now();
+        
+        this._log('info', 'Executing Code Quality Checker sub-agent...');
+        
+        try {
+            // Determine test project path
+            const testProject = options.testProject || this._getDefaultTestProject(options);
+            
+            // Use Claude Code Task tool to execute the real code-quality-checker sub-agent
+            const { Task } = require('./task_tool_interface');
+            
+            const taskPrompt = `
+You are the Code Quality Checker sub-agent. Please analyze the code quality of the project at: ${testProject}
+
+Focus on:
+1. Production blockers (TODO comments, debug statements, hardcoded values, commented code)
+2. Code structure issues (long functions, missing error handling, unused code)
+3. Language-specific quality standards (PEP 8, ESLint, style guides)
+4. Maintainability issues (poor naming, missing documentation, code duplication)
+
+Provide a comprehensive quality analysis report with:
+- Overall quality score (0-100)
+- Quality grade (A-F)
+- Categorized findings (critical, high, medium, low)
+- Specific recommendations for improvement
+- Production readiness assessment
+
+Analyze all source code files in the project directory.
+            `;
+            
+            const result = await Task({
+                description: "Execute Code Quality Analysis",
+                prompt: taskPrompt.trim(),
+                subagent_type: "code-quality-checker"
+            });
+            
+            // Parse the analysis results
+            const analysisResults = this._parseCodeQualityResults(result, testProject);
+            
+            const executionTime = Date.now() - startTime;
+            this._log('info', `Code Quality Checker completed in ${executionTime}ms`);
+            
+            return {
+                output: result,
+                error: null,
+                exitCode: 0,
+                metadata: {
+                    ...analysisResults,
+                    executionTime,
+                    testProject,
+                    agentType: 'code-quality-checker'
+                }
+            };
+            
+        } catch (error) {
+            this._log('error', `Code Quality Checker execution failed: ${error.message}`);
+            
+            return {
+                output: '',
+                error: error.message,
+                exitCode: 1,
+                metadata: {
+                    error: error.message,
+                    executionTime: Date.now() - startTime,
+                    agentType: 'code-quality-checker'
+                }
+            };
+        }
+    }
+
+    /**
+     * Get default test project based on options
+     */
+    _getDefaultTestProject(options = {}) {
+        if (options.language === 'python') {
+            return '/home/chris/work/CyberSecAI/BMAD-METHOD/tests/agents/code-quality-checker/fixtures/python/quality_issues_app';
+        } else if (options.language === 'javascript') {
+            return '/home/chris/work/CyberSecAI/BMAD-METHOD/tests/agents/code-quality-checker/fixtures/javascript/quality_issues_app';
+        } else if (options.comprehensive) {
+            return '/home/chris/work/CyberSecAI/BMAD-METHOD/tests/agents/code-quality-checker/fixtures';
+        } else {
+            // Default to Python quality issues app
+            return '/home/chris/work/CyberSecAI/BMAD-METHOD/tests/agents/code-quality-checker/fixtures/python/quality_issues_app';
+        }
+    }
+
+    /**
+     * Parse code quality analysis results
+     */
+    _parseCodeQualityResults(output, testProject) {
+        // Initialize results with structured format
+        const results = {
+            testProject,
+            filesAnalyzed: 0,
+            qualityScore: 0,
+            qualityGrade: 'F',
+            findings: {
+                critical: [],
+                high: [],
+                medium: [],
+                low: []
+            },
+            summary: {
+                critical: 0,
+                high: 0,
+                medium: 0,
+                low: 0,
+                total: 0,
+                autoFixable: 0
+            },
+            productionReady: false
+        };
+
+        try {
+            // First try to extract structured JSON findings from output
+            const structuredFindings = this._extractStructuredFindings(output);
+            if (structuredFindings.length > 0) {
+                // Use structured findings if available
+                this._log('info', `Found ${structuredFindings.length} structured findings`);
+                
+                // Categorize findings by severity
+                structuredFindings.forEach(finding => {
+                    const severity = finding.severity.toLowerCase();
+                    if (results.findings[severity]) {
+                        results.findings[severity].push(finding);
+                        results.summary[severity]++;
+                        results.summary.total++;
+                        if (finding.autoFixable) {
+                            results.summary.autoFixable++;
+                        }
+                    }
+                });
+
+                // Extract quality score and other metrics
+                const scoreMatch = output.match(/quality score[:\s]*(\d+)/i);
+                if (scoreMatch) {
+                    results.qualityScore = parseInt(scoreMatch[1]);
+                    results.qualityGrade = this._calculateGrade(results.qualityScore);
+                }
+
+                const filesMatch = output.match(/(\d+)\s+(?:Python\s+)?files?\s+analyzed/i);
+                if (filesMatch) {
+                    results.filesAnalyzed = parseInt(filesMatch[1]);
+                }
+
+                // Determine production readiness based on critical findings
+                results.productionReady = results.summary.critical === 0 && results.qualityScore >= 80;
+                
+                return results;
+            }
+
+            // Fallback to legacy parsing if no structured findings found
+            this._log('info', 'No structured findings found, using legacy parsing');
+            
+            // Parse basic metrics from output (legacy format)
+            const scoreMatch = output.match(/quality score[:\s]*(\d+)/i);
+            if (scoreMatch) {
+                results.qualityScore = parseInt(scoreMatch[1]);
+                results.qualityGrade = this._calculateGrade(results.qualityScore);
+            }
+
+            const filesMatch = output.match(/(\d+)\s+files?\s+analyzed/i);
+            if (filesMatch) {
+                results.filesAnalyzed = parseInt(filesMatch[1]);
+            }
+
+            // Parse finding counts (legacy format)
+            const criticalMatch = output.match(/critical[:\s]*(\d+)/i);
+            if (criticalMatch) results.summary.critical = parseInt(criticalMatch[1]);
+
+            const highMatch = output.match(/high[:\s]*(\d+)/i);  
+            if (highMatch) results.summary.high = parseInt(highMatch[1]);
+
+            const mediumMatch = output.match(/medium[:\s]*(\d+)/i);
+            if (mediumMatch) results.summary.medium = parseInt(mediumMatch[1]);
+
+            const lowMatch = output.match(/low[:\s]*(\d+)/i);
+            if (lowMatch) results.summary.low = parseInt(lowMatch[1]);
+
+            // Convert counts to legacy format for backwards compatibility
+            results.findings = {
+                critical: results.summary.critical,
+                high: results.summary.high,
+                medium: results.summary.medium,
+                low: results.summary.low
+            };
+
+            // Determine production readiness
+            results.productionReady = results.summary.critical === 0 && results.qualityScore >= 80;
+
+        } catch (error) {
+            this._log('warn', `Failed to parse quality results: ${error.message}`);
+        }
+
+        return results;
+    }
+
+    /**
+     * Extract structured JSON findings from agent output
+     */
+    _extractStructuredFindings(output) {
+        const findings = [];
+        
+        try {
+            // Look for JSON blocks in the output
+            const jsonBlocks = output.match(/```json\s*(\[[\s\S]*?\])\s*```/g);
+            
+            if (jsonBlocks) {
+                jsonBlocks.forEach(block => {
+                    try {
+                        // Extract JSON content
+                        const jsonMatch = block.match(/```json\s*(\[[\s\S]*?\])\s*```/);
+                        if (jsonMatch && jsonMatch[1]) {
+                            const jsonData = JSON.parse(jsonMatch[1]);
+                            if (Array.isArray(jsonData)) {
+                                findings.push(...jsonData);
+                            }
+                        }
+                    } catch (error) {
+                        this._log('warn', `Failed to parse JSON block: ${error.message}`);
+                    }
+                });
+            }
+
+            // Also look for single JSON objects (for ruff-validator format)
+            const singleJsonMatch = output.match(/```json\s*(\{[\s\S]*?\})\s*```/);
+            if (singleJsonMatch && singleJsonMatch[1]) {
+                try {
+                    const jsonData = JSON.parse(singleJsonMatch[1]);
+                    if (jsonData.findings && Array.isArray(jsonData.findings)) {
+                        findings.push(...jsonData.findings);
+                    }
+                } catch (error) {
+                    this._log('warn', `Failed to parse single JSON object: ${error.message}`);
+                }
+            }
+
+        } catch (error) {
+            this._log('warn', `Error extracting structured findings: ${error.message}`);
+        }
+
+        return findings;
+    }
+
+    /**
+     * Calculate quality grade from score
+     */
+    _calculateGrade(score) {
+        if (score >= 90) return 'A';
+        if (score >= 80) return 'B';
+        if (score >= 70) return 'C';
+        if (score >= 60) return 'D';
+        return 'F';
     }
 
     /**

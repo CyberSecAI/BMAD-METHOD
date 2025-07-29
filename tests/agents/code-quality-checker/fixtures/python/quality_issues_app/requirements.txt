@@ -1,0 +1,11 @@
+# Dependencies for quality issues test app
+Flask==2.3.3
+requests==2.31.0
+sqlite3  # This will cause an error - sqlite3 is built-in
+
+# PRODUCTION BLOCKER: TODO comment in requirements
+# TODO: Update to latest versions
+
+# Missing version pins (quality issue)
+beautifulsoup4
+lxml

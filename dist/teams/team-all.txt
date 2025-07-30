@@ -335,17 +335,18 @@ agent:
   id: dev
   title: Full Stack Developer
   icon: 💻
-  whenToUse: Use for code implementation, debugging, refactoring, and development best practices
+  whenToUse: Use for secure code implementation, debugging, refactoring, and development best practices with security awareness
   customization: null
 persona:
   role: Expert Senior Software Engineer & Implementation Specialist
   style: Extremely concise, pragmatic, detail-oriented, solution-focused
-  identity: Expert who implements stories by reading requirements and executing tasks sequentially with comprehensive testing
+  identity: Expert who implements stories by reading requirements and executing tasks sequentially with comprehensive testing and security-aware coding practices
   focus: Executing story tasks with precision, updating Dev Agent Record sections only, maintaining minimal context overhead
 core_principles:
   - CRITICAL: Story has ALL info you will need aside from what you loaded during the startup commands. NEVER load PRD/architecture/other docs files unless explicitly directed in story notes or direct command from user.
   - CRITICAL: ONLY update story file Dev Agent Record sections (checkboxes/Debug Log/Completion Notes/Change Log)
   - CRITICAL: FOLLOW THE develop-story command when the user tells you to implement the story
+  - Security-First Development: Apply secure coding practices from python-common-vulns.md and python-secure-coding.md during implementation
   - Numbered Options - Always use numbered lists when presenting choices to the user
 commands:
   - help: Show numbered list of the following commands to allow selection
@@ -367,6 +368,9 @@ dependencies:
     - validate-next-story.md
   checklists:
     - story-dod-checklist.md
+  data:
+    - ../expansion-packs/software-assurance/data/python-common-vulns.md
+    - ../expansion-packs/software-assurance/data/python-secure-coding.md
 ```
 ==================== END: .bmad-core/agents/dev.md ====================
 
@@ -769,6 +773,7 @@ commands:
   nist-ssdf-code-validation: Execute NIST SSDF PW/RV practices validation for code implementation
   nist-ssdf-integrated: Execute integrated NIST SSDF validation with language-specific expansion pack
   specialized-security-review: Execute comprehensive security analysis using specialized Claude Code sub-agents
+  individual-semgrep-triage: Perform individual LLM-based triage of Semgrep findings for precise false positive reduction
   dependency-security-scan: Perform third-party component security assessment using dependency scanner sub-agent
   pattern-security-analysis: Validate secure coding patterns using pattern analyzer sub-agent
   test-security-validation: Assess security test coverage and effectiveness using test validator sub-agent
@@ -8584,7 +8589,7 @@ sections:
         optional: conditional
         condition: story_has_security_implications
       - id: testing-standards
-        title: Testing
+        title: Testing Standards
         instruction: |
           List Relevant Testing Standards from Architecture the Developer needs to conform to:
           - Test file location
@@ -8594,28 +8599,85 @@ sections:
         elicit: true
         owner: scrum-master
         editors: [scrum-master]
-        sections:
-          - id: security-testing
-            title: Security Testing Requirements
-            instruction: |
-              Define security testing requirements for this story:
-              - Security unit tests needed
-              - Integration security tests
-              - Penetration testing requirements
-              - Vulnerability scanning needs
-              - Security compliance validation
-            template: |
-              - [ ] Input validation tests for all user inputs
-              - [ ] Authentication/authorization tests
-              - [ ] SQL injection prevention tests
-              - [ ] XSS prevention tests
-              - [ ] Data encryption validation
-              - [ ] Security header verification
-            elicit: true
-            owner: scrum-master
-            editors: [scrum-master, security-agent]
-            optional: conditional
-            condition: story_has_security_requirements
+        
+  - id: testing
+    title: Testing
+    instruction: |
+      Define comprehensive testing approach for this story including unit tests, integration tests, security verification, and manual testing.
+    elicit: true
+    owner: scrum-master
+    editors: [scrum-master, dev-agent, qa-agent]
+    sections:
+      - id: unit-tests
+        title: Unit Tests
+        instruction: |
+          Define unit tests required for this story:
+          - Test individual components and functions
+          - Mock external dependencies
+          - Verify business logic correctness
+        template: |
+          - [ ] Test [component/function] with valid inputs
+          - [ ] Test [component/function] with invalid inputs
+          - [ ] Test error handling and edge cases
+        elicit: true
+        owner: scrum-master
+        editors: [scrum-master, dev-agent]
+        
+      - id: integration-tests
+        title: Integration Tests
+        instruction: |
+          Define integration tests required for this story:
+          - Test component interactions
+          - Test external API integrations
+          - Test database interactions
+          - End-to-end workflow testing
+        template: |
+          - [ ] Test integration between [component A] and [component B]
+          - [ ] Test external API calls and responses
+          - [ ] Test database operations and data persistence
+        elicit: true
+        owner: scrum-master
+        editors: [scrum-master, dev-agent]
+        
+      - id: security-verification
+        title: Security Verification
+        instruction: |
+          Define security testing and verification requirements for this story:
+          - Input validation and sanitization tests
+          - Authentication and authorization tests
+          - Vulnerability prevention tests
+          - Security configuration validation
+          - Compliance verification
+        template: |
+          - [ ] **Secure API Key Handling:** Create a test to confirm the script fails gracefully with a clear error if an external API key is required but not provided in the environment, verifying it is not hardcoded.
+          - [ ] **Input Validation:** Test all user inputs for proper validation and sanitization to prevent injection attacks.
+          - [ ] **Authentication Tests:** Verify authentication mechanisms work correctly and reject invalid credentials.
+          - [ ] **Authorization Tests:** Confirm proper access controls are enforced for different user roles.
+          - [ ] **Data Protection:** Validate that sensitive data is properly encrypted, masked, or protected.
+          - [ ] **Malformed Data Handling:** Test the system with malformed or empty data files to ensure it fails gracefully without crashing or unexpected errors.
+          - [ ] **Security Headers:** Verify proper security headers are set in HTTP responses.
+          - [ ] **SQL Injection Prevention:** Test for SQL injection vulnerabilities in database queries.
+          - [ ] **XSS Prevention:** Test for cross-site scripting vulnerabilities in user-facing components.
+        elicit: true
+        owner: scrum-master
+        editors: [scrum-master, security-agent, qa-agent]
+        
+      - id: manual-verification
+        title: Manual Verification
+        instruction: |
+          Define manual testing and verification steps:
+          - End-user workflow testing
+          - UI/UX validation
+          - Performance validation
+          - System integration verification
+        template: |
+          - [ ] Run the main functionality from the user interface and verify expected behavior
+          - [ ] Check system logs for success messages and proper error handling
+          - [ ] Verify data is correctly stored and retrievable
+          - [ ] Test user workflows end-to-end
+        elicit: true
+        owner: scrum-master
+        editors: [scrum-master, qa-agent]
         
   - id: change-log
     title: Change Log

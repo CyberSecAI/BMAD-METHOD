@@ -16600,7 +16600,7 @@ sections:
         optional: conditional
         condition: story_has_security_implications
       - id: testing-standards
-        title: Testing
+        title: Testing Standards
         instruction: |
           List Relevant Testing Standards from Architecture the Developer needs to conform to:
           - Test file location
@@ -16610,28 +16610,85 @@ sections:
         elicit: true
         owner: scrum-master
         editors: [scrum-master]
-        sections:
-          - id: security-testing
-            title: Security Testing Requirements
-            instruction: |
-              Define security testing requirements for this story:
-              - Security unit tests needed
-              - Integration security tests
-              - Penetration testing requirements
-              - Vulnerability scanning needs
-              - Security compliance validation
-            template: |
-              - [ ] Input validation tests for all user inputs
-              - [ ] Authentication/authorization tests
-              - [ ] SQL injection prevention tests
-              - [ ] XSS prevention tests
-              - [ ] Data encryption validation
-              - [ ] Security header verification
-            elicit: true
-            owner: scrum-master
-            editors: [scrum-master, security-agent]
-            optional: conditional
-            condition: story_has_security_requirements
+        
+  - id: testing
+    title: Testing
+    instruction: |
+      Define comprehensive testing approach for this story including unit tests, integration tests, security verification, and manual testing.
+    elicit: true
+    owner: scrum-master
+    editors: [scrum-master, dev-agent, qa-agent]
+    sections:
+      - id: unit-tests
+        title: Unit Tests
+        instruction: |
+          Define unit tests required for this story:
+          - Test individual components and functions
+          - Mock external dependencies
+          - Verify business logic correctness
+        template: |
+          - [ ] Test [component/function] with valid inputs
+          - [ ] Test [component/function] with invalid inputs
+          - [ ] Test error handling and edge cases
+        elicit: true
+        owner: scrum-master
+        editors: [scrum-master, dev-agent]
+        
+      - id: integration-tests
+        title: Integration Tests
+        instruction: |
+          Define integration tests required for this story:
+          - Test component interactions
+          - Test external API integrations
+          - Test database interactions
+          - End-to-end workflow testing
+        template: |
+          - [ ] Test integration between [component A] and [component B]
+          - [ ] Test external API calls and responses
+          - [ ] Test database operations and data persistence
+        elicit: true
+        owner: scrum-master
+        editors: [scrum-master, dev-agent]
+        
+      - id: security-verification
+        title: Security Verification
+        instruction: |
+          Define security testing and verification requirements for this story:
+          - Input validation and sanitization tests
+          - Authentication and authorization tests
+          - Vulnerability prevention tests
+          - Security configuration validation
+          - Compliance verification
+        template: |
+          - [ ] **Secure API Key Handling:** Create a test to confirm the script fails gracefully with a clear error if an external API key is required but not provided in the environment, verifying it is not hardcoded.
+          - [ ] **Input Validation:** Test all user inputs for proper validation and sanitization to prevent injection attacks.
+          - [ ] **Authentication Tests:** Verify authentication mechanisms work correctly and reject invalid credentials.
+          - [ ] **Authorization Tests:** Confirm proper access controls are enforced for different user roles.
+          - [ ] **Data Protection:** Validate that sensitive data is properly encrypted, masked, or protected.
+          - [ ] **Malformed Data Handling:** Test the system with malformed or empty data files to ensure it fails gracefully without crashing or unexpected errors.
+          - [ ] **Security Headers:** Verify proper security headers are set in HTTP responses.
+          - [ ] **SQL Injection Prevention:** Test for SQL injection vulnerabilities in database queries.
+          - [ ] **XSS Prevention:** Test for cross-site scripting vulnerabilities in user-facing components.
+        elicit: true
+        owner: scrum-master
+        editors: [scrum-master, security-agent, qa-agent]
+        
+      - id: manual-verification
+        title: Manual Verification
+        instruction: |
+          Define manual testing and verification steps:
+          - End-user workflow testing
+          - UI/UX validation
+          - Performance validation
+          - System integration verification
+        template: |
+          - [ ] Run the main functionality from the user interface and verify expected behavior
+          - [ ] Check system logs for success messages and proper error handling
+          - [ ] Verify data is correctly stored and retrievable
+          - [ ] Test user workflows end-to-end
+        elicit: true
+        owner: scrum-master
+        editors: [scrum-master, qa-agent]
         
   - id: change-log
     title: Change Log

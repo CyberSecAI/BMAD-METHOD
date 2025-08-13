@@ -27,7 +27,8 @@
       "Bash(git init:*)",
       "Bash(npm run:*)",
       "Bash(npx bmad-method:*)",
-      "Bash(echo:*)"
+      "Bash(echo:*)",
+      "Bash(gh:*)"
     ],
     "deny": []
   }
